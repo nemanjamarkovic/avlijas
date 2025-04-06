@@ -345,6 +345,31 @@ document.addEventListener('DOMContentLoaded', function() {
             .social-icons a:hover {
                 color: #0d6efd;
             }
+            .divider-custom {
+                margin: 1.25rem 0 1.5rem;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .divider-custom .divider-custom-line {
+                width: 100%;
+                max-width: 7rem;
+                height: 0.25rem;
+                background-color: #dee2e6;
+                border-radius: 1rem;
+                border-color: #dee2e6;
+            }
+            .divider-custom .divider-custom-line:first-child {
+                margin-right: 1rem;
+            }
+            .divider-custom .divider-custom-line:last-child {
+                margin-left: 1rem;
+            }
+            .divider-custom .divider-custom-icon {
+                color: #0d6efd;
+                font-size: 1.5rem;
+            }
             .map-container {
                 height: 450px;
             }

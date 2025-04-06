@@ -2,16 +2,24 @@
   <div class="container">
     <div class="row justify-content-center mb-5">
       <div class="col-lg-8 text-center">
-        <h2 class="section-heading">Kontaktirajte nas</h2>
-        <p class="text-muted mb-5">
-          Dostupni smo 24/7 za sva vaša pitanja. Pozovite nas na broj telefona
-          ili pošaljite upit putem forme.
+        <h2 class="section-heading display-5 mb-3">Kontaktirajte nas</h2>
+        <div class="divider-custom">
+          <div class="divider-custom-line"></div>
+          <div class="divider-custom-icon">
+            <i class="bi bi-envelope-fill"></i>
+          </div>
+          <div class="divider-custom-line"></div>
+        </div>
+        <p class="lead text-muted mb-0">
+          Dostupni smo 24/7 za sva vaša pitanja. Pozovite nas ili pošaljite upit
+          putem forme.
         </p>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-5 mb-5 mb-lg-0">
-        <div class="contact-info p-4 bg-white shadow-sm rounded">
+
+    <div class="row g-4">
+      <div class="col-lg-5 mb-4 mb-lg-0">
+        <div class="contact-info p-4 bg-white rounded shadow-sm h-100">
           <h3 class="h4 mb-4">Informacije</h3>
 
           <div class="d-flex mb-4">
@@ -54,7 +62,7 @@
             </div>
           </div>
 
-          <div class="d-flex">
+          <div class="d-flex mb-4">
             <div class="contact-icon me-3">
               <i class="bi bi-clock-fill text-primary fs-4"></i>
             </div>
@@ -68,26 +76,26 @@
 
           <h3 class="h5 mb-3">Pratite nas</h3>
           <div class="social-icons">
-            <a href="#" class="me-2 text-decoration-none"
-              ><i class="bi bi-facebook fs-4"></i
-            ></a>
-            <a href="#" class="me-2 text-decoration-none"
-              ><i class="bi bi-instagram fs-4"></i
-            ></a>
-            <a href="#" class="me-2 text-decoration-none"
-              ><i class="bi bi-viber fs-4"></i
-            ></a>
+            <a href="#" class="me-3 text-decoration-none">
+              <i class="bi bi-facebook fs-4"></i>
+            </a>
+            <a href="#" class="me-3 text-decoration-none">
+              <i class="bi bi-instagram fs-4"></i>
+            </a>
+            <a href="#" class="me-3 text-decoration-none">
+              <i class="bi bi-viber fs-4"></i>
+            </a>
           </div>
         </div>
       </div>
 
       <div class="col-lg-7">
-        <div class="contact-form p-4 bg-white shadow-sm rounded">
+        <div class="contact-form p-4 bg-white rounded shadow-sm">
           <h3 class="h4 mb-4">Pošaljite upit</h3>
           <form id="contactForm">
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="name" class="form-label">Ime i prezime</label>
+                <label for="name" class="form-label">Ime i prezime *</label>
                 <input
                   type="text"
                   class="form-control"
@@ -97,7 +105,7 @@
                 />
               </div>
               <div class="col-md-6 mb-3">
-                <label for="email" class="form-label">Email adresa</label>
+                <label for="email" class="form-label">Email adresa *</label>
                 <input
                   type="email"
                   class="form-control"
@@ -109,17 +117,18 @@
             </div>
 
             <div class="mb-3">
-              <label for="phone" class="form-label">Telefon</label>
+              <label for="phone" class="form-label">Telefon *</label>
               <input
                 type="tel"
                 class="form-control"
                 id="phone"
                 placeholder="Vaš broj telefona"
+                required
               />
             </div>
 
             <div class="mb-3">
-              <label for="subject" class="form-label">Naslov</label>
+              <label for="subject" class="form-label">Naslov *</label>
               <input
                 type="text"
                 class="form-control"
@@ -130,19 +139,19 @@
             </div>
 
             <div class="mb-4">
-              <label for="message" class="form-label">Poruka</label>
+              <label for="message" class="form-label">Poruka *</label>
               <textarea
                 class="form-control"
                 id="message"
                 rows="5"
-                placeholder="Vaša poruka"
+                placeholder="Detaljno opišite vašu situaciju i pitanja"
                 required
               ></textarea>
             </div>
 
             <div class="d-grid">
               <button type="submit" class="btn btn-primary btn-lg">
-                Pošaljite poruku
+                <i class="bi bi-send me-2"></i> Pošaljite poruku
               </button>
             </div>
           </form>
@@ -167,3 +176,58 @@
     </div>
   </div>
 </section>
+
+<style>
+  .contact-section {
+    position: relative;
+  }
+  .contact-icon {
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .social-icons a {
+    color: #495057;
+    transition: color 0.3s ease;
+  }
+  .social-icons a:hover {
+    color: #0d6efd;
+  }
+  .divider-custom {
+    margin: 1.25rem 0 1.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .divider-custom .divider-custom-line {
+    width: 100%;
+    max-width: 7rem;
+    height: 0.25rem;
+    background-color: #dee2e6;
+    border-radius: 1rem;
+    border-color: #dee2e6;
+  }
+  .divider-custom .divider-custom-line:first-child {
+    margin-right: 1rem;
+  }
+  .divider-custom .divider-custom-line:last-child {
+    margin-left: 1rem;
+  }
+  .divider-custom .divider-custom-icon {
+    color: #0d6efd;
+    font-size: 1.5rem;
+  }
+  .map-container {
+    height: 450px;
+  }
+  .map-container iframe {
+    height: 100%;
+  }
+  @media (max-width: 768px) {
+    .map-container {
+      height: 300px;
+    }
+  }
+</style>
