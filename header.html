@@ -1,59 +1,203 @@
 <div class="top-bar py-2">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <div class="contact-info">
-                    <span class="me-3"><i class="bi bi-telephone-fill"></i> +381 XX XXX XXX</span>
-                    <span><i class="bi bi-envelope-fill"></i> info@example.com</span>
-                </div>
-            </div>
-            <div class="col-md-6 text-end">
-                <div class="working-hours">
-                    <span><i class="bi bi-clock-fill"></i> Dostupni 24/7</span>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="contact-info">
+          <span class="me-3"
+            ><i class="bi bi-telephone-fill"></i> +381 XX XXX XXX</span
+          >
+          <span
+            ><i class="bi bi-envelope-fill"></i>
+            kontakt@transportpokojnika.com</span
+          >
         </div>
+      </div>
+      <div class="col-md-6 text-end">
+        <div class="working-hours">
+          <span><i class="bi bi-clock-fill"></i> Dostupni 24/7</span>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-<nav class="navbar navbar-expand-lg navbar-dark" role="navigation" aria-label="Main navigation">
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <i class="bi bi-building me-2"></i>
-            <div>
-                <span class="brand-name">Pogrebno preduzeće</span>
-                <span class="brand-slogan d-block">Tradicija i poverenje</span>
-            </div>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Početna</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        Međunarodni prevoz
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/nemacka">Prevoz iz Nemačke</a></li>
-                        <li><a class="dropdown-item" href="/austrija">Prevoz iz Austrije</a></li>
-                        <li><a class="dropdown-item" href="/svajcarska">Prevoz iz Švajcarske</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/#transport">Sve destinacije</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/#showcase">Vozila</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/#faq">FAQ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/#contact">Kontakt</a>
-                </li>
-            </ul>
-        </div>
+<nav
+  class="navbar navbar-expand-lg navbar-dark"
+  role="navigation"
+  aria-label="Main navigation"
+>
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <i class="bi bi-building me-2"></i>
+      <div>
+        <span class="brand-name">Pogrebno preduzeće</span>
+        <span class="brand-slogan d-block">Tradicija i poverenje</span>
+      </div>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Početna</a>
+        </li>
+        <li class="nav-item dropdown medjunarodni-transport">
+          <a
+            href="#"
+            class="nav-link dropdown-toggle"
+            id="medjunarodni-dropdown"
+          >
+            Medjunarodni Transport
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="/nemacka">Prevoz iz Nemačke</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/austrija">Prevoz iz Austrije</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/svajcarska"
+                >Prevoz iz Švajcarske</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="/#transport">Sve destinacije</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#showcase">Vozila</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#faq">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#contact">Kontakt</a>
+        </li>
+      </ul>
     </div>
-</nav> 
+  </div>
+</nav>
+
+<style>
+  /* Make dropdown menus mobile-friendly */
+  @media screen and (max-width: 768px) {
+    /* Increase tap target size for mobile */
+    .nav-item,
+    .dropdown-item {
+      min-height: 44px;
+      padding: 12px 15px;
+      font-size: 16px;
+    }
+
+    /* Make sure dropdown items are visible when parent is tapped */
+    .dropdown-menu {
+      position: static;
+      width: 100%;
+      padding-left: 15px;
+      box-shadow: none;
+      display: none;
+    }
+
+    /* Add a toggle class for mobile dropdown visibility */
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    /* Add a toggle button for subcategories */
+    .dropdown-toggle::after {
+      float: right;
+      margin-top: 8px;
+    }
+
+    /* Specifically target Medjunarodni Transport dropdown */
+    .medjunarodni-transport .dropdown-item {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+</style>
+
+<script>
+  // Complete revamp of the mobile dropdown behavior
+  document.addEventListener("DOMContentLoaded", function () {
+    // Check if we're on a mobile device (either by width or touch capability)
+    const isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
+
+    if (isMobile) {
+      // Handle specifically the Medjunarodni Transport dropdown
+      const medjunarodniBtns = document.querySelectorAll(
+        ".medjunarodni-transport > .nav-link"
+      );
+
+      medjunarodniBtns.forEach(function (btn) {
+        // Remove any Bootstrap data attributes that might interfere
+        btn.removeAttribute("data-bs-toggle");
+        btn.removeAttribute("data-bs-target");
+
+        // Simple click handler directly on the button
+        btn.onclick = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Find the dropdown menu
+          const menu = this.parentNode.querySelector(".dropdown-menu");
+
+          // Toggle the show class
+          if (menu.classList.contains("show")) {
+            menu.classList.remove("show");
+          } else {
+            // Close all other dropdowns first
+            document
+              .querySelectorAll(".dropdown-menu.show")
+              .forEach(function (openMenu) {
+                openMenu.classList.remove("show");
+              });
+
+            // Show this dropdown
+            menu.classList.add("show");
+          }
+
+          return false;
+        };
+      });
+
+      // Add CSS to ensure dropdowns display properly
+      const style = document.createElement("style");
+      style.textContent = `
+        @media (max-width: 768px) {
+          .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+          }
+          
+          .medjunarodni-transport .dropdown-menu {
+            max-height: none !important;
+            overflow: visible !important;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // Close dropdowns when clicking outside
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest(".dropdown")) {
+          document
+            .querySelectorAll(".dropdown-menu.show")
+            .forEach(function (menu) {
+              menu.classList.remove("show");
+            });
+        }
+      });
+    }
+  });
+</script>
