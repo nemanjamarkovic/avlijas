@@ -15,13 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="row align-items-center">
       <div class="col-md-6">
         <div class="contact-info">
-          <span class="me-3"
-            ><i class="bi bi-telephone-fill"></i> +381 XX XXX XXX</span
-          >
-          <span
-            ><i class="bi bi-envelope-fill"></i>
-            kontakt@transportpokojnika.com</span
-          >
+          <span class="me-3">
+            <a href="tel:+381XXXXXXXX" class="text-decoration-none">
+              <i class="bi bi-telephone-fill"></i> +381 XX XXX XXX
+            </a>
+          </span>
+          <span>
+            <a href="mailto:kontakt@transportpokojnika.com" class="text-decoration-none">
+              <i class="bi bi-envelope-fill"></i> kontakt@transportpokojnika.com
+            </a>
+          </span>
         </div>
       </div>
       <div class="col-md-6 text-end">
@@ -271,9 +274,80 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             console.log('Footer content injected');
         }
-
+        
+        // Add sticky contact button
+        addStickyContactButton();
+        
         // Set active states after content is loaded
         setActiveStates();
+    }
+    
+    // Function to add sticky contact button
+    function addStickyContactButton() {
+        // Create the sticky button element
+        const stickyButton = document.createElement('div');
+        stickyButton.className = 'sticky-contact-button';
+        stickyButton.innerHTML = `
+            <a href="tel:+381XXXXXXXX" class="btn btn-primary btn-lg rounded-circle">
+                <i class="bi bi-telephone-fill"></i>
+            </a>
+            <a href="#contact" class="btn btn-success btn-lg">
+                Kontaktirajte nas
+            </a>
+        `;
+        
+        // Style the button
+        const style = document.createElement('style');
+        style.textContent = `
+            .sticky-contact-button {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                z-index: 99;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-end;
+            }
+            .sticky-contact-button .btn-primary {
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            }
+            .sticky-contact-button .btn-success {
+                padding: 10px 20px;
+                font-weight: bold;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.05);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            @media (max-width: 768px) {
+                .sticky-contact-button {
+                    bottom: 20px;
+                    right: 20px;
+                }
+                .sticky-contact-button .btn-success {
+                    font-size: 14px;
+                }
+            }
+        `;
+        
+        // Add the styles and button to the document
+        document.head.appendChild(style);
+        document.body.appendChild(stickyButton);
     }
 
     // Inject the content directly
