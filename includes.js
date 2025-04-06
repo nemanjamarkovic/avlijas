@@ -3,129 +3,281 @@ document.addEventListener('DOMContentLoaded', function() {
     const headerContainer = document.querySelector('#header-container');
     const footerContainer = document.querySelector('#footer-container');
 
-    console.log('Document loaded, debugging includes');
+    console.log('Loading includes for:', window.location.pathname);
     
-    // Debug information
-    const debugInfo = {
-        url: window.location.href,
-        path: window.location.pathname,
-        origin: window.location.origin,
-        containers: {
-            header: headerContainer ? 'Found' : 'Not found',
-            footer: footerContainer ? 'Found' : 'Not found'
-        }
-    };
-    
-    console.log('Debug info:', debugInfo);
-    
-    // Display debug panel
-    const debugPanel = document.createElement('div');
-    debugPanel.style.position = 'fixed';
-    debugPanel.style.bottom = '0';
-    debugPanel.style.right = '0';
-    debugPanel.style.backgroundColor = 'rgba(0,0,0,0.8)';
-    debugPanel.style.color = 'white';
-    debugPanel.style.padding = '10px';
-    debugPanel.style.zIndex = '9999';
-    debugPanel.style.maxHeight = '300px';
-    debugPanel.style.overflowY = 'auto';
-    debugPanel.style.maxWidth = '500px';
-    debugPanel.innerHTML = `
-        <h5>Include Debugger</h5>
-        <p>URL: ${debugInfo.url}</p>
-        <p>Path: ${debugInfo.path}</p>
-        <p>Header container: ${debugInfo.containers.header}</p>
-        <p>Footer container: ${debugInfo.containers.footer}</p>
-        <div id="debug-log"></div>
-        <button id="test-direct-content">Test Direct Content</button>
-    `;
-    document.body.appendChild(debugPanel);
-    
-    // Direct content test
-    document.getElementById('test-direct-content').addEventListener('click', function() {
-        // Try setting direct HTML to containers to see if they work
+    // Function to inject content to containers
+    function injectContent() {
+        // Header content
         if (headerContainer) {
             headerContainer.innerHTML = `
-                <div class="top-bar py-2">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-md-6">
-                                <div class="contact-info">Test Header - Direct Content</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            logDebug('Set direct content to header successfully');
-        } else {
-            logDebug('Header container not found for direct content test');
+<div class="top-bar py-2">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="contact-info">
+          <span class="me-3"
+            ><i class="bi bi-telephone-fill"></i> +381 XX XXX XXX</span
+          >
+          <span
+            ><i class="bi bi-envelope-fill"></i>
+            kontakt@transportpokojnika.com</span
+          >
+        </div>
+      </div>
+      <div class="col-md-6 text-end">
+        <div class="working-hours">
+          <span><i class="bi bi-clock-fill"></i> Dostupni 24/7</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<nav
+  class="navbar navbar-expand-lg navbar-dark"
+  role="navigation"
+  aria-label="Main navigation"
+>
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <i class="bi bi-building me-2"></i>
+      <div>
+        <span class="brand-name">Pogrebno preduzeće</span>
+        <span class="brand-slogan d-block">Tradicija i poverenje</span>
+      </div>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Početna</a>
+        </li>
+        <li class="nav-item dropdown medjunarodni-transport">
+          <a
+            href="#"
+            class="nav-link dropdown-toggle"
+            id="medjunarodni-dropdown"
+          >
+            Medjunarodni Transport
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="/nemacka">Prevoz iz Nemačke</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/austrija">Prevoz iz Austrije</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/svajcarska"
+                >Prevoz iz Švajcarske</a
+              >
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item" href="/#transport">Sve destinacije</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#showcase">Vozila</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#faq">FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#contact">Kontakt</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<style>
+  /* Make dropdown menus mobile-friendly */
+  @media screen and (max-width: 768px) {
+    /* Increase tap target size for mobile */
+    .nav-item,
+    .dropdown-item {
+      min-height: 44px;
+      padding: 12px 15px;
+      font-size: 16px;
+    }
+
+    /* Make sure dropdown items are visible when parent is tapped */
+    .dropdown-menu {
+      position: static;
+      width: 100%;
+      padding-left: 15px;
+      box-shadow: none;
+      display: none;
+    }
+
+    /* Add a toggle class for mobile dropdown visibility */
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    /* Add a toggle button for subcategories */
+    .dropdown-toggle::after {
+      float: right;
+      margin-top: 8px;
+    }
+
+    /* Specifically target Medjunarodni Transport dropdown */
+    .medjunarodni-transport .dropdown-item {
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+</style>
+
+<script>
+  // Complete revamp of the mobile dropdown behavior
+  document.addEventListener("DOMContentLoaded", function () {
+    // Check if we're on a mobile device (either by width or touch capability)
+    const isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
+
+    if (isMobile) {
+      // Handle specifically the Medjunarodni Transport dropdown
+      const medjunarodniBtns = document.querySelectorAll(
+        ".medjunarodni-transport > .nav-link"
+      );
+
+      medjunarodniBtns.forEach(function (btn) {
+        // Remove any Bootstrap data attributes that might interfere
+        btn.removeAttribute("data-bs-toggle");
+        btn.removeAttribute("data-bs-target");
+
+        // Simple click handler directly on the button
+        btn.onclick = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Find the dropdown menu
+          const menu = this.parentNode.querySelector(".dropdown-menu");
+
+          // Toggle the show class
+          if (menu.classList.contains("show")) {
+            menu.classList.remove("show");
+          } else {
+            // Close all other dropdowns first
+            document
+              .querySelectorAll(".dropdown-menu.show")
+              .forEach(function (openMenu) {
+                openMenu.classList.remove("show");
+              });
+
+            // Show this dropdown
+            menu.classList.add("show");
+          }
+
+          return false;
+        };
+      });
+
+      // Add CSS to ensure dropdowns display properly
+      const style = document.createElement("style");
+      style.textContent = \`
+        @media (max-width: 768px) {
+          .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+          }
+          
+          .medjunarodni-transport .dropdown-menu {
+            max-height: none !important;
+            overflow: visible !important;
+          }
         }
-        
+      \`;
+      document.head.appendChild(style);
+
+      // Close dropdowns when clicking outside
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest(".dropdown")) {
+          document
+            .querySelectorAll(".dropdown-menu.show")
+            .forEach(function (menu) {
+              menu.classList.remove("show");
+            });
+        }
+      });
+    }
+  });
+</script>
+            `;
+            console.log('Header content injected');
+        }
+
+        // Footer content
         if (footerContainer) {
             footerContainer.innerHTML = `
-                <footer class="bg-dark text-white py-4">
-                    <div class="container">
-                        <p>Test Footer - Direct Content</p>
-                    </div>
-                </footer>
+<footer class="bg-dark text-white py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h5>O nama</h5>
+        <p>
+          Profesionalno pogrebno preduzeće sa dugogodišnjim iskustvom u
+          organizaciji međunarodnog transporta pokojnika.
+        </p>
+        <div class="mt-3 social-icons">
+          <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-white me-2"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-white"><i class="bi bi-viber"></i></a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 mb-md-0">
+        <h5>Kontakt</h5>
+        <address class="mb-0">
+          <p><i class="bi bi-geo-alt-fill me-2"></i>Adresa 123, Grad, Srbija</p>
+          <p><i class="bi bi-telephone-fill me-2"></i>+381 XX XXX XXX</p>
+          <p>
+            <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
+          </p>
+        </address>
+      </div>
+      <div class="col-md-4">
+        <h5>Brzi linkovi</h5>
+        <ul class="list-unstyled">
+          <li><a href="/" class="text-white">Početna</a></li>
+          <li><a href="/#services" class="text-white">Usluge</a></li>
+          <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
+          <li><a href="/#contact" class="text-white">Kontakt</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container copyright mt-4 pt-3 border-top border-secondary">
+    <p class="mb-0 text-center">
+      &copy; <span id="current-year">2023</span> Transport Pokojnika. Sva prava
+      zadržana.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Set current year in footer
+  document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
             `;
-            logDebug('Set direct content to footer successfully');
-        } else {
-            logDebug('Footer container not found for direct content test');
+            console.log('Footer content injected');
         }
-    });
-    
-    function logDebug(message) {
-        const logElement = document.getElementById('debug-log');
-        const time = new Date().toLocaleTimeString();
-        logElement.innerHTML += `<p>[${time}] ${message}</p>`;
-        console.log(`[${time}] ${message}`);
+
+        // Set active states after content is loaded
+        setActiveStates();
     }
-    
-    // First try to load header with inline fetch status logging
-    if (headerContainer) {
-        headerContainer.innerHTML = '<div class="text-center py-3">Attempting to load header...</div>';
-        
-        logDebug('Attempting to load header.html');
-        
-        // Try with a direct inline fetch to see exactly what happens
-        fetch('header.html')
-            .then(response => {
-                logDebug(`Header fetch status: ${response.status} ${response.statusText}`);
-                return response.text();
-            })
-            .then(data => {
-                logDebug(`Header content loaded: ${data.length} characters`);
-                headerContainer.innerHTML = data;
-                logDebug('Header content inserted into DOM');
-            })
-            .catch(error => {
-                logDebug(`Header fetch error: ${error.message}`);
-                headerContainer.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            });
-    }
-    
-    // Try to load footer with similar debugging
-    if (footerContainer) {
-        footerContainer.innerHTML = '<div class="text-center py-3">Attempting to load footer...</div>';
-        
-        logDebug('Attempting to load footer.html');
-        
-        fetch('footer.html')
-            .then(response => {
-                logDebug(`Footer fetch status: ${response.status} ${response.statusText}`);
-                return response.text();
-            })
-            .then(data => {
-                logDebug(`Footer content loaded: ${data.length} characters`);
-                footerContainer.innerHTML = data;
-                logDebug('Footer content inserted into DOM');
-            })
-            .catch(error => {
-                logDebug(`Footer fetch error: ${error.message}`);
-                footerContainer.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
-            });
-    }
+
+    // Inject the content directly
+    injectContent();
 });
 
 function setActiveStates() {
