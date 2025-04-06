@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get the header and footer container elements
     const headerContainer = document.querySelector('#header-container');
     const footerContainer = document.querySelector('#footer-container');
+    // Look for a contact container
+    const contactContainer = document.querySelector('#contact-container');
 
     console.log('Loading includes for:', window.location.pathname);
     
@@ -220,6 +222,33 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Header content injected');
         }
 
+        // Contact section - load from contact.html
+        if (contactContainer) {
+            // Add a loading indicator
+            contactContainer.innerHTML = '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
+            
+            fetch('contact.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    contactContainer.innerHTML = data;
+                    
+                    // Add contact form functionality
+                    initContactForm();
+                    
+                    // Add contact styles
+                    addContactStyles();
+                })
+                .catch(error => {
+                    console.error('Error loading contact section:', error);
+                    contactContainer.innerHTML = '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
+                });
+        }
+
         // Footer content
         if (footerContainer) {
             footerContainer.innerHTML = `
@@ -280,6 +309,55 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Set active states after content is loaded
         setActiveStates();
+    }
+    
+    // Initialize contact form functionality
+    function initContactForm() {
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Here you would typically send the form data to your server
+                // For now, just show a success message
+                alert('Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku.');
+                this.reset();
+            });
+        }
+    }
+    
+    // Add contact section styles
+    function addContactStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .contact-section {
+                position: relative;
+            }
+            .contact-icon {
+                width: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .social-icons a {
+                color: #495057;
+                transition: color 0.3s ease;
+            }
+            .social-icons a:hover {
+                color: #0d6efd;
+            }
+            .map-container {
+                height: 450px;
+            }
+            .map-container iframe {
+                height: 100%;
+            }
+            @media (max-width: 768px) {
+                .map-container {
+                    height: 300px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     }
     
     // Function to add sticky contact button
