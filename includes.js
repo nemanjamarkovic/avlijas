@@ -313,19 +313,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize contact form functionality
     function initContactForm() {
+        console.log('Initializing contact form...');
         const contactForm = document.getElementById('contactForm');
         if (contactForm) {
+            console.log('Contact form found, loading EmailJS...');
             // Load EmailJS library
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
             document.head.appendChild(script);
             
             script.onload = function() {
+                console.log('EmailJS library loaded successfully');
                 // Initialize EmailJS with your user ID
-                emailjs.init("service_bmwfktw"); // Sign up at emailjs.com to get your user ID
+                emailjs.init("service_bmwfktw");
+                console.log('EmailJS initialized with service ID');
+            };
+            
+            script.onerror = function() {
+                console.error('Failed to load EmailJS library!');
             };
             
             contactForm.addEventListener('submit', function(e) {
+                console.log('Form submitted, preventing default behavior');
                 e.preventDefault();
                 
                 // Show loading state
@@ -333,6 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const originalBtnText = submitBtn.innerHTML;
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Šalje se...';
+                console.log('Submit button set to loading state');
                 
                 // Prepare template parameters
                 const templateParams = {
@@ -342,23 +352,32 @@ document.addEventListener('DOMContentLoaded', function() {
                     subject: document.getElementById('subject').value,
                     message: document.getElementById('message').value
                 };
+                console.log('Form data collected:', templateParams);
+                
+                // IMPORTANT: Update these with your actual service and template IDs
+                const serviceID = 'service_bmwfktw'; // Replace with your actual service ID
+                const templateID = 'template_5gqzk4c'; // Replace with your actual template ID
+                
+                console.log(`Attempting to send email with serviceID: ${serviceID}, templateID: ${templateID}`);
                 
                 // Send the email using EmailJS
-                emailjs.send('SERVICE_ID', 'TEMPLATE_ID', templateParams)
-                    .then(function() {
-                        // Success message
+                emailjs.send(serviceID, templateID, templateParams)
+                    .then(function(response) {
+                        console.log('Email sent successfully!', response);
                         alert('Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku.');
                         contactForm.reset();
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = originalBtnText;
                     }, function(error) {
-                        // Error handling
-                        console.error('Error:', error);
+                        console.error('Error sending email:', error);
+                        console.error('Error details:', JSON.stringify(error));
                         alert('Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom.');
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = originalBtnText;
                     });
             });
+        } else {
+            console.error('Contact form element not found in the DOM!');
         }
     }
     
