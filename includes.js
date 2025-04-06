@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
             script.onload = function() {
                 console.log('EmailJS library loaded successfully');
                 // Initialize EmailJS with your user ID
-                emailjs.init("service_bmwfktw");
+                emailjs.init({"publicKey":"8hZ5M6g4Vl3edGr46"});
                 console.log('EmailJS initialized with service ID');
             };
             
