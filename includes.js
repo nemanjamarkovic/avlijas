@@ -317,10 +317,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (contactForm) {
             contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                // Here you would typically send the form data to your server
-                // For now, just show a success message
-                alert('Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku.');
-                this.reset();
+                
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Šalje se...';
+                
+                // Collect form data
+                const formData = new FormData(this);
+                
+                // Send to PHP handler
+                fetch('process-form.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku.');
+                    contactForm.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                });
             });
         }
     }
