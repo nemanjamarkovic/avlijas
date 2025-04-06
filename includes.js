@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // IMPORTANT: Update these with your actual service and template IDs
                 const serviceID = 'service_bmwfktw'; // Replace with your actual service ID
-                const templateID = 'template_5gqzk4c'; // Replace with your actual template ID
+                const templateID = 'template_6lq0do3'; // Replace with your actual template ID
                 
                 console.log(`Attempting to send email with serviceID: ${serviceID}, templateID: ${templateID}`);
                 
