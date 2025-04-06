@@ -315,6 +315,16 @@ document.addEventListener('DOMContentLoaded', function() {
     function initContactForm() {
         const contactForm = document.getElementById('contactForm');
         if (contactForm) {
+            // Load EmailJS library
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+            document.head.appendChild(script);
+            
+            script.onload = function() {
+                // Initialize EmailJS with your user ID
+                emailjs.init("service_bmwfktw"); // Sign up at emailjs.com to get your user ID
+            };
+            
             contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
@@ -324,27 +334,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Šalje se...';
                 
-                // Collect form data
-                const formData = new FormData(this);
+                // Prepare template parameters
+                const templateParams = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value
+                };
                 
-                // Send to PHP handler
-                fetch('process-form.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert('Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku.');
-                    contactForm.reset();
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnText;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom.');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnText;
-                });
+                // Send the email using EmailJS
+                emailjs.send('SERVICE_ID', 'TEMPLATE_ID', templateParams)
+                    .then(function() {
+                        // Success message
+                        alert('Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku.');
+                        contactForm.reset();
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    }, function(error) {
+                        // Error handling
+                        console.error('Error:', error);
+                        alert('Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom.');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                    });
             });
         }
     }
