@@ -68,6 +68,9 @@ document.addEventListener('DOMContentLoaded', function() {
             href="#"
             class="nav-link dropdown-toggle"
             id="medjunarodni-dropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
             Medjunarodni Transport
           </a>
@@ -79,15 +82,22 @@ document.addEventListener('DOMContentLoaded', function() {
               <a class="dropdown-item" href="/austrija">Prevoz iz Austrije</a>
             </li>
             <li>
-              <a class="dropdown-item" href="/svajcarska"
-                >Prevoz iz Švajcarske</a
-              >
+              <a class="dropdown-item" href="/svajcarska">Prevoz iz Švajcarske</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="/#transport">Sve destinacije</a>
             </li>
           </ul>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/nemacka">Nemačka</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/austrija">Austrija</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/svajcarska">Švajcarska</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/#showcase">Vozila</a>
