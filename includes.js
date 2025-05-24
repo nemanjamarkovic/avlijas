@@ -280,7 +280,6 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="col-md-4 mb-4 mb-md-0">
         <h5>Kontakt</h5>
         <address class="mb-0">
-          <p><i class="bi bi-geo-alt-fill me-2"></i>Adresa 123, Grad, Srbija</p>
           <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
           <p>
             <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
