@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="col-md-6">
         <div class="contact-info">
           <span class="me-3">
-            <a href="tel:+381XXXXXXXX" class="text-decoration-none">
-              <i class="bi bi-telephone-fill"></i> +381 XX XXX XXX
+            <a href="tel:+381642492849" class="text-decoration-none">
+              <i class="bi bi-telephone-fill"></i> +381 64 249 28 49
             </a>
           </span>
           <span>
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <h5>Kontakt</h5>
         <address class="mb-0">
           <p><i class="bi bi-geo-alt-fill me-2"></i>Adresa 123, Grad, Srbija</p>
-          <p><i class="bi bi-telephone-fill me-2"></i>+381 XX XXX XXX</p>
+          <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
           <p>
             <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
           </p>
@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const stickyButton = document.createElement('div');
         stickyButton.className = 'sticky-contact-button';
         stickyButton.innerHTML = `
-            <a href="tel:+381XXXXXXXX" class="btn btn-primary btn-lg rounded-circle">
+            <a href="tel:+381642492849" class="btn btn-primary btn-lg rounded-circle">
                 <i class="bi bi-telephone-fill"></i>
             </a>
             <a href="#contact" class="btn btn-success btn-lg">
