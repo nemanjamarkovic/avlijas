@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://transportpokojnika.com/sitemap.xml
+
+# Block access to sensitive files
+Disallow: /process-form.php
+Disallow: /*.php$
+Disallow: /includes.js
+Disallow: /styles.css
+
+# Allow access to images for SEO
+Allow: /*.jpg
+Allow: /*.png
+Allow: /*.gif
+Allow: /*.webp
+
+# Common crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Crawl delay for polite crawling
+Crawl-delay: 1 

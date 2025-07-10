@@ -1,23 +1,211 @@
-<div class="container">
+<footer
+  class="bg-dark text-light py-5"
+  itemscope
+  itemtype="https://schema.org/FuneralService"
+>
+  <div class="container">
     <div class="row">
-        <div class="col-md-4">
-            <h5>Kontakt</h5>
-            <p>Adresa: Vaša adresa</p>
-            <p>Telefon: +381 XX XXX XXX</p>
-            <p>Email: info@example.com</p>
+      <div class="col-md-4 mb-4">
+        <h5 class="text-success mb-3">
+          <i class="bi bi-building me-2"></i>
+          <span itemprop="name">Transport pokojnika</span>
+        </h5>
+        <p class="mb-2" itemprop="description">
+          Profesionalno pogrebno preduzeće sa dugogodišnjim iskustvom u
+          međunarodnom transportu pokojnika iz Evrope.
+        </p>
+        <div class="contact-info">
+          <p class="mb-2">
+            <i class="bi bi-geo-alt me-2 text-success"></i>
+            <span
+              itemprop="address"
+              itemscope
+              itemtype="https://schema.org/PostalAddress"
+            >
+              <span itemprop="addressLocality">Beograd</span>,
+              <span itemprop="addressCountry">Srbija</span>
+            </span>
+          </p>
+          <p class="mb-2">
+            <i class="bi bi-telephone me-2 text-success"></i>
+            <a
+              href="tel:+381642492849"
+              class="text-light text-decoration-none"
+              itemprop="telephone"
+            >
+              +381 64 249 28 49
+            </a>
+          </p>
+          <p class="mb-2">
+            <i class="bi bi-envelope me-2 text-success"></i>
+            <a
+              href="mailto:kontakt@transportpokojnika.com"
+              class="text-light text-decoration-none"
+              itemprop="email"
+            >
+              kontakt@transportpokojnika.com
+            </a>
+          </p>
         </div>
-        <div class="col-md-4">
-            <h5>Radno vreme</h5>
-            <p>Ponedeljak - Petak: 00-24h</p>
-            <p>Subota - Nedelja: 00-24h</p>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <h5 class="text-success mb-3">
+          <i class="bi bi-clock me-2"></i>Radno vreme
+        </h5>
+        <div itemprop="openingHours" content="Mo-Su 00:00-24:00">
+          <p class="mb-2">
+            <i class="bi bi-calendar3 me-2"></i>Ponedeljak - Nedelja
+          </p>
+          <p class="mb-3">
+            <i class="bi bi-clock me-2"></i>Dostupni 24 sata dnevno
+          </p>
         </div>
-        <div class="col-md-4">
-            <h5>Brze veze</h5>
-            <ul class="list-unstyled">
-                <li><a href="#" class="text-light">Usluge</a></li>
-                <li><a href="#" class="text-light">O nama</a></li>
-                <li><a href="#" class="text-light">Kontakt</a></li>
-            </ul>
+
+        <h6 class="text-success mb-2">Oblasti usluga:</h6>
+        <ul class="list-unstyled small">
+          <li><i class="bi bi-chevron-right me-1"></i>Transport iz Nemačke</li>
+          <li><i class="bi bi-chevron-right me-1"></i>Transport iz Austrije</li>
+          <li>
+            <i class="bi bi-chevron-right me-1"></i>Transport iz Švajcarske
+          </li>
+          <li>
+            <i class="bi bi-chevron-right me-1"></i>Kompletna dokumentacija
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <h5 class="text-success mb-3">
+          <i class="bi bi-link-45deg me-2"></i>Brze veze
+        </h5>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="/" class="text-light text-decoration-none hover-success">
+              <i class="bi bi-house me-2"></i>Početna stranica
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/nemacka"
+              class="text-light text-decoration-none hover-success"
+            >
+              <i class="bi bi-arrow-right me-2"></i>Prevoz iz Nemačke
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/austrija"
+              class="text-light text-decoration-none hover-success"
+            >
+              <i class="bi bi-arrow-right me-2"></i>Prevoz iz Austrije
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/svajcarska"
+              class="text-light text-decoration-none hover-success"
+            >
+              <i class="bi bi-arrow-right me-2"></i>Prevoz iz Švajcarske
+            </a>
+          </li>
+          <li class="mb-2">
+            <a
+              href="/contact"
+              class="text-light text-decoration-none hover-success"
+            >
+              <i class="bi bi-envelope me-2"></i>Kontakt
+            </a>
+          </li>
+        </ul>
+
+        <div class="social-links mt-3">
+          <h6 class="text-success mb-2">Pratite nas:</h6>
+          <a
+            href="#"
+            class="text-light me-3 hover-success"
+            aria-label="Facebook stranica"
+          >
+            <i class="bi bi-facebook fs-5"></i>
+          </a>
+          <a
+            href="#"
+            class="text-light me-3 hover-success"
+            aria-label="Instagram profil"
+          >
+            <i class="bi bi-instagram fs-5"></i>
+          </a>
+          <a
+            href="#"
+            class="text-light me-3 hover-success"
+            aria-label="Viber kontakt"
+          >
+            <i class="bi bi-viber fs-5"></i>
+          </a>
         </div>
+      </div>
     </div>
-</div> 
+
+    <hr class="my-4" style="border-color: #495057" />
+
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <p class="mb-0 small text-muted">
+          &copy; <span id="currentYear"></span> Transport pokojnika - Pogrebno
+          preduzeće. Sva prava zadržana.
+        </p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <div class="emergency-contact">
+          <span class="badge bg-success">
+            <i class="bi bi-telephone-fill me-1"></i>
+            Hitno:
+            <a href="tel:+381642492849" class="text-white text-decoration-none"
+              >064 249 28 49</a
+            >
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set current year
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+  </script>
+
+  <style>
+    .hover-success:hover {
+      color: #198754 !important;
+      transform: translateX(3px);
+      transition: all 0.3s ease;
+    }
+
+    .contact-info a:hover,
+    .social-links a:hover {
+      color: #198754 !important;
+      transition: color 0.3s ease;
+    }
+
+    .emergency-contact .badge {
+      font-size: 0.9rem;
+      padding: 8px 12px;
+    }
+
+    .social-links a {
+      transition: transform 0.3s ease;
+    }
+
+    .social-links a:hover {
+      transform: scale(1.2);
+    }
+
+    @media (max-width: 768px) {
+      .text-md-end {
+        text-align: center !important;
+        margin-top: 1rem;
+      }
+    }
+  </style>
+</footer>
