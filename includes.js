@@ -275,7 +275,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     return response.text();
                 })
                 .then(data => {
-                    contactContainer.innerHTML = data;
+                    // Parse fetched HTML and extract only the contact section to avoid duplicating <head> and canonical tags
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, 'text/html');
+                    const contactSection = doc.querySelector('section#contact');
+                    if (contactSection) {
+                        contactContainer.innerHTML = contactSection.outerHTML;
+                    } else {
+                        // Fallback to whole body content if section not found
+                        const mainContent = doc.querySelector('main');
+                        contactContainer.innerHTML = mainContent ? mainContent.innerHTML : data;
+                    }
                     
                     // Add contact form functionality
                     initContactForm();
@@ -323,9 +333,9 @@ document.addEventListener('DOMContentLoaded', function() {
         <h5>Brzi linkovi</h5>
         <ul class="list-unstyled">
           <li><a href="/" class="text-white">Početna</a></li>
-          <li><a href="/#services" class="text-white">Usluge</a></li>
+          <li><a href="/#transport" class="text-white">Usluge</a></li>
           <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
-          <li><a href="/#contact" class="text-white">Kontakt</a></li>
+          <li><a href="/contact" class="text-white">Kontakt</a></li>
           <li class="mt-2"><strong>Destinacije</strong></li>
           <li><a href="/nemacka" class="text-white">Prevoz iz Nemačke</a></li>
           <li><a href="/austrija" class="text-white">Prevoz iz Austrije</a></li>
@@ -338,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
   </div>
-  <div class="container copyright mt-4 pt-3 border-top border-secondary">
+      <div class="container copyright mt-4 pt-3 border-top border-secondary">
     <p class="mb-0 text-center">
       &copy; <span id="current-year">2023</span> Transport Pokojnika. Sva prava
       zadržana.
@@ -349,37 +359,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
   // Set current year in footer
   document.getElementById('current-year').textContent = new Date().getFullYear();
-  // Inject LocalBusiness (FuneralHome) structured data sitewide
-  (function(){
-    try {
-      const schema = {
-        "@context": "https://schema.org",
-        "@type": "FuneralHome",
-        "name": "Transport pokojnika - Pogrebno preduzeće",
-        "url": "https://transportpokojnika.com",
-        "logo": "https://transportpokojnika.com/vijenac%20logo.png",
-        "image": "https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg",
-        "telephone": "+381642492849",
-        "email": "kontakt@transportpokojnika.com",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Beograd",
-          "addressCountry": "RS"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": "44.8154",
-          "longitude": "20.4612"
-        },
-        "openingHours": "Mo-Su 00:00-24:00",
-        "priceRange": "€€"
-      };
-      const script = document.createElement('script');
-      script.type = 'application/ld+json';
-      script.textContent = JSON.stringify(schema);
-      document.body.appendChild(script);
-    } catch (e) { console.error('Schema injection failed', e); }
-  })();
 </script>
             `;
             console.log('Footer content injected');
@@ -534,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <a href="tel:+381642492849" class="btn btn-primary btn-lg rounded-circle">
                 <i class="bi bi-telephone-fill"></i>
             </a>
-            <a href="#contact" class="btn btn-success btn-lg">
+            <a href="/contact" class="btn btn-success btn-lg">
                 Kontaktirajte nas
             </a>
         `;
