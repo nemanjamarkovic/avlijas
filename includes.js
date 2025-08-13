@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="container">
     <div class="row">
       <div class="col-md-4 mb-4 mb-md-0">
-        <h5>O nama</h5>
+        <h2>O nama</h2>
         <p>
           Profesionalno pogrebno preduzeće sa dugogodišnjim iskustvom u
           organizaciji međunarodnog transporta pokojnika.
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       </div>
       <div class="col-md-4 mb-4 mb-md-0">
-        <h5>Kontakt</h5>
+        <h2>Kontakt</h2>
         <address class="mb-0">
           <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
           <p>
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </address>
       </div>
       <div class="col-md-4">
-        <h5>Brzi linkovi</h5>
+        <h2>Brzi linkovi</h2>
         <ul class="list-unstyled">
           <li><a href="/" class="text-white">Početna</a></li>
           <li><a href="/#transport" class="text-white">Usluge</a></li>
@@ -338,10 +338,21 @@ document.addEventListener('DOMContentLoaded', function() {
           <li><a href="/contact" class="text-white">Kontakt</a></li>
           <li class="mt-2"><strong>Destinacije</strong></li>
           <li><a href="/nemacka" class="text-white">Prevoz iz Nemačke</a></li>
+          <li><a href="/berlin" class="text-white">Prevoz iz Berlina</a></li>
+          <li><a href="/hamburg" class="text-white">Prevoz iz Hamburga</a></li>
+          <li><a href="/frankfurt" class="text-white">Prevoz iz Frankfurta</a></li>
+          <li><a href="/munchen" class="text-white">Prevoz iz Minhena (München)</a></li>
           <li><a href="/austrija" class="text-white">Prevoz iz Austrije</a></li>
+          <li><a href="/bec" class="text-white">Prevoz iz Beča (Wien)</a></li>
+          <li><a href="/graz" class="text-white">Prevoz iz Graca (Graz)</a></li>
+          <li><a href="/linz" class="text-white">Prevoz iz Linca (Linz)</a></li>
           <li><a href="/svajcarska" class="text-white">Prevoz iz Švajcarske</a></li>
+          <li><a href="/cirih" class="text-white">Prevoz iz Ciriha (Zürich)</a></li>
+          <li><a href="/zeneva" class="text-white">Prevoz iz Ženeve (Genève)</a></li>
           <li><a href="/italija" class="text-white">Prevoz iz Italije</a></li>
+          <li><a href="/rim" class="text-white">Prevoz iz Rima (Roma)</a></li>
           <li><a href="/spanija" class="text-white">Prevoz iz Španije</a></li>
+          <li><a href="/madrid" class="text-white">Prevoz iz Madrida</a></li>
           <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
           <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
         </ul>
