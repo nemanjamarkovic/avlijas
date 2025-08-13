@@ -387,6 +387,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add sticky contact button
         addStickyContactButton();
+
+        // Apply theme overrides (ensure no unexpected white backgrounds)
+        addThemeOverrides();
         
         // Set active states after content is loaded
         setActiveStates();
@@ -588,6 +591,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add the styles and button to the document
         document.head.appendChild(style);
         document.body.appendChild(stickyButton);
+    }
+
+    // Theme overrides to align section backgrounds with dark theme
+    function addThemeOverrides() {
+        const style = document.createElement('style');
+        style.textContent = `
+            /* Ensure "light" sections match site theme */
+            section.bg-light,
+            .bg-light,
+            .container-fluid.bg-light {
+                background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%) !important;
+                color: #e9e9e9 !important;
+            }
+
+            /* Keep cards readable on dark */
+            .service-card,
+            .card,
+            .card-body {
+                background-color: #2b2b2b !important;
+                color: #e9e9e9 !important;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     // Inject the content directly
