@@ -84,6 +84,18 @@ document.addEventListener('DOMContentLoaded', function() {
             <li>
               <a class="dropdown-item" href="/svajcarska">Prevoz iz Švajcarske</a>
             </li>
+            <li>
+              <a class="dropdown-item" href="/italija">Prevoz iz Italije</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/spanija">Prevoz iz Španije</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/svedska">Prevoz iz Švedske</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/danska">Prevoz iz Danske</a>
+            </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="/#transport">Sve destinacije</a>
@@ -98,6 +110,18 @@ document.addEventListener('DOMContentLoaded', function() {
         </li>
         <li class="nav-item d-lg-none">
           <a class="nav-link" href="/svajcarska">Švajcarska</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/italija">Italija</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/spanija">Španija</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/svedska">Švedska</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/danska">Danska</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/cenovnik">Cenovnik</a>
@@ -549,5 +573,17 @@ function setActiveStates() {
     } else if (currentPath.includes('/svajcarska')) {
         document.querySelector('a[href="/svajcarska"]')?.classList.add('active');
         document.querySelector('.dropdown-toggle')?.classList.add('active');
+  } else if (currentPath.includes('/italija')) {
+      document.querySelector('a[href="/italija"]')?.classList.add('active');
+      document.querySelector('.dropdown-toggle')?.classList.add('active');
+  } else if (currentPath.includes('/spanija')) {
+      document.querySelector('a[href="/spanija"]')?.classList.add('active');
+      document.querySelector('.dropdown-toggle')?.classList.add('active');
+  } else if (currentPath.includes('/svedska')) {
+      document.querySelector('a[href="/svedska"]')?.classList.add('active');
+      document.querySelector('.dropdown-toggle')?.classList.add('active');
+  } else if (currentPath.includes('/danska')) {
+      document.querySelector('a[href="/danska"]')?.classList.add('active');
+      document.querySelector('.dropdown-toggle')?.classList.add('active');
     }
 } 
