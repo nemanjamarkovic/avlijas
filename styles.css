@@ -793,6 +793,19 @@ html {
     background-color: var(--accent);
 }
 
+/* City CTA band button overrides to match theme (avoid default blue link look) */
+.bg-primary .btn-outline-light {
+    color: #fff;
+    border-color: rgba(255,255,255,0.85);
+}
+.bg-primary .btn-outline-light:hover {
+    background-color: rgba(255,255,255,0.15);
+    color: #fff;
+}
+.bg-primary .btn-light {
+    color: var(--text-dark);
+}
+
 /* Update section backgrounds */
 section {
     background-color: var(--bg-dark);
