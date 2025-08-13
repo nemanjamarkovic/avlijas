@@ -27,9 +27,10 @@
       property="og:description"
       content="Organizujemo prevoz pokojnika iz svih gradova Italije. Kompletna dokumentacija i podrška 24/7."
     />
+    <meta property="og:locale" content="sr_RS" />
     <meta
       property="og:image"
-      content="https://transportpokojnika.com/images/og-italija.jpg"
+      content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg"
     />
 
     <!-- Twitter -->
@@ -48,11 +49,21 @@
     />
     <meta
       property="twitter:image"
-      content="https://transportpokojnika.com/images/og-italija.jpg"
+      content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg"
     />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://transportpokojnika.com/italija" />
+    <link
+      rel="alternate"
+      hreflang="sr-RS"
+      href="https://transportpokojnika.com/italija"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://transportpokojnika.com/"
+    />
 
     <!-- Bootstrap CSS -->
     <link
@@ -65,7 +76,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <!-- Custom CSS -->
-    <link href="styles.css" rel="stylesheet" />
+    <link href="styles.min.css" rel="stylesheet" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -151,6 +162,16 @@
     <div id="header-container"></div>
 
     <main role="main">
+      <!-- Breadcrumbs -->
+      <nav class="container" aria-label="breadcrumb">
+        <ol class="breadcrumb py-3">
+          <li class="breadcrumb-item"><a href="/">Početna</a></li>
+          <li class="breadcrumb-item">
+            <a href="/#transport">Međunarodni transport</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Italija</li>
+        </ol>
+      </nav>
       <!-- Hero Section -->
       <section class="container-fluid bg-light py-5">
         <div class="container">
@@ -168,6 +189,8 @@
             </div>
             <div class="col-lg-6">
               <img
+                loading="lazy"
+                decoding="async"
                 src="pogrebni-kombi-sa-sandukom.jpg"
                 alt="Specijalizovano pogrebno vozilo za transport pokojnika iz Italije u Srbiju"
                 class="img-fluid rounded shadow mb-3"
@@ -175,6 +198,8 @@
                 height="300"
               />
               <img
+                loading="lazy"
+                decoding="async"
                 src="pogrebni-sanduk.png"
                 alt="Pogrebni sanduk za dostojan transport pokojnika iz Italije"
                 class="img-fluid rounded shadow mb-3"
@@ -182,6 +207,8 @@
                 height="300"
               />
               <img
+                loading="lazy"
+                decoding="async"
                 src="pogrebni-sanduci.jpg"
                 alt="Različiti pogrebni sanduci za međunarodni transport iz Italije"
                 class="img-fluid rounded shadow"
@@ -405,5 +432,31 @@
     <!-- JavaScript includes -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="includes.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Početna",
+            "item": "https://transportpokojnika.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Međunarodni transport",
+            "item": "https://transportpokojnika.com/#transport"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Italija",
+            "item": "https://transportpokojnika.com/italija"
+          }
+        ]
+      }
+    </script>
   </body>
 </html>

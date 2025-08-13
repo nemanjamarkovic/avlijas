@@ -7,8 +7,9 @@ Sitemap: https://transportpokojnika.com/sitemap.xml
 # Block access to sensitive files
 Disallow: /process-form.php
 Disallow: /*.php$
-Disallow: /includes.js
-Disallow: /styles.css
+# Allow rendering-critical assets
+Allow: /includes.js
+Allow: /styles.css
 
 # Allow access to images for SEO
 Allow: /*.jpg

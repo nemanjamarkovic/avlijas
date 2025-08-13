@@ -27,9 +27,10 @@
       property="og:description"
       content="Profesionalno pogrebno preduzeće sa dugogodišnjim iskustvom. Međunarodni transport pokojnika iz svih evropskih zemalja."
     />
+    <meta property="og:locale" content="sr_RS" />
     <meta
       property="og:image"
-      content="https://transportpokojnika.com/images/og-image.jpg"
+      content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg"
     />
 
     <!-- Twitter -->
@@ -45,16 +46,32 @@
     />
     <meta
       property="twitter:image"
-      content="https://transportpokojnika.com/images/og-image.jpg"
+      content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg"
     />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://transportpokojnika.com/" />
+    <link
+      rel="alternate"
+      hreflang="sr-RS"
+      href="https://transportpokojnika.com/"
+    />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://transportpokojnika.com/"
+    />
 
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="preconnect"
+      href="https://www.googletagmanager.com"
+      crossorigin
     />
     <!-- Bootstrap Icons -->
     <link
@@ -62,7 +79,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
     <!-- Custom CSS -->
-    <link href="styles.css" rel="stylesheet" />
+    <link href="styles.min.css" rel="stylesheet" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -203,6 +220,7 @@
             <div class="col-lg-6">
               <div class="hero-image-wrapper">
                 <img
+                  fetchpriority="high"
                   src="pogrebni-kombi-sa-sandukom.jpg"
                   alt="Profesionalno pogrebno vozilo sa sandukom za međunarodni transport pokojnika iz Evrope"
                   class="img-fluid rounded hero-image"
@@ -343,18 +361,24 @@
           </h2>
           <div class="image-showcase position-relative">
             <img
+              loading="lazy"
+              decoding="async"
               src="pogrebni-kombi-sa-sandukom.jpg"
               alt="Pogrebni kombi sa sandukom"
               class="showcase-image img-fluid rounded w-100"
               data-index="0"
             />
             <img
+              loading="lazy"
+              decoding="async"
               src="pogrebni-sanduk.png"
               alt="Pogrebni sanduk"
               class="showcase-image img-fluid rounded w-100"
               data-index="1"
             />
             <img
+              loading="lazy"
+              decoding="async"
               src="pogrebni-sanduci.jpg"
               alt="Izbor pogrebnih sanduka"
               class="showcase-image img-fluid rounded w-100"

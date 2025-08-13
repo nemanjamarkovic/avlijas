@@ -314,6 +314,9 @@ document.addEventListener('DOMContentLoaded', function() {
           <p>
             <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
           </p>
+          <p>
+            <i class="bi bi-geo-alt-fill me-2"></i>Beograd, Srbija
+          </p>
         </address>
       </div>
       <div class="col-md-4">
@@ -323,6 +326,14 @@ document.addEventListener('DOMContentLoaded', function() {
           <li><a href="/#services" class="text-white">Usluge</a></li>
           <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
           <li><a href="/#contact" class="text-white">Kontakt</a></li>
+          <li class="mt-2"><strong>Destinacije</strong></li>
+          <li><a href="/nemacka" class="text-white">Prevoz iz Nemačke</a></li>
+          <li><a href="/austrija" class="text-white">Prevoz iz Austrije</a></li>
+          <li><a href="/svajcarska" class="text-white">Prevoz iz Švajcarske</a></li>
+          <li><a href="/italija" class="text-white">Prevoz iz Italije</a></li>
+          <li><a href="/spanija" class="text-white">Prevoz iz Španije</a></li>
+          <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
+          <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
         </ul>
       </div>
     </div>
@@ -338,6 +349,37 @@ document.addEventListener('DOMContentLoaded', function() {
 <script>
   // Set current year in footer
   document.getElementById('current-year').textContent = new Date().getFullYear();
+  // Inject LocalBusiness (FuneralHome) structured data sitewide
+  (function(){
+    try {
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "FuneralHome",
+        "name": "Transport pokojnika - Pogrebno preduzeće",
+        "url": "https://transportpokojnika.com",
+        "logo": "https://transportpokojnika.com/vijenac%20logo.png",
+        "image": "https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg",
+        "telephone": "+381642492849",
+        "email": "kontakt@transportpokojnika.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Beograd",
+          "addressCountry": "RS"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "44.8154",
+          "longitude": "20.4612"
+        },
+        "openingHours": "Mo-Su 00:00-24:00",
+        "priceRange": "€€"
+      };
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(schema);
+      document.body.appendChild(script);
+    } catch (e) { console.error('Schema injection failed', e); }
+  })();
 </script>
             `;
             console.log('Footer content injected');
