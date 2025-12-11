@@ -198,3 +198,5 @@ Start with `.htaccess` if you're unsure, or `_headers` if using a modern static 
 - [MDN Web Docs - HSTS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
 - [OWASP - Security Headers](https://owasp.org/www-project-secure-headers/)
 - [Security Headers Scanner](https://securityheaders.com/)
+
+

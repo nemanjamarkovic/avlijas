@@ -1,17 +1,17 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Get the header and footer container elements
-    const headerContainer = document.querySelector('#header-container');
-    const footerContainer = document.querySelector('#footer-container');
-    // Look for a contact container
-    const contactContainer = document.querySelector('#contact-container');
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the header and footer container elements
+  const headerContainer = document.querySelector("#header-container");
+  const footerContainer = document.querySelector("#footer-container");
+  // Look for a contact container
+  const contactContainer = document.querySelector("#contact-container");
 
-    console.log('Loading includes for:', window.location.pathname);
-    
-    // Function to inject content to containers
-    function injectContent() {
-        // Header content
-        if (headerContainer) {
-            headerContainer.innerHTML = `
+  console.log("Loading includes for:", window.location.pathname);
+
+  // Function to inject content to containers
+  function injectContent() {
+    // Header content
+    if (headerContainer) {
+      headerContainer.innerHTML = `
 <div class="top-bar py-2">
   <div class="container">
     <div class="row align-items-center">
@@ -259,49 +259,53 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 </script>
             `;
-            console.log('Header content injected');
-        }
+      console.log("Header content injected");
+    }
 
-        // Contact section - load from contact.html
-        if (contactContainer) {
-            // Add a loading indicator
-            contactContainer.innerHTML = '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
-            
-            fetch('contact.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    // Parse fetched HTML and extract only the contact section to avoid duplicating <head> and canonical tags
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, 'text/html');
-                    const contactSection = doc.querySelector('section#contact');
-                    if (contactSection) {
-                        contactContainer.innerHTML = contactSection.outerHTML;
-                    } else {
-                        // Fallback to whole body content if section not found
-                        const mainContent = doc.querySelector('main');
-                        contactContainer.innerHTML = mainContent ? mainContent.innerHTML : data;
-                    }
-                    
-                    // Add contact form functionality
-                    initContactForm();
-                    
-                    // Add contact styles
-                    addContactStyles();
-                })
-                .catch(error => {
-                    console.error('Error loading contact section:', error);
-                    contactContainer.innerHTML = '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
-                });
-        }
+    // Contact section - load from contact.html
+    if (contactContainer) {
+      // Add a loading indicator
+      contactContainer.innerHTML =
+        '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
 
-        // Footer content
-        if (footerContainer) {
-            footerContainer.innerHTML = `
+      fetch("contact.html")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then((data) => {
+          // Parse fetched HTML and extract only the contact section to avoid duplicating <head> and canonical tags
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(data, "text/html");
+          const contactSection = doc.querySelector("section#contact");
+          if (contactSection) {
+            contactContainer.innerHTML = contactSection.outerHTML;
+          } else {
+            // Fallback to whole body content if section not found
+            const mainContent = doc.querySelector("main");
+            contactContainer.innerHTML = mainContent
+              ? mainContent.innerHTML
+              : data;
+          }
+
+          // Add contact form functionality
+          initContactForm();
+
+          // Add contact styles
+          addContactStyles();
+        })
+        .catch((error) => {
+          console.error("Error loading contact section:", error);
+          contactContainer.innerHTML =
+            '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
+        });
+    }
+
+    // Footer content
+    if (footerContainer) {
+      footerContainer.innerHTML = `
 <footer class="bg-dark text-white py-5">
   <div class="container">
     <div class="row">
@@ -312,8 +316,8 @@ document.addEventListener('DOMContentLoaded', function() {
           organizaciji međunarodnog transporta pokojnika.
         </p>
         <div class="mt-3 social-icons">
-          <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="text-white me-2"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="text-white me-2" aria-label="Facebook stranica"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/transportpokojnika/" target="_blank" rel="noopener noreferrer" class="text-white me-2" aria-label="Instagram profil"><i class="bi bi-instagram"></i></a>
           <a href="#" class="text-white"><i class="bi bi-viber"></i></a>
         </div>
       </div>
@@ -372,93 +376,103 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
             `;
-            console.log('Footer content injected');
-        }
-        
-        // Add sticky contact button
-        addStickyContactButton();
+      console.log("Footer content injected");
+    }
 
-        // Apply theme overrides (ensure no unexpected white backgrounds)
-        addThemeOverrides();
-        
-        // Set active states after content is loaded
-        setActiveStates();
+    // Add sticky contact button
+    addStickyContactButton();
+
+    // Apply theme overrides (ensure no unexpected white backgrounds)
+    addThemeOverrides();
+
+    // Set active states after content is loaded
+    setActiveStates();
+  }
+
+  // Initialize contact form functionality
+  function initContactForm() {
+    console.log("Initializing contact form...");
+    const contactForm = document.getElementById("contactForm");
+    if (contactForm) {
+      console.log("Contact form found, loading EmailJS...");
+      // Load EmailJS library
+      const script = document.createElement("script");
+      script.src =
+        "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+      document.head.appendChild(script);
+
+      script.onload = function () {
+        console.log("EmailJS library loaded successfully");
+        // Initialize EmailJS with your user ID
+        emailjs.init("yN59DEa4iJObN4zOM");
+        console.log("EmailJS initialized with service ID");
+      };
+
+      script.onerror = function () {
+        console.error("Failed to load EmailJS library!");
+      };
+
+      contactForm.addEventListener("submit", function (e) {
+        console.log("Form submitted, preventing default behavior");
+        e.preventDefault();
+
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Šalje se...';
+        console.log("Submit button set to loading state");
+
+        // Prepare template parameters
+        const templateParams = {
+          name: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+          phone: document.getElementById("phone").value,
+          subject: document.getElementById("subject").value,
+          message: document.getElementById("message").value,
+        };
+        console.log("Form data collected:", templateParams);
+
+        // IMPORTANT: Update these with your actual service and template IDs
+        const serviceID = "service_bmwfktw"; // Replace with your actual service ID
+        const templateID = "template_6lq0do3"; // Replace with your actual template ID
+
+        console.log(
+          `Attempting to send email with serviceID: ${serviceID}, templateID: ${templateID}`
+        );
+
+        // Send the email using EmailJS
+        emailjs.send(serviceID, templateID, templateParams).then(
+          function (response) {
+            console.log("Email sent successfully!", response);
+            alert(
+              "Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku."
+            );
+            contactForm.reset();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+          },
+          function (error) {
+            console.error("Error sending email:", error);
+            console.error("Error details:", JSON.stringify(error));
+            alert(
+              "Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom."
+            );
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+          }
+        );
+      });
+    } else {
+      console.error("Contact form element not found in the DOM!");
     }
-    
-    // Initialize contact form functionality
-    function initContactForm() {
-        console.log('Initializing contact form...');
-        const contactForm = document.getElementById('contactForm');
-        if (contactForm) {
-            console.log('Contact form found, loading EmailJS...');
-            // Load EmailJS library
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-            document.head.appendChild(script);
-            
-            script.onload = function() {
-                console.log('EmailJS library loaded successfully');
-                // Initialize EmailJS with your user ID
-                emailjs.init('yN59DEa4iJObN4zOM');
-                console.log('EmailJS initialized with service ID');
-            };
-            
-            script.onerror = function() {
-                console.error('Failed to load EmailJS library!');
-            };
-            
-            contactForm.addEventListener('submit', function(e) {
-                console.log('Form submitted, preventing default behavior');
-                e.preventDefault();
-                
-                // Show loading state
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalBtnText = submitBtn.innerHTML;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Šalje se...';
-                console.log('Submit button set to loading state');
-                
-                // Prepare template parameters
-                const templateParams = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    subject: document.getElementById('subject').value,
-                    message: document.getElementById('message').value
-                };
-                console.log('Form data collected:', templateParams);
-                
-                // IMPORTANT: Update these with your actual service and template IDs
-                const serviceID = 'service_bmwfktw'; // Replace with your actual service ID
-                const templateID = 'template_6lq0do3'; // Replace with your actual template ID
-                
-                console.log(`Attempting to send email with serviceID: ${serviceID}, templateID: ${templateID}`);
-                
-                // Send the email using EmailJS
-                emailjs.send(serviceID, templateID, templateParams)
-                    .then(function(response) {
-                        console.log('Email sent successfully!', response);
-                        alert('Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku.');
-                        contactForm.reset();
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnText;
-                    }, function(error) {
-                        console.error('Error sending email:', error);
-                        console.error('Error details:', JSON.stringify(error));
-                        alert('Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom.');
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnText;
-                    });
-            });
-        } else {
-            console.error('Contact form element not found in the DOM!');
-        }
-    }
-    
-    // Add contact section styles
-    function addContactStyles() {
-        const style = document.createElement('style');
-        style.textContent = `
+  }
+
+  // Add contact section styles
+  function addContactStyles() {
+    const style = document.createElement("style");
+    style.textContent = `
             .contact-section {
                 position: relative;
             }
@@ -512,15 +526,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         `;
-        document.head.appendChild(style);
-    }
-    
-    // Function to add sticky contact button
-    function addStickyContactButton() {
-        // Create the sticky button element
-        const stickyButton = document.createElement('div');
-        stickyButton.className = 'sticky-contact-button';
-        stickyButton.innerHTML = `
+    document.head.appendChild(style);
+  }
+
+  // Function to add sticky contact button
+  function addStickyContactButton() {
+    // Create the sticky button element
+    const stickyButton = document.createElement("div");
+    stickyButton.className = "sticky-contact-button";
+    stickyButton.innerHTML = `
             <a href="tel:+381642492849" class="btn btn-primary btn-lg rounded-circle">
                 <i class="bi bi-telephone-fill"></i>
             </a>
@@ -528,10 +542,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 Kontaktirajte nas
             </a>
         `;
-        
-        // Style the button
-        const style = document.createElement('style');
-        style.textContent = `
+
+    // Style the button
+    const style = document.createElement("style");
+    style.textContent = `
             .sticky-contact-button {
                 position: fixed;
                 bottom: 30px;
@@ -577,16 +591,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         `;
-        
-        // Add the styles and button to the document
-        document.head.appendChild(style);
-        document.body.appendChild(stickyButton);
-    }
 
-    // Theme overrides to align section backgrounds with dark theme
-    function addThemeOverrides() {
-        const style = document.createElement('style');
-        style.textContent = `
+    // Add the styles and button to the document
+    document.head.appendChild(style);
+    document.body.appendChild(stickyButton);
+  }
+
+  // Theme overrides to align section backgrounds with dark theme
+  function addThemeOverrides() {
+    const style = document.createElement("style");
+    style.textContent = `
             /* Ensure "light" sections match site theme */
             section.bg-light,
             .bg-light,
@@ -603,45 +617,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 color: #e9e9e9 !important;
             }
         `;
-        document.head.appendChild(style);
-    }
+    document.head.appendChild(style);
+  }
 
-    // Inject the content directly
-    injectContent();
+  // Inject the content directly
+  injectContent();
 });
 
 function setActiveStates() {
-    // Get current path
-    const currentPath = window.location.pathname;
-    
-    // Remove all active classes first
-    document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
-        link.classList.remove('active');
-    });
-    
-    // Set active states based on current path
-    if (currentPath === '/' || currentPath === '/index.html') {
-        document.querySelector('a[href="/"]')?.classList.add('active');
-    } else if (currentPath.includes('/nemacka')) {
-        document.querySelector('a[href="/nemacka"]')?.classList.add('active');
-        document.querySelector('.dropdown-toggle')?.classList.add('active');
-    } else if (currentPath.includes('/austrija')) {
-        document.querySelector('a[href="/austrija"]')?.classList.add('active');
-        document.querySelector('.dropdown-toggle')?.classList.add('active');
-    } else if (currentPath.includes('/svajcarska')) {
-        document.querySelector('a[href="/svajcarska"]')?.classList.add('active');
-        document.querySelector('.dropdown-toggle')?.classList.add('active');
-  } else if (currentPath.includes('/italija')) {
-      document.querySelector('a[href="/italija"]')?.classList.add('active');
-      document.querySelector('.dropdown-toggle')?.classList.add('active');
-  } else if (currentPath.includes('/spanija')) {
-      document.querySelector('a[href="/spanija"]')?.classList.add('active');
-      document.querySelector('.dropdown-toggle')?.classList.add('active');
-  } else if (currentPath.includes('/svedska')) {
-      document.querySelector('a[href="/svedska"]')?.classList.add('active');
-      document.querySelector('.dropdown-toggle')?.classList.add('active');
-  } else if (currentPath.includes('/danska')) {
-      document.querySelector('a[href="/danska"]')?.classList.add('active');
-      document.querySelector('.dropdown-toggle')?.classList.add('active');
-    }
-} 
+  // Get current path
+  const currentPath = window.location.pathname;
+
+  // Remove all active classes first
+  document.querySelectorAll(".nav-link, .dropdown-item").forEach((link) => {
+    link.classList.remove("active");
+  });
+
+  // Set active states based on current path
+  if (currentPath === "/" || currentPath === "/index.html") {
+    document.querySelector('a[href="/"]')?.classList.add("active");
+  } else if (currentPath.includes("/nemacka")) {
+    document.querySelector('a[href="/nemacka"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/austrija")) {
+    document.querySelector('a[href="/austrija"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/svajcarska")) {
+    document.querySelector('a[href="/svajcarska"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/italija")) {
+    document.querySelector('a[href="/italija"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/spanija")) {
+    document.querySelector('a[href="/spanija"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/svedska")) {
+    document.querySelector('a[href="/svedska"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/danska")) {
+    document.querySelector('a[href="/danska"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  }
+}
