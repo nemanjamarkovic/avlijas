@@ -164,6 +164,31 @@ button:focus {
     transform: scale(1.1);
 }
 
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(147, 115, 65, 0.2);
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: var(--accent);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.social-icon i {
+    font-size: 1rem;
+    color: inherit;
+    margin: 0;
+}
+
 .navbar {
     background-color: #2b2b2b;
     padding: 1rem 0;
