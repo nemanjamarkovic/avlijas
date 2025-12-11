@@ -22,22 +22,35 @@ document.addEventListener("DOMContentLoaded", function () {
               <i class="bi bi-telephone-fill"></i> +381 64 249 28 49
             </a>
           </span>
-          <span class="me-3">
+          <span>
             <a href="mailto:kontakt@transportpokojnika.com" class="text-decoration-none">
               <i class="bi bi-envelope-fill"></i> kontakt@transportpokojnika.com
             </a>
           </span>
-          <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Facebook">
-            <i class="bi bi-facebook"></i>
-          </a>
-          <a href="https://www.instagram.com/transportpokojnika/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
-            <i class="bi bi-instagram"></i>
-          </a>
         </div>
       </div>
       <div class="col-md-6 text-end">
         <div class="working-hours">
           <span><i class="bi bi-clock-fill"></i> Dostupni 24/7</span>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="social-media-bar text-center">
+          <span class="me-2 text-white-50 small">Pratite nas:</span>
+          <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Facebook stranica">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="https://www.instagram.com/transportpokojnika/" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Instagram profil">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a href="https://wa.me/381642492849?text=Zdravo,%20trebam%20pomo%C4%87%20oko%20prevoza%20pokojnika" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="WhatsApp kontakt">
+            <i class="bi bi-whatsapp"></i>
+          </a>
+          <a href="viber://chat?number=381642492849" class="social-icon" aria-label="Viber kontakt">
+            <i class="bi bi-chat-dots-fill"></i>
+          </a>
         </div>
       </div>
     </div>
