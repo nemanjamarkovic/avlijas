@@ -18,13 +18,13 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="col-md-6">
         <div class="contact-info">
           <span class="me-3">
-            <a href="tel:+381642492849" class="text-decoration-none">
-              <i class="bi bi-telephone-fill"></i> +381 64 249 28 49
+            <a href="tel:+381642492849" class="text-decoration-none contact-link">
+              <i class="bi bi-telephone-fill"></i> <span class="contact-text">+381 64 249 28 49</span>
             </a>
           </span>
           <span>
-            <a href="mailto:kontakt@transportpokojnika.com" class="text-decoration-none">
-              <i class="bi bi-envelope-fill"></i> kontakt@transportpokojnika.com
+            <a href="mailto:kontakt@transportpokojnika.com" class="text-decoration-none contact-link">
+              <i class="bi bi-envelope-fill"></i> <span class="contact-text">kontakt@transportpokojnika.com</span>
             </a>
           </span>
         </div>
@@ -36,9 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
     </div>
     <div class="row mt-2">
-      <div class="col-md-6">
-        <div class="social-media-bar">
-          <span class="me-3 text-white-50 small">Pratite nas:</span>
+      <div class="col-12">
+        <div class="social-media-bar text-center">
+          <span class="me-2 text-white-50 small">Pratite nas:</span>
           <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Facebook stranica">
             <i class="bi bi-facebook"></i>
           </a>
