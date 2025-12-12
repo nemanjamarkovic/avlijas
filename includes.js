@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="row mt-2">
       <div class="col-12">
         <div class="social-media-bar text-center">
-          <span class="me-2 text-white-50 small">Pratite nas:</span>
           <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Facebook stranica">
             <i class="bi bi-facebook"></i>
           </a>
