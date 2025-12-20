@@ -924,15 +924,19 @@ html {
 
 .feature-list li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
     margin-bottom: 1rem;
     color: rgba(255, 255, 255, 0.9);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .feature-list li i {
     color: var(--accent);
     font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
 }
 
 .cta-wrapper {
