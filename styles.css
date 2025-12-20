@@ -179,6 +179,18 @@ button:focus {
     border-radius: 4px;
 }
 
+.contact-info .contact-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.contact-info .contact-link i {
+    color: var(--accent);
+    margin-right: 5px;
+}
+
 .contact-info a:hover {
     color: var(--accent) !important;
     background: rgba(147, 115, 65, 0.1);
@@ -192,47 +204,6 @@ button:focus {
     transform: scale(1.1);
 }
 
-/* Mobile contact info - hide text, make icons bigger */
-@media (max-width: 768px) {
-    .contact-info .contact-text {
-        display: none;
-    }
-
-    .contact-info .contact-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 50px;
-        min-height: 50px;
-        padding: 12px;
-        margin-right: 15px;
-        border-radius: 8px;
-        background: rgba(147, 115, 65, 0.15);
-        transition: all 0.3s ease;
-    }
-
-    .contact-info .contact-link:hover {
-        background: rgba(147, 115, 65, 0.3);
-        transform: scale(1.1);
-    }
-
-    .contact-info .contact-link i {
-        font-size: 24px;
-        color: #937341;
-        margin-right: 0;
-    }
-
-    .contact-info {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 10px;
-    }
-
-    .contact-info span {
-        margin: 0;
-    }
-}
 
 .social-icon {
     display: inline-flex;
@@ -360,14 +331,42 @@ button:focus {
     .contact-info {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-right: 8px;
+        gap: 6px;
+        margin-right: 6px;
     }
     
-    .contact-info span {
+    /* Show contact links as icon-only buttons on mobile */
+    .contact-info .contact-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        padding: 8px;
+        margin: 0;
+        border-radius: 6px;
+        background: rgba(147, 115, 65, 0.15);
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    
+    .contact-info .contact-link:hover {
+        background: rgba(147, 115, 65, 0.3);
+        transform: scale(1.05);
+    }
+    
+    .contact-info .contact-link i {
+        font-size: 18px;
+        color: var(--accent);
+        margin: 0;
+    }
+    
+    /* Hide text on mobile */
+    .contact-info .contact-text {
         display: none;
     }
     
+    /* Hide social icons on mobile */
     .contact-info .social-icon {
         display: none;
     }
