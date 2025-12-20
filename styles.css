@@ -1137,4 +1137,43 @@ footer a.text-light:hover {
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--accent) var(--bg-dark);
+}
+
+/* Blog alert boxes - enhanced visibility */
+.article-content .alert-primary {
+    background-color: rgba(58, 99, 161, 1) !important;
+    border-color: rgba(0, 0, 0, 1) !important;
+    color: rgba(255, 255, 255, 1) !important;
+    border-width: 2px;
+}
+
+.article-content .alert-primary .alert-heading {
+    color: rgba(255, 255, 255, 1) !important;
+    font-weight: 600;
+}
+
+.article-content .alert-primary p {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.article-content .alert-primary a.btn {
+    background-color: rgba(255, 255, 255, 1) !important;
+    color: rgba(58, 99, 161, 1) !important;
+    border-color: rgba(255, 255, 255, 1) !important;
+}
+
+.article-content .alert-primary a.btn:hover {
+    background-color: rgba(240, 240, 240, 1) !important;
+    color: rgba(58, 99, 161, 1) !important;
+}
+
+.article-content .alert-primary a.btn-outline-primary {
+    background-color: transparent !important;
+    color: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(255, 255, 255, 1) !important;
+}
+
+.article-content .alert-primary a.btn-outline-primary:hover {
+    background-color: rgba(255, 255, 255, 1) !important;
+    color: rgba(58, 99, 161, 1) !important;
 } 
