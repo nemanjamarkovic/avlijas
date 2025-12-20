@@ -20,11 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <a href="tel:+381642492849" class="contact-link me-3">
             <i class="bi bi-telephone-fill"></i>
             <span class="contact-text">+381 64 249 28 49</span>
-          </a>
+            </a>
           <a href="mailto:kontakt@transportpokojnika.com" class="contact-link me-3">
             <i class="bi bi-envelope-fill"></i>
             <span class="contact-text">kontakt@transportpokojnika.com</span>
-          </a>
+            </a>
         </div>
       </div>
       <div class="col-md-6 text-end">
@@ -42,19 +42,9 @@ document.addEventListener("DOMContentLoaded", function () {
           <a href="https://www.instagram.com/transportpokojnika/" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Instagram profil">
             <i class="bi bi-instagram"></i>
           </a>
-          <div class="whatsapp-dropdown me-2">
-            <a href="#" class="social-icon whatsapp-toggle" aria-label="WhatsApp kontakt">
-              <i class="bi bi-whatsapp"></i>
-            </a>
-            <div class="whatsapp-menu">
-              <a href="https://wa.me/381642492849?text=Zdravo,%20trebam%20pomo%C4%87%20oko%20prevoza%20pokojnika" target="_blank" rel="noopener noreferrer" class="whatsapp-option">
-                <i class="bi bi-chat-text"></i> Pošalji poruku
-              </a>
-              <a href="https://wa.me/381642492849" target="_blank" rel="noopener noreferrer" class="whatsapp-option">
-                <i class="bi bi-telephone"></i> Pozovi
-              </a>
-            </div>
-          </div>
+          <a href="https://wa.me/381642492849?text=Zdravo,%20trebam%20pomo%C4%87%20oko%20prevoza%20pokojnika" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="WhatsApp kontakt">
+            <i class="bi bi-whatsapp"></i>
+          </a>
           <a href="viber://chat?number=381642492849" class="social-icon" aria-label="Viber kontakt">
             <i class="bi bi-chat-dots-fill"></i>
           </a>
@@ -565,27 +555,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Inject the content directly
   injectContent();
-
-  // Add WhatsApp dropdown functionality for mobile
-  setTimeout(() => {
-    const whatsappToggle = document.querySelector(".whatsapp-toggle");
-    const whatsappDropdown = document.querySelector(".whatsapp-dropdown");
-
-    if (whatsappToggle && whatsappDropdown) {
-      // Toggle dropdown on click (for mobile)
-      whatsappToggle.addEventListener("click", function (e) {
-        e.preventDefault();
-        whatsappDropdown.classList.toggle("active");
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener("click", function (e) {
-        if (!whatsappDropdown.contains(e.target)) {
-          whatsappDropdown.classList.remove("active");
-        }
-      });
-    }
-  }, 100);
 });
 
 function setActiveStates() {
