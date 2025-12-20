@@ -241,6 +241,68 @@ nav[aria-label="breadcrumb"] {
     border-top: 1px solid rgba(147, 115, 65, 0.2);
 }
 
+/* WhatsApp Dropdown Menu */
+.whatsapp-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.whatsapp-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.5rem;
+    background-color: #2b2b2b;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    min-width: 160px;
+    overflow: hidden;
+}
+
+.whatsapp-menu::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid var(--accent);
+}
+
+.whatsapp-dropdown:hover .whatsapp-menu,
+.whatsapp-dropdown.active .whatsapp-menu {
+    display: block;
+}
+
+.whatsapp-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.whatsapp-option:hover {
+    background-color: rgba(147, 115, 65, 0.2);
+    color: var(--accent);
+}
+
+.whatsapp-option i {
+    font-size: 1rem;
+    color: var(--accent);
+}
+
 @media (max-width: 768px) {
     .social-media-bar {
         padding: 0.75rem 0;
