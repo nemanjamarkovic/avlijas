@@ -746,7 +746,7 @@ html {
 
 /* Transport Section Styles */
 .transport-section {
-    background: var(--gradient-light);
+    background: var(--gradient-dark);
     position: relative;
     overflow: hidden;
 }
