@@ -324,9 +324,70 @@ button:focus {
 }
 
 @media (max-width: 768px) {
-    .top-bar .text-end {
-        text-align: left !important;
-        margin-top: 0.5rem;
+    /* Make top bar more compact on mobile */
+    .top-bar {
+        padding: 0.5rem 0 !important;
+    }
+    
+    .top-bar .row {
+        margin: 0;
+    }
+    
+    .top-bar .col-md-6 {
+        padding: 0;
+    }
+    
+    /* Make contact info and working hours inline */
+    .top-bar .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
+    
+    .top-bar .col-md-6:first-child {
+        flex: 0 0 auto;
+        width: auto;
+    }
+    
+    .top-bar .col-md-6:last-child {
+        flex: 0 0 auto;
+        width: auto;
+        text-align: right !important;
+        margin-top: 0;
+    }
+    
+    .contact-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: 8px;
+    }
+    
+    .contact-info span {
+        display: none;
+    }
+    
+    .contact-info .social-icon {
+        display: none;
+    }
+    
+    /* Style working hours to be inline */
+    .working-hours {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        font-size: 0.85rem;
+    }
+    
+    .working-hours span {
+        display: flex;
+        align-items: center;
+    }
+    
+    .working-hours i {
+        font-size: 16px;
+        margin-right: 4px;
     }
     
     .navbar-brand {
@@ -336,6 +397,21 @@ button:focus {
     .brand-slogan {
         font-size: 0.7rem;
     }
+    
+    /* Reduce navbar padding on mobile */
+    .navbar {
+        padding: 0.5rem 0;
+    }
+    
+    .navbar-brand i {
+        font-size: 1.2rem;
+        margin-right: 8px;
+    }
+    
+    .brand-name {
+        font-size: 1.1rem;
+    }
+    
     .image-showcase {
         height: 400px;
     }
