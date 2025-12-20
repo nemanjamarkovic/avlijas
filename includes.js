@@ -17,16 +17,32 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="row align-items-center">
       <div class="col-md-6">
         <div class="contact-info">
-          <span class="me-3">
-            <a href="tel:+381642492849" class="text-decoration-none contact-link">
-              <i class="bi bi-telephone-fill"></i> <span class="contact-text">+381 64 249 28 49</span>
-            </a>
-          </span>
-          <span>
-            <a href="mailto:kontakt@transportpokojnika.com" class="text-decoration-none contact-link">
-              <i class="bi bi-envelope-fill"></i> <span class="contact-text">kontakt@transportpokojnika.com</span>
-            </a>
-          </span>
+          <a href="tel:+381642492849" class="contact-link me-3">
+            <i class="bi bi-telephone-fill"></i>
+            <span class="contact-text">+381 64 249 28 49</span>
+          </a>
+          <a href="mailto:kontakt@transportpokojnika.com" class="contact-link me-3">
+            <i class="bi bi-envelope-fill"></i>
+            <span class="contact-text">kontakt@transportpokojnika.com</span>
+          </a>
+          <a
+            href="https://www.facebook.com/profile.php?id=61584921571392"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-icon me-2"
+            aria-label="Facebook"
+          >
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/transportpokojnika/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-icon"
+            aria-label="Instagram"
+          >
+            <i class="bi bi-instagram"></i>
+          </a>
         </div>
       </div>
       <div class="col-md-6 text-end">
