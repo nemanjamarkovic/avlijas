@@ -79,6 +79,34 @@ button:focus {
     outline-offset: 2px;
 }
 
+/* Breadcrumb styles for better contrast */
+.breadcrumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 20px;
+}
+
+.breadcrumb-item,
+.breadcrumb-item.active {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.breadcrumb-item a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.6);
+}
+
 /* Image Showcase Styles */
 .image-showcase {
     position: relative;
