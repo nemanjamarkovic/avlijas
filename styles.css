@@ -80,11 +80,17 @@ button:focus {
 }
 
 /* Breadcrumb styles for better contrast */
+nav[aria-label="breadcrumb"] {
+    background-color: transparent !important;
+    padding: 0.5rem 0 !important;
+}
+
 .breadcrumb {
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    padding: 12px 20px;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0;
+    padding: 0.5rem 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .breadcrumb-item,
