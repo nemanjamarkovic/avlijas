@@ -1139,41 +1139,50 @@ footer a.text-light:hover {
     scrollbar-color: var(--accent) var(--bg-dark);
 }
 
-/* Blog alert boxes - enhanced visibility */
-.article-content .alert-primary {
-    background-color: rgba(58, 99, 161, 1) !important;
-    border-color: rgba(0, 0, 0, 1) !important;
+/* Blog alert boxes - enhanced visibility with darker blue */
+.article-content .alert-primary,
+.alert-primary {
+    background-color: #0d6efd !important;
+    border-color: rgba(0, 0, 0, 0.3) !important;
     color: rgba(255, 255, 255, 1) !important;
     border-width: 2px;
 }
 
-.article-content .alert-primary .alert-heading {
+.article-content .alert-primary .alert-heading,
+.alert-primary .alert-heading {
     color: rgba(255, 255, 255, 1) !important;
     font-weight: 600;
 }
 
-.article-content .alert-primary p {
+.article-content .alert-primary p,
+.alert-primary p {
     color: rgba(255, 255, 255, 0.95) !important;
 }
 
-.article-content .alert-primary a.btn {
+.article-content .alert-primary a.btn,
+.alert-primary a.btn {
     background-color: rgba(255, 255, 255, 1) !important;
-    color: rgba(58, 99, 161, 1) !important;
+    color: #0d6efd !important;
     border-color: rgba(255, 255, 255, 1) !important;
+    font-weight: 500;
 }
 
-.article-content .alert-primary a.btn:hover {
+.article-content .alert-primary a.btn:hover,
+.alert-primary a.btn:hover {
     background-color: rgba(240, 240, 240, 1) !important;
-    color: rgba(58, 99, 161, 1) !important;
+    color: #0d6efd !important;
 }
 
-.article-content .alert-primary a.btn-outline-primary {
+.article-content .alert-primary a.btn-outline-primary,
+.alert-primary a.btn-outline-primary {
     background-color: transparent !important;
     color: rgba(255, 255, 255, 1) !important;
-    border-color: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(255, 255, 255, 0.85) !important;
 }
 
-.article-content .alert-primary a.btn-outline-primary:hover {
-    background-color: rgba(255, 255, 255, 1) !important;
-    color: rgba(58, 99, 161, 1) !important;
+.article-content .alert-primary a.btn-outline-primary:hover,
+.alert-primary a.btn-outline-primary:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 1) !important;
+    border-color: rgba(255, 255, 255, 1) !important;
 } 
