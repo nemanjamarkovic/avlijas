@@ -151,6 +151,9 @@ document.addEventListener("DOMContentLoaded", function () {
           <a class="nav-link" href="/testimonials">Utisci</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="/#faq">FAQ</a>
         </li>
         <li class="nav-item">
@@ -356,6 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <ul class="list-unstyled">
           <li><a href="/" class="text-white">Početna</a></li>
           <li><a href="/#transport" class="text-white">Usluge</a></li>
+          <li><a href="/blog" class="text-white">Blog</a></li>
           <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
           <li><a href="/contact" class="text-white">Kontakt</a></li>
           <li class="mt-2"><strong>Destinacije</strong></li>
