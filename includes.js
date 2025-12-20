@@ -247,24 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
       });
 
-      // Add CSS to ensure dropdowns display properly
-      const style = document.createElement("style");
-      style.textContent = \`
-        @media (max-width: 768px) {
-          .dropdown-menu.show {
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            transform: none !important;
-          }
-          
-          .medjunarodni-transport .dropdown-menu {
-            max-height: none !important;
-            overflow: visible !important;
-          }
-        }
-      \`;
-      document.head.appendChild(style);
+      // Styles are now in styles.css for better performance
 
       // Close dropdowns when clicking outside
       document.addEventListener("click", function (e) {
@@ -283,45 +266,95 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Header content injected");
     }
 
-    // Contact section - load from contact.html
+    // Contact section - lazy load from contact.html (only when visible)
     if (contactContainer) {
-      // Add a loading indicator
-      contactContainer.innerHTML =
-        '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
+      // Use IntersectionObserver for lazy loading - only fetch when section is about to be visible
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                observer.unobserve(entry.target);
 
-      fetch("contact.html")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                // Add a loading indicator
+                contactContainer.innerHTML =
+                  '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
+
+                fetch("contact.html")
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                  })
+                  .then((data) => {
+                    // Parse fetched HTML and extract only the contact section to avoid duplicating <head> and canonical tags
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, "text/html");
+                    const contactSection = doc.querySelector("section#contact");
+                    if (contactSection) {
+                      contactContainer.innerHTML = contactSection.outerHTML;
+                    } else {
+                      // Fallback to whole body content if section not found
+                      const mainContent = doc.querySelector("main");
+                      contactContainer.innerHTML = mainContent
+                        ? mainContent.innerHTML
+                        : data;
+                    }
+
+                    // Add contact form functionality
+                    initContactForm();
+
+                    // Add contact styles
+                    addContactStyles();
+                  })
+                  .catch((error) => {
+                    console.error("Error loading contact section:", error);
+                    contactContainer.innerHTML =
+                      '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
+                  });
+              }
+            });
+          },
+          {
+            rootMargin: "200px", // Start loading 200px before section is visible
           }
-          return response.text();
-        })
-        .then((data) => {
-          // Parse fetched HTML and extract only the contact section to avoid duplicating <head> and canonical tags
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(data, "text/html");
-          const contactSection = doc.querySelector("section#contact");
-          if (contactSection) {
-            contactContainer.innerHTML = contactSection.outerHTML;
-          } else {
-            // Fallback to whole body content if section not found
-            const mainContent = doc.querySelector("main");
-            contactContainer.innerHTML = mainContent
-              ? mainContent.innerHTML
-              : data;
-          }
+        );
 
-          // Add contact form functionality
-          initContactForm();
+        observer.observe(contactContainer);
+      } else {
+        // Fallback for browsers without IntersectionObserver - load immediately
+        contactContainer.innerHTML =
+          '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
 
-          // Add contact styles
-          addContactStyles();
-        })
-        .catch((error) => {
-          console.error("Error loading contact section:", error);
-          contactContainer.innerHTML =
-            '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
-        });
+        fetch("contact.html")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+          })
+          .then((data) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data, "text/html");
+            const contactSection = doc.querySelector("section#contact");
+            if (contactSection) {
+              contactContainer.innerHTML = contactSection.outerHTML;
+            } else {
+              const mainContent = doc.querySelector("main");
+              contactContainer.innerHTML = mainContent
+                ? mainContent.innerHTML
+                : data;
+            }
+            initContactForm();
+            addContactStyles();
+          })
+          .catch((error) => {
+            console.error("Error loading contact section:", error);
+            contactContainer.innerHTML =
+              '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
+          });
+      }
     }
 
     // Footer content
@@ -493,62 +526,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Add contact section styles
   function addContactStyles() {
-    const style = document.createElement("style");
-    style.textContent = `
-            .contact-section {
-                position: relative;
-            }
-            .contact-icon {
-                width: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .social-icons a {
-                color: #495057;
-                transition: color 0.3s ease;
-            }
-            .social-icons a:hover {
-                color: #0d6efd;
-            }
-            .divider-custom {
-                margin: 1.25rem 0 1.5rem;
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .divider-custom .divider-custom-line {
-                width: 100%;
-                max-width: 7rem;
-                height: 0.25rem;
-                background-color: #dee2e6;
-                border-radius: 1rem;
-                border-color: #dee2e6;
-            }
-            .divider-custom .divider-custom-line:first-child {
-                margin-right: 1rem;
-            }
-            .divider-custom .divider-custom-line:last-child {
-                margin-left: 1rem;
-            }
-            .divider-custom .divider-custom-icon {
-                color: #0d6efd;
-                font-size: 1.5rem;
-            }
-            .map-container {
-                height: 450px;
-            }
-            .map-container iframe {
-                height: 100%;
-            }
-            @media (max-width: 768px) {
-                .map-container {
-                    height: 300px;
-                }
-            }
-        `;
-    document.head.appendChild(style);
+    // Styles are now in styles.css for better performance
+    // No need to inject styles dynamically
   }
 
   // Function to add sticky contact button
@@ -565,81 +544,15 @@ document.addEventListener("DOMContentLoaded", function () {
             </a>
         `;
 
-    // Style the button
-    const style = document.createElement("style");
-    style.textContent = `
-            .sticky-contact-button {
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                z-index: 99;
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-end;
-            }
-            .sticky-contact-button .btn-primary {
-                width: 60px;
-                height: 60px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            }
-            .sticky-contact-button .btn-success {
-                padding: 10px 20px;
-                font-weight: bold;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-                animation: pulse 2s infinite;
-            }
-            @keyframes pulse {
-                0% {
-                    transform: scale(1);
-                }
-                50% {
-                    transform: scale(1.05);
-                }
-                100% {
-                    transform: scale(1);
-                }
-            }
-            @media (max-width: 768px) {
-                .sticky-contact-button {
-                    bottom: 20px;
-                    right: 20px;
-                }
-                .sticky-contact-button .btn-success {
-                    font-size: 14px;
-                }
-            }
-        `;
-
-    // Add the styles and button to the document
-    document.head.appendChild(style);
+    // Styles are now in styles.css for better performance
+    // Add the button to the document
     document.body.appendChild(stickyButton);
   }
 
   // Theme overrides to align section backgrounds with dark theme
   function addThemeOverrides() {
-    const style = document.createElement("style");
-    style.textContent = `
-            /* Ensure "light" sections match site theme */
-            section.bg-light,
-            .bg-light,
-            .container-fluid.bg-light {
-                background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%) !important;
-                color: #e9e9e9 !important;
-            }
-
-            /* Keep cards readable on dark */
-            .service-card,
-            .card,
-            .card-body {
-                background-color: #2b2b2b !important;
-                color: #e9e9e9 !important;
-            }
-        `;
-    document.head.appendChild(style);
+    // Styles are now in styles.css for better performance
+    // No need to inject styles dynamically
   }
 
   // Inject the content directly
