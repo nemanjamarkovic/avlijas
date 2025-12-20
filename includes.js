@@ -25,24 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
             <i class="bi bi-envelope-fill"></i>
             <span class="contact-text">kontakt@transportpokojnika.com</span>
           </a>
-          <a
-            href="https://www.facebook.com/profile.php?id=61584921571392"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon me-2"
-            aria-label="Facebook"
-          >
-            <i class="bi bi-facebook"></i>
-          </a>
-          <a
-            href="https://www.instagram.com/transportpokojnika/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon"
-            aria-label="Instagram"
-          >
-            <i class="bi bi-instagram"></i>
-          </a>
         </div>
       </div>
       <div class="col-md-6 text-end">
