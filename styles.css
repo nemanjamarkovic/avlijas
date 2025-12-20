@@ -1208,6 +1208,21 @@ footer a.text-light:hover {
     border-color: rgba(255, 255, 255, 1);
 }
 
+/* Alert-info styling for dark theme with better contrast */
+.alert-info {
+    background-color: rgba(147, 115, 65, 0.15) !important;
+    border: 2px solid var(--accent) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.alert-info strong {
+    color: var(--accent);
+    font-weight: 600;
+}
+
 /* Mobile dropdown styles - moved from includes.js for better performance */
 @media (max-width: 768px) {
     .dropdown-menu.show {
