@@ -1,85 +1,123 @@
 # Netlify/Cloudflare Pages Headers Configuration
+
 # This file configures HTTP headers for static hosting platforms
 
 # Apply to all pages
-/*
-  # HSTS Header: Force HTTPS for 1 year including subdomains
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  
-  # Prevent MIME type sniffing
-  X-Content-Type-Options: nosniff
-  
-  # Enable XSS Protection
-  X-XSS-Protection: 1; mode=block
-  
-  # Prevent clickjacking
-  X-Frame-Options: SAMEORIGIN
-  
-  # Referrer Policy
-  Referrer-Policy: strict-origin-when-cross-origin
-  
-  # Permissions Policy
-  Permissions-Policy: geolocation=(), microphone=(), camera=()
-  
-  # Content Security Policy (optional - uncomment and adjust as needed)
-  # Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net;
+
+/\*
+
+# HSTS Header: Force HTTPS for 1 year including subdomains
+
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# Prevent MIME type sniffing
+
+X-Content-Type-Options: nosniff
+
+# Enable XSS Protection
+
+X-XSS-Protection: 1; mode=block
+
+# Prevent clickjacking
+
+X-Frame-Options: SAMEORIGIN
+
+# Referrer Policy
+
+Referrer-Policy: strict-origin-when-cross-origin
+
+# Permissions Policy
+
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# Content Security Policy (optional - uncomment and adjust as needed)
+
+# Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net;
 
 # Cache Control for Images - 1 year
-/*.jpg
-  Cache-Control: public, max-age=31536000, immutable
 
-/*.jpeg
-  Cache-Control: public, max-age=31536000, immutable
+/\*.jpg
+Cache-Control: public, max-age=31536000, immutable
 
-/*.png
-  Cache-Control: public, max-age=31536000, immutable
+/\*.jpeg
+Cache-Control: public, max-age=31536000, immutable
 
-/*.gif
-  Cache-Control: public, max-age=31536000, immutable
+/\*.png
+Cache-Control: public, max-age=31536000, immutable
 
-/*.webp
-  Cache-Control: public, max-age=31536000, immutable
+/\*.gif
+Cache-Control: public, max-age=31536000, immutable
 
-/*.svg
-  Cache-Control: public, max-age=31536000, immutable
+/\*.webp
+Cache-Control: public, max-age=31536000, immutable
 
-/*.ico
-  Cache-Control: public, max-age=31536000, immutable
+/\*.svg
+Cache-Control: public, max-age=31536000, immutable
+
+/\*.ico
+Cache-Control: public, max-age=31536000, immutable
+
+# Explicit cache for specific large images
+
+/pogrebni-kombi-sa-sandukom.jpg
+Cache-Control: public, max-age=31536000, immutable
+
+/pogrebni-sanduci.jpg
+Cache-Control: public, max-age=31536000, immutable
+
+/pogrebni-sanduk.png
+Cache-Control: public, max-age=31536000, immutable
+
+/pogrebno-vozilo-i-sanduk.jpg
+Cache-Control: public, max-age=31536000, immutable
+
+/sanduk.jpg
+Cache-Control: public, max-age=31536000, immutable
 
 # Cache Control for CSS and JS - 1 year
-/*.css
-  Cache-Control: public, max-age=31536000, immutable
 
-/*.js
-  Cache-Control: public, max-age=31536000, immutable
+/\*.css
+Cache-Control: public, max-age=31536000, immutable
+
+/\*.js
+Cache-Control: public, max-age=31536000, immutable
+
+# Explicit cache for specific JS and CSS files
+
+/includes.js
+Cache-Control: public, max-age=31536000, immutable
+
+/styles.min.css
+Cache-Control: public, max-age=31536000, immutable
+
+/styles.css
+Cache-Control: public, max-age=31536000, immutable
 
 # Cache Control for Fonts - 1 year
-/*.woff
-  Cache-Control: public, max-age=31536000, immutable
 
-/*.woff2
-  Cache-Control: public, max-age=31536000, immutable
+/\*.woff
+Cache-Control: public, max-age=31536000, immutable
 
-/*.ttf
-  Cache-Control: public, max-age=31536000, immutable
+/\*.woff2
+Cache-Control: public, max-age=31536000, immutable
 
-/*.otf
-  Cache-Control: public, max-age=31536000, immutable
+/\*.ttf
+Cache-Control: public, max-age=31536000, immutable
+
+/\*.otf
+Cache-Control: public, max-age=31536000, immutable
 
 # HTML - No cache (always fetch fresh)
-/*.html
-  Cache-Control: no-cache, no-store, must-revalidate
-  Pragma: no-cache
-  Expires: 0
+
+/\*.html
+Cache-Control: no-cache, no-store, must-revalidate
+Pragma: no-cache
+Expires: 0
 
 # XML and JSON - 1 hour cache
-/*.xml
-  Cache-Control: public, max-age=3600
 
-/*.json
-  Cache-Control: public, max-age=3600
+/\*.xml
+Cache-Control: public, max-age=3600
 
-
-
-
-
+/\*.json
+Cache-Control: public, max-age=3600
