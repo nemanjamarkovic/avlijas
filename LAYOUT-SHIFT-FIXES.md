@@ -67,10 +67,17 @@ This document outlines the fixes applied to reduce Cumulative Layout Shift (CLS)
   background-color: #1a1a1a;
 }
 
+/* Prevent main element layout shifts */
+main {
+  flex: 1 0 auto;
+  contain: layout style;
+}
+
 /* Reserve space for hero section */
 .hero-section {
   min-height: 80vh;
   background: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
+  contain: layout;
 }
 
 /* Prevent layout shift from contact links */
@@ -81,11 +88,28 @@ This document outlines the fixes applied to reduce Cumulative Layout Shift (CLS)
   min-height: 36px;
 }
 
+/* Contact info styling to prevent shifts */
+.contact-info {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+}
+
 /* Reserve space for icons before they load */
 .bi::before {
   display: inline-block;
   width: 1em;
   height: 1em;
+}
+
+/* Top bar minimum height */
+.top-bar {
+  min-height: 80px;
+}
+
+/* Navbar minimum height */
+.navbar {
+  min-height: 60px;
 }
 ```
 
