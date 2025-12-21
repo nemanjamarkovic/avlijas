@@ -24,6 +24,7 @@ body {
 
 main {
     flex: 1 0 auto;
+    contain: layout style;
 }
 
 footer {
@@ -168,6 +169,7 @@ nav[aria-label="breadcrumb"] {
     background-color: #1a1a1a;
     color: #ffffff;
     font-size: 0.9rem;
+    min-height: 80px;
 }
 
 .contact-info span, .working-hours span {
@@ -177,6 +179,9 @@ nav[aria-label="breadcrumb"] {
 .contact-info i, .working-hours i {
     color: #937341;
     margin-right: 5px;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
 }
 
 .contact-info a {
@@ -190,11 +195,16 @@ nav[aria-label="breadcrumb"] {
     align-items: center;
     text-decoration: none;
     color: rgba(255, 255, 255, 0.85);
+    min-height: 36px;
+    min-width: 44px;
 }
 
 .contact-info .contact-link i {
     color: var(--accent);
     margin-right: 5px;
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
 }
 
 .contact-info a:hover {
@@ -261,6 +271,7 @@ nav[aria-label="breadcrumb"] {
     background-color: #2b2b2b;
     padding: 1rem 0;
     border-bottom: 3px solid #937341;
+    min-height: 60px;
 }
 
 .navbar-brand {
@@ -654,6 +665,7 @@ html {
     min-height: 80vh;
     display: flex;
     align-items: center;
+    contain: layout;
 }
 
 /* Decorative Shapes */
@@ -763,12 +775,15 @@ html {
 .hero-image-wrapper {
     position: relative;
     padding: 20px;
+    min-height: 440px;
 }
 
 .hero-image {
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
+    aspect-ratio: 3/2;
+    object-fit: cover;
 }
 
 .hero-image:hover {
