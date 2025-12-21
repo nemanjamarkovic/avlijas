@@ -34,7 +34,9 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 
 # Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://cdn.jsdelivr.net;
 
-# Cache Control for Images - 1 year
+# Cache Control for Images - 1 year (static assets)
+
+# Images don't change, so they can be cached for a long time
 
 /\*.jpg
 Cache-Control: public, max-age=31536000, immutable
@@ -57,40 +59,12 @@ Cache-Control: public, max-age=31536000, immutable
 /\*.ico
 Cache-Control: public, max-age=31536000, immutable
 
-# Explicit cache for specific large images
-
-/pogrebni-kombi-sa-sandukom.jpg
-Cache-Control: public, max-age=31536000, immutable
-
-/pogrebni-sanduci.jpg
-Cache-Control: public, max-age=31536000, immutable
-
-/pogrebni-sanduk.png
-Cache-Control: public, max-age=31536000, immutable
-
-/pogrebno-vozilo-i-sanduk.jpg
-Cache-Control: public, max-age=31536000, immutable
-
-/sanduk.jpg
-Cache-Control: public, max-age=31536000, immutable
-
-# Cache Control for CSS and JS - 1 year
+# Cache Control for CSS and JS - 1 year (versioned files can be cached forever)
 
 /\*.css
 Cache-Control: public, max-age=31536000, immutable
 
 /\*.js
-Cache-Control: public, max-age=31536000, immutable
-
-# Explicit cache for specific JS and CSS files
-
-/includes.js?v=3
-Cache-Control: public, max-age=31536000, immutable
-
-/styles.min.css?v=3
-Cache-Control: public, max-age=31536000, immutable
-
-/styles.css
 Cache-Control: public, max-age=31536000, immutable
 
 # Cache Control for Fonts - 1 year
