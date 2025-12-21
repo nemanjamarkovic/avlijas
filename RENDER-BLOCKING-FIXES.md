@@ -52,68 +52,27 @@ This document outlines the fixes applied to eliminate render-blocking resources 
 3. `onload="this.media='all'"` - Switches to all media types once loaded
 4. `<noscript>` - Fallback for users without JavaScript
 
-### 2. Critical Icon CSS Inline
+### 2. Icon Space Reservation
 
-To prevent layout shifts while the full icon CSS loads, we inline critical icon definitions in the `<head>`:
+To prevent layout shifts while the icon font loads, we reserve space for icons in the critical CSS:
 
 ```html
 <style>
-  /* Critical Bootstrap Icons - inline to prevent layout shift */
-  @font-face {
-    font-family: "bootstrap-icons";
-    src: url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2")
-      format("woff2");
-    font-display: swap;
-  }
-
-  .bi {
-    font-family: "bootstrap-icons" !important;
-    font-style: normal;
-    font-weight: normal !important;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    vertical-align: -0.125em;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
+  /* Reserve space for icons before they load */
   .bi::before {
     display: inline-block;
     width: 1em;
     height: 1em;
-  }
-
-  /* Critical icons used above the fold */
-  .bi-telephone-fill::before {
-    content: "\f4e9";
-  }
-  .bi-envelope-fill::before {
-    content: "\f32a";
-  }
-  .bi-clock-fill::before {
-    content: "\f292";
-  }
-  .bi-clock::before {
-    content: "\f285";
-  }
-  .bi-globe::before {
-    content: "\f42d";
-  }
-  .bi-file-text::before {
-    content: "\f377";
-  }
-  .bi-building::before {
-    content: "\f1e6";
   }
 </style>
 ```
 
 **Benefits:**
 
-- Icons render immediately without waiting for CSS
-- No layout shift when icons appear
-- Only includes icons visible above the fold (~1KB inline CSS)
+- Prevents layout shift when icons load
+- Minimal inline CSS (only ~50 bytes)
+- No conflicts with full Bootstrap Icons CSS
+- Icons render properly once font loads
 
 ### 3. Optimized includes.js Loading
 

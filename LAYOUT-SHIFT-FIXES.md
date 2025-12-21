@@ -43,10 +43,9 @@ This document outlines the fixes applied to reduce Cumulative Layout Shift (CLS)
 
 **Solution:**
 
-- Changed from deferred loading to immediate loading with preload
 - Added font preload: `<link rel="preload" href="...bootstrap-icons.woff2" as="font" type="font/woff2" crossorigin />`
-- Removed `media="print" onload="this.media='all'"` trick
-- Reserved space for icons with `.bi::before` pseudo-element
+- Kept CSS deferred with `media="print" onload="this.media='all'"` to prevent render-blocking
+- Reserved space for icons with `.bi::before` pseudo-element to prevent layout shift
 
 ### 5. Main Element Containment
 

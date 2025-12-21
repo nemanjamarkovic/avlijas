@@ -114,23 +114,19 @@ This document summarizes all performance optimizations applied to eliminate rend
 - Eliminates 750ms render-blocking delay
 - Font preload ensures quick icon rendering
 
-#### 2. Critical Icon CSS Inline
+#### 2. Icon Space Reservation
 ```css
-/* Inline in <head> for immediate rendering */
-@font-face {
-  font-family: "bootstrap-icons";
-  src: url("...bootstrap-icons.woff2") format("woff2");
-  font-display: swap;
+/* Reserve space to prevent layout shift */
+.bi::before {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
 }
-
-.bi-telephone-fill::before { content: "\f4e9"; }
-.bi-envelope-fill::before { content: "\f32a"; }
-.bi-clock-fill::before { content: "\f292"; }
-/* ... other critical icons */
 ```
-- Icons render immediately
-- No wait for external CSS
-- Only ~1KB inline CSS
+- Prevents layout shift when icons load
+- Minimal inline CSS (~50 bytes)
+- No conflicts with full icon CSS
+- Icons render properly once font loads
 
 ---
 
@@ -234,8 +230,8 @@ Chrome DevTools Lighthouse:
 - **Header reservation:** ~100 bytes
 - **Hero section:** ~150 bytes
 - **Contact links:** ~100 bytes
-- **Icon definitions:** ~800 bytes
-- **Total inline CSS:** ~1.15 KB
+- **Icon space reservation:** ~50 bytes
+- **Total inline CSS:** ~400 bytes
 
 ### Loading Strategy
 1. **HTML loads** → Critical CSS applies immediately
