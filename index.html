@@ -93,8 +93,8 @@
       />
     </noscript>
     <!-- Custom CSS -->
-    <link rel="preload" href="styles.min.css?v=2" as="style" />
-    <link href="styles.min.css?v=2" rel="stylesheet" />
+    <link rel="preload" href="styles.min.css?v=3" as="style" />
+    <link href="styles.min.css?v=3" rel="stylesheet" />
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
@@ -138,14 +138,15 @@
         width: 1em;
         height: 1em;
       }
-      
+
       /* Critical Bootstrap Icons - inline to prevent layout shift */
       @font-face {
         font-family: "bootstrap-icons";
-        src: url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2") format("woff2");
+        src: url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2")
+          format("woff2");
         font-display: swap;
       }
-      
+
       .bi {
         font-family: "bootstrap-icons" !important;
         font-style: normal;
@@ -157,15 +158,29 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-      
+
       /* Critical icons used above the fold */
-      .bi-telephone-fill::before { content: "\f4e9"; }
-      .bi-envelope-fill::before { content: "\f32a"; }
-      .bi-clock-fill::before { content: "\f292"; }
-      .bi-clock::before { content: "\f285"; }
-      .bi-globe::before { content: "\f42d"; }
-      .bi-file-text::before { content: "\f377"; }
-      .bi-building::before { content: "\f1e6"; }
+      .bi-telephone-fill::before {
+        content: "\f4e9";
+      }
+      .bi-envelope-fill::before {
+        content: "\f32a";
+      }
+      .bi-clock-fill::before {
+        content: "\f292";
+      }
+      .bi-clock::before {
+        content: "\f285";
+      }
+      .bi-globe::before {
+        content: "\f42d";
+      }
+      .bi-file-text::before {
+        content: "\f377";
+      }
+      .bi-building::before {
+        content: "\f1e6";
+      }
     </style>
 
     <!-- Structured Data -->
@@ -984,7 +999,7 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       defer
     ></script>
-    <script src="includes.js?v=2" defer></script>
+    <script src="includes.js?v=3" defer></script>
 
     <!-- Image Showcase Script -->
     <script>

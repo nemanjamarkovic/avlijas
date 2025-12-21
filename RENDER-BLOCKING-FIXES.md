@@ -1,6 +1,7 @@
 # Render-Blocking Resources Fixes
 
 ## Overview
+
 This document outlines the fixes applied to eliminate render-blocking resources and improve LCP (Largest Contentful Paint) and FCP (First Contentful Paint) metrics.
 
 ## Problem Identified
@@ -8,6 +9,7 @@ This document outlines the fixes applied to eliminate render-blocking resources 
 **Bootstrap Icons CSS** was blocking the initial render for **750ms**, causing a delay of **1,350ms** in estimated savings.
 
 ### Before Optimization:
+
 - Bootstrap Icons CSS: 14.2 KiB, 750ms duration (render-blocking)
 - Total estimated savings: 1,350ms
 - Impact: Delayed LCP and FCP
@@ -44,6 +46,7 @@ This document outlines the fixes applied to eliminate render-blocking resources 
 ```
 
 **How it works:**
+
 1. `rel="preload"` - Fetches the font file early without blocking render
 2. `media="print"` - Loads CSS with low priority (non-blocking)
 3. `onload="this.media='all'"` - Switches to all media types once loaded
@@ -58,10 +61,11 @@ To prevent layout shifts while the full icon CSS loads, we inline critical icon 
   /* Critical Bootstrap Icons - inline to prevent layout shift */
   @font-face {
     font-family: "bootstrap-icons";
-    src: url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2") format("woff2");
+    src: url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2")
+      format("woff2");
     font-display: swap;
   }
-  
+
   .bi {
     font-family: "bootstrap-icons" !important;
     font-style: normal;
@@ -73,25 +77,40 @@ To prevent layout shifts while the full icon CSS loads, we inline critical icon 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   .bi::before {
     display: inline-block;
     width: 1em;
     height: 1em;
   }
-  
+
   /* Critical icons used above the fold */
-  .bi-telephone-fill::before { content: "\f4e9"; }
-  .bi-envelope-fill::before { content: "\f32a"; }
-  .bi-clock-fill::before { content: "\f292"; }
-  .bi-clock::before { content: "\f285"; }
-  .bi-globe::before { content: "\f42d"; }
-  .bi-file-text::before { content: "\f377"; }
-  .bi-building::before { content: "\f1e6"; }
+  .bi-telephone-fill::before {
+    content: "\f4e9";
+  }
+  .bi-envelope-fill::before {
+    content: "\f32a";
+  }
+  .bi-clock-fill::before {
+    content: "\f292";
+  }
+  .bi-clock::before {
+    content: "\f285";
+  }
+  .bi-globe::before {
+    content: "\f42d";
+  }
+  .bi-file-text::before {
+    content: "\f377";
+  }
+  .bi-building::before {
+    content: "\f1e6";
+  }
 </style>
 ```
 
 **Benefits:**
+
 - Icons render immediately without waiting for CSS
 - No layout shift when icons appear
 - Only includes icons visible above the fold (~1KB inline CSS)
@@ -99,6 +118,7 @@ To prevent layout shifts while the full icon CSS loads, we inline critical icon 
 ### 3. Optimized includes.js Loading
 
 The `includes.js` file was already optimized:
+
 - Loaded with `defer` attribute (non-blocking)
 - Waits for `DOMContentLoaded` event
 - Contact form lazy-loaded with IntersectionObserver
@@ -107,6 +127,7 @@ The `includes.js` file was already optimized:
 ## Files Updated
 
 ### Automatically Updated (15 files):
+
 1. austrija.html
 2. svajcarska.html
 3. italija.html
@@ -124,11 +145,14 @@ The `includes.js` file was already optimized:
 15. 500.html
 
 ### Manually Updated (2 files):
+
 1. index.html
 2. nemacka.html
 
 ### Files Already Optimized (18 files):
+
 City pages and blog posts that already had deferred loading:
+
 - berlin.html, bec.html, graz.html, linz.html, munchen.html, hamburg.html, frankfurt.html
 - cirih.html, zeneva.html, rim.html, madrid.html
 - Various blog posts
@@ -138,12 +162,14 @@ City pages and blog posts that already had deferred loading:
 ### Expected Improvements:
 
 #### Before:
+
 - **Render-blocking time:** 750ms
 - **Estimated savings:** 1,350ms
 - **LCP:** Delayed by icon CSS loading
 - **FCP:** Delayed by icon CSS loading
 
 #### After:
+
 - **Render-blocking time:** 0ms (CSS deferred)
 - **Font preload:** Starts immediately
 - **LCP:** Improved by ~750ms
@@ -153,18 +179,21 @@ City pages and blog posts that already had deferred loading:
 ### Trade-offs:
 
 ✅ **Pros:**
+
 - Eliminates 750ms render-blocking delay
 - Maintains zero layout shift (CLS < 0.1)
 - Icons render immediately with inline CSS
 - Full icon library loads asynchronously
 
 ⚠️ **Cons:**
+
 - Adds ~1KB inline CSS to HTML
 - Icons may briefly show with system font before custom font loads (mitigated by font-display: swap)
 
 ## Testing Recommendations
 
 ### 1. PageSpeed Insights
+
 ```
 Test URL: https://transportpokojnika.com
 Expected results:
@@ -175,6 +204,7 @@ Expected results:
 ```
 
 ### 2. Chrome DevTools
+
 ```
 1. Open DevTools > Performance
 2. Record page load
@@ -184,6 +214,7 @@ Expected results:
 ```
 
 ### 3. WebPageTest
+
 ```
 Test with:
 - Location: Europe (closest to target audience)
@@ -197,6 +228,7 @@ Test with:
 ```
 
 ### 4. Visual Regression Testing
+
 ```
 1. Load page with throttled network (Slow 3G)
 2. Verify icons appear immediately
@@ -208,26 +240,26 @@ Test with:
 
 All techniques used are widely supported:
 
-| Feature | Chrome | Firefox | Safari | Edge |
-|---------|--------|---------|--------|------|
-| `<link rel="preload">` | 50+ | 85+ | 11.1+ | 79+ |
-| `media="print" onload` | All | All | All | All |
-| `@font-face` | All | All | All | All |
-| `font-display: swap` | 60+ | 58+ | 11.1+ | 79+ |
+| Feature                | Chrome | Firefox | Safari | Edge |
+| ---------------------- | ------ | ------- | ------ | ---- |
+| `<link rel="preload">` | 50+    | 85+     | 11.1+  | 79+  |
+| `media="print" onload` | All    | All     | All    | All  |
+| `@font-face`           | All    | All     | All    | All  |
+| `font-display: swap`   | 60+    | 58+     | 11.1+  | 79+  |
 
 ## Critical Icons Reference
 
 Icons included in critical inline CSS (above the fold):
 
-| Icon Class | Unicode | Usage |
-|------------|---------|-------|
+| Icon Class          | Unicode | Usage                       |
+| ------------------- | ------- | --------------------------- |
 | `bi-telephone-fill` | `\f4e9` | Header contact, CTA buttons |
-| `bi-envelope-fill` | `\f32a` | Header email, contact links |
-| `bi-clock-fill` | `\f292` | Working hours in header |
-| `bi-clock` | `\f285` | Hero section features |
-| `bi-globe` | `\f42d` | Hero section features |
-| `bi-file-text` | `\f377` | Hero section features |
-| `bi-building` | `\f1e6` | Navbar brand |
+| `bi-envelope-fill`  | `\f32a` | Header email, contact links |
+| `bi-clock-fill`     | `\f292` | Working hours in header     |
+| `bi-clock`          | `\f285` | Hero section features       |
+| `bi-globe`          | `\f42d` | Hero section features       |
+| `bi-file-text`      | `\f377` | Hero section features       |
+| `bi-building`       | `\f1e6` | Navbar brand                |
 
 ## Maintenance Notes
 
@@ -237,8 +269,11 @@ If you add new icons above the fold:
 
 1. Find the icon unicode from [Bootstrap Icons](https://icons.getbootstrap.com/)
 2. Add to critical CSS in all HTML files:
+
 ```css
-.bi-new-icon::before { content: "\fXXX"; }
+.bi-new-icon::before {
+  content: "\fXXX";
+}
 ```
 
 ### Updating Bootstrap Icons Version
@@ -253,6 +288,7 @@ When updating to a new Bootstrap Icons version:
 ### Version Control
 
 Current versions:
+
 - Bootstrap Icons: 1.11.3
 - Font file: bootstrap-icons.woff2
 - CSS file: bootstrap-icons.min.css
@@ -273,14 +309,13 @@ Current versions:
 
 ## Results Summary
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Render-blocking CSS | 750ms | 0ms | ✅ 750ms |
-| Estimated savings | 1,350ms | 0ms | ✅ 1,350ms |
-| LCP | Delayed | Faster | ✅ ~750ms |
-| FCP | Delayed | Faster | ✅ ~750ms |
-| CLS | < 0.1 | < 0.1 | ✅ Maintained |
-| Icon render | Delayed | Immediate | ✅ Improved |
+| Metric              | Before  | After     | Improvement   |
+| ------------------- | ------- | --------- | ------------- |
+| Render-blocking CSS | 750ms   | 0ms       | ✅ 750ms      |
+| Estimated savings   | 1,350ms | 0ms       | ✅ 1,350ms    |
+| LCP                 | Delayed | Faster    | ✅ ~750ms     |
+| FCP                 | Delayed | Faster    | ✅ ~750ms     |
+| CLS                 | < 0.1   | < 0.1     | ✅ Maintained |
+| Icon render         | Delayed | Immediate | ✅ Improved   |
 
 **Total Performance Gain: ~1,350ms faster page load**
-
