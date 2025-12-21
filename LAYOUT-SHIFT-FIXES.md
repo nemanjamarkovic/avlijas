@@ -111,6 +111,57 @@ main {
 .navbar {
   min-height: 60px;
 }
+
+/* Mobile-specific layout shift prevention */
+@media (max-width: 768px) {
+  /* Adjust header height for mobile */
+  #header-container {
+    min-height: 180px;
+  }
+
+  /* Hero section mobile adjustment */
+  .hero-section {
+    min-height: 100vh;
+    padding: 60px 0;
+  }
+
+  /* Contact info mobile layout */
+  .contact-info {
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 50px;
+  }
+
+  /* Contact link mobile sizing */
+  .contact-link {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 8px;
+  }
+
+  /* Top bar mobile height */
+  .top-bar {
+    min-height: 120px;
+  }
+
+  /* Navbar mobile height */
+  .navbar {
+    min-height: 56px;
+  }
+
+  /* Row and column mobile stability */
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .col-md-6 {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
 ```
 
 ### styles.css Updates
