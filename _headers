@@ -84,10 +84,10 @@ Cache-Control: public, max-age=31536000, immutable
 
 # Explicit cache for specific JS and CSS files
 
-/includes.js
+/includes.js?v=3
 Cache-Control: public, max-age=31536000, immutable
 
-/styles.min.css
+/styles.min.css?v=3
 Cache-Control: public, max-age=31536000, immutable
 
 /styles.css
