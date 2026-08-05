@@ -110,6 +110,32 @@
       }
     </script>
 
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Koliko traje prevoz iz Berlina?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "U proseku 2–4 dana, u zavisnosti od dokumentacije i termina."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Da li govorite nemački?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Da, deo tima govori nemački i komunicira sa lokalnim institucijama."
+            }
+          }
+        ]
+      }
+    </script>
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="vijenac logo.png" />
     <link rel="apple-touch-icon" href="vijenac logo.png" />
@@ -157,7 +183,7 @@
               >
             </div>
             <div class="col-lg-6">
-              <img
+              <picture><source srcset="pogrebni-kombi-sa-sandukom.webp" type="image/webp" /><picture><source srcset="pogrebni-kombi-sa-sandukom.webp" type="image/webp" /><img
                 loading="lazy"
                 decoding="async"
                 src="pogrebni-kombi-sa-sandukom.jpg"
@@ -165,8 +191,8 @@
                 class="img-fluid rounded shadow mb-3"
                 width="500"
                 height="300"
-              />
-              <img
+              /></picture></picture>
+              <picture><source srcset="pogrebni-sanduk.webp" type="image/webp" /><picture><source srcset="pogrebni-sanduk.webp" type="image/webp" /><img
                 loading="lazy"
                 decoding="async"
                 src="pogrebni-sanduk.png"
@@ -174,7 +200,7 @@
                 class="img-fluid rounded shadow"
                 width="500"
                 height="300"
-              />
+              /></picture></picture>
             </div>
           </div>
         </div>

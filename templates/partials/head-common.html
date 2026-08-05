@@ -1,0 +1,42 @@
+<!--
+  Shared head partial — reference template for SEO meta tags.
+  Regenerate pages with: npm run build
+
+  Placeholders:
+    {{TITLE}}           — page title
+    {{DESCRIPTION}}     — meta description
+    {{CANONICAL_URL}}   — full canonical URL
+    {{OG_TYPE}}         — website | article
+    {{OG_IMAGE}}        — default: pogrebni-kombi-sa-sandukom.jpg
+    {{STRUCTURED_DATA}} — optional JSON-LD blocks
+-->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESCRIPTION}}" />
+<meta name="author" content="Transport pokojnika - Pogrebno preduzeće" />
+
+<meta property="og:type" content="{{OG_TYPE}}" />
+<meta property="og:url" content="{{CANONICAL_URL}}" />
+<meta property="og:title" content="{{TITLE}}" />
+<meta property="og:description" content="{{DESCRIPTION}}" />
+<meta property="og:locale" content="sr_RS" />
+<meta property="og:site_name" content="Transport pokojnika" />
+<meta property="og:image" content="https://transportpokojnika.com/{{OG_IMAGE}}" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="{{CANONICAL_URL}}" />
+<meta name="twitter:title" content="{{TITLE}}" />
+<meta name="twitter:description" content="{{DESCRIPTION}}" />
+<meta name="twitter:image" content="https://transportpokojnika.com/{{OG_IMAGE}}" />
+
+<link rel="canonical" href="{{CANONICAL_URL}}" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
+<link href="styles.min.css?v=3" rel="stylesheet" />
+
+{{STRUCTURED_DATA}}
+
+<link rel="icon" type="image/png" href="vijenac logo.png" />
+<link rel="apple-touch-icon" href="vijenac logo.png" />

@@ -1,3 +1,19 @@
+(function () {
+  if (window.__ga4Loaded) return;
+  window.__ga4Loaded = true;
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=G-9FMNRLMTK3";
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  window.gtag = gtag;
+  gtag("js", new Date());
+  gtag("config", "G-9FMNRLMTK3");
+})();
+
 document.addEventListener("DOMContentLoaded", function () {
   // Get the header and footer container elements
   const headerContainer = document.querySelector("#header-container");
@@ -399,6 +415,12 @@ document.addEventListener("DOMContentLoaded", function () {
           <li><a href="/hamburg" class="text-white">Prevoz iz Hamburga</a></li>
           <li><a href="/frankfurt" class="text-white">Prevoz iz Frankfurta</a></li>
           <li><a href="/munchen" class="text-white">Prevoz iz Minhena (München)</a></li>
+          <li><a href="/dusseldorf" class="text-white">Prevoz iz Diseldorfa</a></li>
+          <li><a href="/koln" class="text-white">Prevoz iz Kelna</a></li>
+          <li><a href="/stuttgart" class="text-white">Prevoz iz Štutgarta</a></li>
+          <li><a href="/dortmund" class="text-white">Prevoz iz Dortmunda</a></li>
+          <li><a href="/leipzig" class="text-white">Prevoz iz Lajpciga</a></li>
+          <li><a href="/dresden" class="text-white">Prevoz iz Drezdena</a></li>
           <li><a href="/austrija" class="text-white">Prevoz iz Austrije</a></li>
           <li><a href="/bec" class="text-white">Prevoz iz Beča (Wien)</a></li>
           <li><a href="/graz" class="text-white">Prevoz iz Graca (Graz)</a></li>
@@ -412,6 +434,11 @@ document.addEventListener("DOMContentLoaded", function () {
           <li><a href="/madrid" class="text-white">Prevoz iz Madrida</a></li>
           <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
           <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
+          <li class="mt-2"><strong>Usluge</strong></li>
+          <li><a href="/dokumentacija-za-prevoz-pokojnika" class="text-white">Dokumentacija</a></li>
+          <li><a href="/pogrebni-sanduci" class="text-white">Pogrebni sanduci</a></li>
+          <li><a href="/ekshumacija" class="text-white">Ekshumacija</a></li>
+          <li><a href="/repatrijacija-pokojnika" class="text-white">Repatrijacija</a></li>
         </ul>
       </div>
     </div>

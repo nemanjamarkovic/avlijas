@@ -142,6 +142,56 @@
       }
     </script>
 
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Prevoz pokojnika iz Berlina",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Organizujemo kompletan prevoz pokojnika iz Berlina za Srbiju i region. Naš tim preuzima svu potrebnu dokumentaciju, obezbeđuje vozilo sa rashladnim uređajem i vrši transport u najkraćem roku. Prevoz iz Berlina je moguć 24/7."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Prevoz pokojnika iz Hamburga",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prevoz pokojnika iz Hamburga obavljamo brzo i profesionalno, uz poštovanje svih međunarodnih propisa. Uključujemo preuzimanje tela, izradu dokumentacije i carinske procedure."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Prevoz pokojnika iz Minhena",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prevoz pokojnika iz Minhena organizujemo sa kompletnom dokumentacijom i podrškom porodici. Naš tim ima iskustva sa bavarskim institucijama."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Prevoz pokojnika iz Kelna",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prevoz pokojnika iz Kelna vršimo u najkraćem mogućem roku, uz transparentne cene i bez skrivenih troškova."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Prevoz pokojnika iz Frankfurta",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Naš tim ima višegodišnje iskustvo u organizaciji prevoza pokojnika iz Frankfurta, od preuzimanja tela do dolaska u Srbiju."
+            }
+          }
+        ]
+      }
+    </script>
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="vijenac logo.png" />
     <link rel="apple-touch-icon" href="vijenac logo.png" />
@@ -181,7 +231,7 @@
               >
             </div>
             <div class="col-lg-6">
-              <img
+              <picture><source srcset="pogrebni-sanduk.webp" type="image/webp" /><picture><source srcset="pogrebni-sanduk.webp" type="image/webp" /><img
                 loading="lazy"
                 decoding="async"
                 src="pogrebni-sanduk.png"
@@ -189,8 +239,8 @@
                 class="img-fluid rounded shadow mb-3"
                 width="500"
                 height="300"
-              />
-              <img
+              /></picture></picture>
+              <picture><source srcset="pogrebni-kombi-sa-sandukom.webp" type="image/webp" /><picture><source srcset="pogrebni-kombi-sa-sandukom.webp" type="image/webp" /><img
                 loading="lazy"
                 decoding="async"
                 src="pogrebni-kombi-sa-sandukom.jpg"
@@ -198,8 +248,8 @@
                 class="img-fluid rounded shadow mb-3"
                 width="500"
                 height="300"
-              />
-              <img
+              /></picture></picture>
+              <picture><source srcset="pogrebni-sanduci.webp" type="image/webp" /><picture><source srcset="pogrebni-sanduci.webp" type="image/webp" /><img
                 loading="lazy"
                 decoding="async"
                 src="pogrebni-sanduci.jpg"
@@ -207,7 +257,7 @@
                 class="img-fluid rounded shadow"
                 width="500"
                 height="300"
-              />
+              /></picture></picture>
             </div>
           </div>
         </div>
@@ -326,7 +376,90 @@
               </div>
             </div>
           </div>
+          <div class="col-6 col-md-3">
+            <div class="card h-100 text-center">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h3 class="h5 mb-3">Diseldorf</h3>
+                <a href="/dusseldorf" class="btn btn-primary">Pogledajte</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card h-100 text-center">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h3 class="h5 mb-3">Keln</h3>
+                <a href="/koln" class="btn btn-primary">Pogledajte</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card h-100 text-center">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h3 class="h5 mb-3">Štutgart</h3>
+                <a href="/stuttgart" class="btn btn-primary">Pogledajte</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card h-100 text-center">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h3 class="h5 mb-3">Dortmund</h3>
+                <a href="/dortmund" class="btn btn-primary">Pogledajte</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card h-100 text-center">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h3 class="h5 mb-3">Lajpcig</h3>
+                <a href="/leipzig" class="btn btn-primary">Pogledajte</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card h-100 text-center">
+              <div class="card-body d-flex flex-column justify-content-between">
+                <h3 class="h5 mb-3">Drezden</h3>
+                <a href="/dresden" class="btn btn-primary">Pogledajte</a>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <!-- Korisni članci -->
+      <section class="container my-5">
+        <h2 class="text-center mb-4">Korisni vodiči o prevozu iz Nemačke</h2>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="h6"><a href="/blog-koliko-kosta-prevoz-pokojnika-nemacka" class="text-primary">Koliko košta prevoz pokojnika iz Nemačke</a></h3>
+                <p class="small mb-0">Transparentne cene i faktori koji utiču na cenu transporta.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="h6"><a href="/blog-dokumentacija-za-prevoz-pokojnika" class="text-primary">Dokumentacija za prevoz pokojnika</a></h3>
+                <p class="small mb-0">Kompletan spisak dokumenata potrebnih za prevoz iz inostranstva.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="h6"><a href="/blog-kako-organizovati-prevoz-pokojnika" class="text-primary">Kako organizovati prevoz pokojnika</a></h3>
+                <p class="small mb-0">Korak po korak vodič za organizaciju međunarodnog transporta.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-center mt-4 mb-0">
+          <a href="/dokumentacija-za-prevoz-pokojnika" class="text-primary me-3">Dokumentacija (usluga)</a>
+          <a href="/blog" class="text-primary">Svi blog članci</a>
+        </p>
       </section>
 
       <!-- Process Section -->

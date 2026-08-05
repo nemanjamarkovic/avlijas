@@ -1,0 +1,15 @@
+{
+  "name": "transportpokojnika",
+  "private": true,
+  "description": "Static site build tooling for transportpokojnika.com",
+  "scripts": {
+    "build": "node scripts/build-site.js",
+    "build:images": "node scripts/build-site.js --images",
+    "update-versions": "node update-versions.js",
+    "dev": "node scripts/dev-server.js",
+    "dev:netlify": "npx --yes netlify-cli dev"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.3"
+  }
+}
