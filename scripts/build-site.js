@@ -15,6 +15,49 @@ const { execSync } = require("child_process");
 const ROOT = path.join(__dirname, "..");
 const TODAY = new Date().toISOString().slice(0, 10);
 
+const PARTIALS_DIR = path.join(ROOT, "templates", "partials");
+
+const ICON_FONT_PRELOAD =
+  '<link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.woff2" as="font" type="font/woff2" crossorigin />';
+
+const BOOTSTRAP_CSS_SYNC =
+  '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />';
+
+const BOOTSTRAP_CSS_DEFER = `<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
+<noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /></noscript>`;
+
+const ICONS_CSS_DEFER = `<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
+<noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" /></noscript>`;
+
+const SYNC_BOOTSTRAP_PAGES = new Set([
+  "index.html",
+  "nemacka.html",
+  "austrija.html",
+  "svajcarska.html",
+  "italija.html",
+  "spanija.html",
+  "svedska.html",
+  "danska.html",
+  "contact.html",
+]);
+
+const HUB_PAGES = new Set([
+  "index.html",
+  "nemacka.html",
+  "austrija.html",
+  "svajcarska.html",
+  "italija.html",
+  "spanija.html",
+  "svedska.html",
+  "danska.html",
+]);
+
+const GENERATED_HEAD_ASSETS = `${ICON_FONT_PRELOAD}
+  ${BOOTSTRAP_CSS_DEFER}
+  ${ICONS_CSS_DEFER}
+  <link href="styles.min.css?v=3" rel="stylesheet" />
+  <style>body{margin:0;background-color:#2b2b2b;color:#e9e9e9;font-family:system-ui,-apple-system,sans-serif}.container{max-width:1140px;margin:0 auto;padding:0 15px}</style>`;
+
 const GERMAN_CITIES = [
   {
     slug: "dusseldorf",
@@ -315,16 +358,7 @@ function renderCityPage(city) {
     <link rel="canonical" href="${url}" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /></noscript>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" /></noscript>
-    <link href="styles.min.css?v=3" rel="stylesheet" />
-    <style>
-      body { margin: 0; background-color: #2b2b2b; color: #e9e9e9; font-family: system-ui, -apple-system, sans-serif; }
-      .container { max-width: 1140px; margin: 0 auto; padding: 0 15px; }
-    </style>
-
+    ${GENERATED_HEAD_ASSETS}
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -519,24 +553,41 @@ function convertImages() {
 }
 
 function wrapImagesWithPicture(html) {
-  if (html.includes("<picture>")) {
-    // Fix double-wrapped images from repeated builds
+  html = dedupePictureTags(html);
+
+  const wrapAsset = (filename, webp) => {
+    const re = new RegExp(`<img([^>]*?)src="${filename.replace(".", "\\.")}"([^>]*?)>`, "gi");
+    html = html.replace(re, (match, before, after, offset, str) => {
+      const prefix = str.slice(0, offset);
+      const lastOpen = prefix.lastIndexOf("<picture>");
+      const lastClose = prefix.lastIndexOf("</picture>");
+      if (lastOpen > lastClose) return match;
+      return `<picture><source srcset="${webp}" type="image/webp" /><img${before}src="${filename}"${after}>`;
+    });
+  };
+
+  wrapAsset("pogrebni-kombi-sa-sandukom.jpg", "pogrebni-kombi-sa-sandukom.webp");
+  wrapAsset("pogrebni-sanduk.png", "pogrebni-sanduk.webp");
+  wrapAsset("pogrebni-sanduci.jpg", "pogrebni-sanduci.webp");
+
+  return dedupePictureTags(html);
+}
+
+function dedupePictureTags(html) {
+  let prev;
+  do {
+    prev = html;
     html = html.replace(
       /<picture><source srcset="([^"]+\.webp)" type="image\/webp" \/><picture><source srcset="\1" type="image\/webp" \/>/g,
       '<picture><source srcset="$1" type="image/webp" />'
     );
+    html = html.replace(
+      /<picture><source srcset="([^"]+\.webp)" type="image\/webp" \/><picture>/g,
+      '<picture><source srcset="$1" type="image/webp" />'
+    );
     html = html.replace(/<\/picture><\/picture>/g, "</picture>");
-  }
-  return html.replace(
-    /<img([^>]*?)src="(pogrebni-kombi-sa-sandukom\.jpg)"([^>]*?)>/g,
-    '<picture><source srcset="pogrebni-kombi-sa-sandukom.webp" type="image/webp" /><img$1src="$2"$3></picture>'
-  ).replace(
-    /<img([^>]*?)src="(pogrebni-sanduk\.png)"([^>]*?)>/g,
-    '<picture><source srcset="pogrebni-sanduk.webp" type="image/webp" /><img$1src="$2"$3></picture>'
-  ).replace(
-    /<img([^>]*?)src="(pogrebni-sanduci\.jpg)"([^>]*?)>/g,
-    '<picture><source srcset="pogrebni-sanduci.webp" type="image/webp" /><img$1src="$2"$3></picture>'
-  );
+  } while (html !== prev);
+  return html;
 }
 
 function updateBlogImageDimensions() {
@@ -545,15 +596,18 @@ function updateBlogImageDimensions() {
     let content = fs.readFileSync(path.join(ROOT, file), "utf8");
     let modified = false;
 
-    if (content.includes('src="pogrebni-sanduci.jpg"') && !content.includes('width="800"')) {
-      content = content.replace(
-        /<img\s+src="pogrebni-sanduci\.jpg"([^>]*)>/g,
-        '<picture><source srcset="pogrebni-sanduci.webp" type="image/webp" /><img src="pogrebni-sanduci.jpg" width="800" height="450"$1></picture>'
-      );
+    const withDims = content.replace(/<img(?![^>]*\bwidth=)([^>]*?)>/gi, (match, attrs) => {
+      if (/class="[^"]*card-img-top/.test(attrs)) return match;
+      return `<img width="800" height="450"${attrs}>`;
+    });
+    if (withDims !== content) {
+      content = withDims;
       modified = true;
     }
-    if (content.includes('src="pogrebni-kombi-sa-sandukom.jpg"') || content.includes('src="pogrebni-sanduk.png"') || content.includes('src="pogrebni-sanduci.jpg"')) {
-      content = wrapImagesWithPicture(content);
+
+    const wrapped = wrapImagesWithPicture(content);
+    if (wrapped !== content) {
+      content = wrapped;
       modified = true;
     }
 
@@ -562,6 +616,71 @@ function updateBlogImageDimensions() {
       console.log(`Updated images in ${file}`);
     }
   });
+}
+
+function updateBlogListingImages() {
+  const filePath = path.join(ROOT, "blog.html");
+  if (!fs.existsSync(filePath)) return;
+
+  let content = fs.readFileSync(filePath, "utf8");
+  let modified = false;
+
+  const cardPattern =
+    /<img\s+src="(pogrebni-kombi-sa-sandukom\.jpg|pogrebni-sanduk\.png|pogrebni-sanduci\.jpg)"\s+class="card-img-top"\s+alt="([^"]*)"\s+loading="lazy"\s*\/>/g;
+
+  let updated = content.replace(cardPattern, (_match, src, alt) => {
+    const webp = src.replace(/\.(jpe?g|png)$/i, ".webp");
+    return `<picture><source srcset="${webp}" type="image/webp" /><img src="${src}" class="card-img-top" alt="${alt}" width="400" height="225" loading="lazy" /></picture>`;
+  });
+
+  updated = updated.replace(
+    /<img\s+src="([^"]+)"\s+class="card-img-top"\s+alt="([^"]*)"\s+loading="lazy"\s*\/>/g,
+    '<img src="$1" class="card-img-top" alt="$2" width="400" height="225" loading="lazy" />'
+  );
+
+  if (updated !== content) {
+    content = updated;
+    modified = true;
+  }
+
+  const wrapped = wrapImagesWithPicture(content);
+  if (wrapped !== content) {
+    content = wrapped;
+    modified = true;
+  }
+
+  if (modified) {
+    fs.writeFileSync(filePath, content, "utf8");
+    console.log("Updated images in blog.html");
+  }
+}
+
+function dedupeAllPictureTags() {
+  fs.readdirSync(ROOT)
+    .filter((f) => f.endsWith(".html"))
+    .forEach((file) => {
+      const filePath = path.join(ROOT, file);
+      let content = fs.readFileSync(filePath, "utf8");
+      const deduped = dedupePictureTags(content);
+      if (deduped !== content) {
+        fs.writeFileSync(filePath, deduped, "utf8");
+        console.log(`Deduped picture tags in ${file}`);
+      }
+    });
+}
+
+function updateStaticPageImages() {
+  fs.readdirSync(ROOT)
+    .filter((f) => f.endsWith(".html"))
+    .forEach((file) => {
+      const filePath = path.join(ROOT, file);
+      let content = fs.readFileSync(filePath, "utf8");
+      const updated = wrapImagesWithPicture(content);
+      if (updated !== content) {
+        fs.writeFileSync(filePath, updated, "utf8");
+        console.log(`Updated images in ${file}`);
+      }
+    });
 }
 
 function renderServicePage({ slug, title, description, h1, lead, sections, faqs, relatedLinks }) {
@@ -610,11 +729,7 @@ function renderServicePage({ slug, title, description, h1, lead, sections, faqs,
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="${url}" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-  <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /></noscript>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-  <link href="styles.min.css?v=3" rel="stylesheet" />
-  <style>body{margin:0;background-color:#2b2b2b;color:#e9e9e9;font-family:system-ui,-apple-system,sans-serif}.container{max-width:1140px;margin:0 auto;padding:0 15px}</style>
+  ${GENERATED_HEAD_ASSETS}
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":${JSON.stringify(h1)},"description":${JSON.stringify(description)},"url":"${url}","provider":{"@type":"FuneralService","name":"Transport pokojnika - Pogrebno preduzeće","telephone":"+381642492849","url":"https://transportpokojnika.com"}}</script>
   ${faqs && faqs.length ? `<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[${faqSchema}]}</script>` : ""}
   <link rel="icon" type="image/png" href="vijenac logo.png" />
@@ -753,11 +868,7 @@ function renderBlogPost({ slug, title, description, h1, lead, date, readTime, se
   <meta name="twitter:description" content="${description}" />
   <meta name="twitter:image" content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg" />
   <link rel="canonical" href="${url}" />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-  <link href="styles.min.css?v=3" rel="stylesheet" />
-  <style>body{margin:0;background-color:#2b2b2b;color:#e9e9e9;font-family:system-ui,-apple-system,sans-serif}.container{max-width:1140px;margin:0 auto;padding:0 15px}</style>
+  ${GENERATED_HEAD_ASSETS}
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":${JSON.stringify(h1)},"description":${JSON.stringify(description)},"image":"https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg","author":{"@type":"Organization","name":"Transport pokojnika - Pogrebno preduzeće"},"publisher":{"@type":"Organization","name":"Transport pokojnika - Pogrebno preduzeće","logo":{"@type":"ImageObject","url":"https://transportpokojnika.com/vijenac%20logo.png"}},"datePublished":"${date}","dateModified":"${date}","mainEntityOfPage":{"@type":"WebPage","@id":"${url}"}}</script>
   <link rel="icon" type="image/png" href="vijenac logo.png" />
 </head>
@@ -832,35 +943,6 @@ function generateBlogPosts() {
   });
 }
 
-function updateStaticPageImages() {
-  ["index.html", "berlin.html", "nemacka.html"].forEach((file) => {
-    const filePath = path.join(ROOT, file);
-    if (!fs.existsSync(filePath)) return;
-    let content = fs.readFileSync(filePath, "utf8");
-    const updated = wrapImagesWithPicture(content);
-    if (updated !== content) {
-      fs.writeFileSync(filePath, updated, "utf8");
-      console.log(`Updated images in ${file}`);
-    }
-  });
-}
-
-function updateStaticPageImages() {
-  ["index.html", "berlin.html", "nemacka.html"].forEach((file) => {
-    const filePath = path.join(ROOT, file);
-    if (!fs.existsSync(filePath)) return;
-    let content = fs.readFileSync(filePath, "utf8");
-    const updated = wrapImagesWithPicture(content);
-    if (updated !== content) {
-      fs.writeFileSync(filePath, updated, "utf8");
-      console.log(`Updated images in ${file}`);
-    }
-  });
-}
-
-const PARTIALS_DIR = path.join(ROOT, "templates", "partials");
-const INJECT_EXCLUDE = new Set(["404.html", "500.html", "contact.html"]);
-
 function readPartial(name) {
   return fs.readFileSync(path.join(PARTIALS_DIR, name), "utf8").trim();
 }
@@ -931,14 +1013,109 @@ function stripOrphanedHeaderFragments(html) {
   return html.slice(0, pos) + afterContainer.slice(mainMatch.index);
 }
 
+function replaceFooterContainer(html, footerContent) {
+  if (/<footer id="footer-container"/i.test(html)) {
+    return html.replace(
+      /<footer id="footer-container"[^>]*>\s*<\/footer>/i,
+      footerContent
+    );
+  }
+  return replaceDivById(html, "footer-container", footerContent);
+}
+
+function removeInlineGA4(html) {
+  return html.replace(
+    /\s*(?:<!-- Google tag \(gtag\.js\) -->\s*)?<script[\s\S]*?googletagmanager\.com\/gtag\/js[\s\S]*?<\/script>\s*<script>[\s\S]*?gtag\("config", "G-9FMNRLMTK3"\);\s*<\/script>/g,
+    ""
+  );
+}
+
+function updateHeadAssets() {
+  const deferBootstrapRe =
+    /<link[^>]*bootstrap@5\.3\.3\/dist\/css\/bootstrap\.min\.css[^>]*media="print"[^>]*onload="this\.media='all'"[^>]*\/>[\s\n]*<noscript>\s*<link[^>]*bootstrap@5\.3\.3\/dist\/css\/bootstrap\.min\.css[^>]*\/>\s*<\/noscript>/g;
+
+  fs.readdirSync(ROOT)
+    .filter((f) => f.endsWith(".html"))
+    .forEach((file) => {
+      let content = fs.readFileSync(path.join(ROOT, file), "utf8");
+      const original = content;
+
+      content = removeInlineGA4(content);
+
+      if (
+        SYNC_BOOTSTRAP_PAGES.has(file) &&
+        content.includes('media="print"') &&
+        content.includes("bootstrap@5.3.3/dist/css/bootstrap")
+      ) {
+        content = content.replace(deferBootstrapRe, BOOTSTRAP_CSS_SYNC);
+      }
+
+      if (
+        content.includes("bootstrap-icons") &&
+        !content.includes("bootstrap-icons.woff2")
+      ) {
+        content = content.replace(
+          /(<link[^>]*bootstrap-icons[^>]*font\/bootstrap-icons\.min\.css)/,
+          `${ICON_FONT_PRELOAD}\n    $1`
+        );
+      }
+
+      if (content !== original) {
+        fs.writeFileSync(path.join(ROOT, file), content, "utf8");
+        console.log(`Updated head assets in ${file}`);
+      }
+    });
+}
+
+function verifyCls() {
+  const warnings = [];
+
+  fs.readdirSync(ROOT)
+    .filter((f) => f.endsWith(".html"))
+    .forEach((file) => {
+      const content = fs.readFileSync(path.join(ROOT, file), "utf8");
+      const navbars = (content.match(/navbar navbar-expand-lg/g) || []).length;
+      if (navbars !== 1) {
+        warnings.push(`${file}: expected 1 navbar, found ${navbars}`);
+      }
+
+      if (/<picture><source[^>]+><picture>/i.test(content)) {
+        warnings.push(`${file}: double-nested picture tags`);
+      }
+
+      const imgs = [...content.matchAll(/<img[\s\S]*?>/gi)];
+      imgs.forEach((match) => {
+        const tag = match[0].replace(/\s+/g, " ");
+        if (/\bwidth\s*=/.test(tag) && /\bheight\s*=/.test(tag)) return;
+        if (/class="[^"]*card-img-top/.test(tag)) {
+          warnings.push(`${file}: card image missing width/height`);
+        }
+        if (/class="[^"]*img-fluid rounded shadow mb-4/.test(tag)) {
+          warnings.push(`${file}: blog hero image missing width/height`);
+        }
+      });
+
+      if (HUB_PAGES.has(file) && content.includes('id="contact-container"')) {
+        if (!content.includes('id="contact"')) {
+          warnings.push(`${file}: hub page missing pre-rendered contact section`);
+        }
+      }
+    });
+
+  if (warnings.length) {
+    console.warn("CLS verification warnings:");
+    warnings.forEach((w) => console.warn(`  - ${w}`));
+  } else {
+    console.log("CLS verification passed.");
+  }
+}
+
 function injectPartials() {
   const header = readPartial("header.html");
   const footer = readPartial("footer.html");
-  const contactFallback = readPartial("contact-fallback.html");
+  const contactSection = readPartial("contact-section.html");
 
-  const htmlFiles = fs
-    .readdirSync(ROOT)
-    .filter((f) => f.endsWith(".html") && !INJECT_EXCLUDE.has(f));
+  const htmlFiles = fs.readdirSync(ROOT).filter((f) => f.endsWith(".html"));
 
   htmlFiles.forEach((file) => {
     let content = fs.readFileSync(path.join(ROOT, file), "utf8");
@@ -946,10 +1123,10 @@ function injectPartials() {
 
     content = stripOrphanedHeaderFragments(content);
     content = replaceDivById(content, "header-container", header);
-    content = replaceDivById(content, "footer-container", footer);
+    content = replaceFooterContainer(content, footer);
 
     if (content.includes('id="contact-container"')) {
-      content = replaceDivById(content, "contact-container", contactFallback);
+      content = replaceDivById(content, "contact-container", contactSection);
     }
 
     if (content !== original) {
@@ -1065,6 +1242,15 @@ Sajt na srpskom jeziku. Glavne usluge: međunarodni transport pokojnika, repatri
   console.log("Generated llms.txt");
 }
 
+function syncStylesMin() {
+  const src = path.join(ROOT, "styles.css");
+  const dest = path.join(ROOT, "styles.min.css");
+  if (fs.existsSync(src)) {
+    fs.copyFileSync(src, dest);
+    console.log("Synced styles.min.css from styles.css");
+  }
+}
+
 // Main
 generateCityPages();
 generateServicePages();
@@ -1086,7 +1272,12 @@ const newUrls = [
 updateSitemap(newUrls);
 generateLlmsTxt();
 updateBlogImageDimensions();
+updateBlogListingImages();
 updateStaticPageImages();
+dedupeAllPictureTags();
+updateHeadAssets();
+syncStylesMin();
+verifyCls();
 
 if (process.argv.includes("--images")) {
   convertImages();

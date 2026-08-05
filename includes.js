@@ -1,19 +1,3 @@
-(function () {
-  if (window.__ga4Loaded) return;
-  window.__ga4Loaded = true;
-  var s = document.createElement("script");
-  s.async = true;
-  s.src = "https://www.googletagmanager.com/gtag/js?id=G-9FMNRLMTK3";
-  document.head.appendChild(s);
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  window.gtag = gtag;
-  gtag("js", new Date());
-  gtag("config", "G-9FMNRLMTK3");
-})();
-
 document.addEventListener("DOMContentLoaded", function () {
   const headerContainer = document.querySelector("#header-container");
   const footerContainer = document.querySelector("#footer-container");
@@ -50,15 +34,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const afterPartials = function () {
       addStickyContactButton();
       setActiveStates();
+      if (document.getElementById("contactForm")) {
+        initContactForm();
+      }
     };
 
-    if (contactContainer) {
-      const hasOnlyFallback =
-        contactContainer.querySelector("noscript") &&
-        !contactContainer.querySelector("section#contact");
+    const hasPreRenderedContact =
+      (contactContainer && contactContainer.querySelector("section#contact")) ||
+      (document.querySelector("main section#contact") &&
+        document.getElementById("contactForm"));
 
-      if (hasOnlyFallback || !contactContainer.querySelector("section#contact")) {
-        Promise.all(tasks).then(function () {
+    if (contactContainer && !hasPreRenderedContact) {
+      Promise.all(tasks)
+        .then(function () {
           afterPartials();
           if ("IntersectionObserver" in window) {
             const observer = new IntersectionObserver(
@@ -76,19 +64,14 @@ document.addEventListener("DOMContentLoaded", function () {
           } else {
             loadContactSection(contactContainer);
           }
-        }).catch(afterPartials);
-      } else {
-        Promise.all(tasks).then(afterPartials).catch(afterPartials);
-      }
+        })
+        .catch(afterPartials);
     } else {
       Promise.all(tasks).then(afterPartials).catch(afterPartials);
     }
   }
 
   function loadContactSection(container) {
-    container.innerHTML =
-      '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
-
     fetch("contact.html")
       .then(function (response) {
         if (!response.ok) {
@@ -118,9 +101,26 @@ document.addEventListener("DOMContentLoaded", function () {
   injectContent();
 });
 
+(function () {
+  if (window.__ga4Loaded) return;
+  window.__ga4Loaded = true;
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=G-9FMNRLMTK3";
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  window.gtag = gtag;
+  gtag("js", new Date());
+  gtag("config", "G-9FMNRLMTK3");
+})();
+
 function initContactForm() {
   const contactForm = document.getElementById("contactForm");
-  if (!contactForm) return;
+  if (!contactForm || contactForm.dataset.initialized) return;
+  contactForm.dataset.initialized = "true";
 
   const script = document.createElement("script");
   script.src =

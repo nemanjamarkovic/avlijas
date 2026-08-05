@@ -15,11 +15,46 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    font-display: swap;
     background-color: var(--bg-dark);
     color: var(--text-light);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* CLS guards — reserve space for header, icons, and contact section */
+#header-container {
+    min-height: 140px;
+    background-color: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+    #header-container {
+        min-height: 180px;
+    }
+}
+
+.top-bar {
+    min-height: 80px;
+}
+
+.navbar {
+    min-height: 60px;
+}
+
+.bi::before {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+
+#contact-container {
+    min-height: 900px;
+}
+
+.card-img-top {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    width: 100%;
 }
 
 main {
@@ -1351,6 +1386,21 @@ footer a.text-light:hover {
 /* Contact form styles - moved from includes.js for better performance */
 .contact-section {
     position: relative;
+}
+
+.hover-success:hover {
+    color: #198754 !important;
+}
+
+.contact-section .form-control:focus {
+    background-color: #1a1d20;
+    border-color: #198754;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.contact-section .form-control::placeholder {
+    color: #6c757d;
+    opacity: 0.7;
 }
 
 .contact-icon {
