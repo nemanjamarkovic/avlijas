@@ -29,7 +29,11 @@ body {
 
 @media (max-width: 768px) {
     #header-container {
-        min-height: 180px;
+        min-height: 135px;
+    }
+
+    .top-bar {
+        min-height: 48px;
     }
 }
 
@@ -369,7 +373,8 @@ nav[aria-label="breadcrumb"] {
     }
     
     .top-bar .col-md-6:first-child {
-        flex: 0 0 auto;
+        flex: 1 1 auto;
+        min-width: 0;
         width: auto;
     }
     
@@ -383,18 +388,28 @@ nav[aria-label="breadcrumb"] {
     .contact-info {
         display: flex;
         align-items: center;
+        flex: 1;
+        min-width: 0;
         gap: 6px;
         margin-right: 6px;
     }
-    
-    /* Show contact links as icon-only buttons on mobile */
-    .contact-info .contact-link {
+
+    /* Hide email in top bar on mobile — available in footer and contact page */
+    .contact-info .contact-link[href^="mailto:"] {
+        display: none;
+    }
+
+    /* Phone-first tap-to-call with full number visible */
+    .contact-info .contact-link--phone {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        padding: 8px;
+        justify-content: flex-start;
+        gap: 6px;
+        width: auto;
+        min-width: unset;
+        height: auto;
+        min-height: 44px;
+        padding: 6px 10px;
         margin: 0;
         border-radius: 6px;
         background: rgba(147, 115, 65, 0.15);
@@ -402,24 +417,28 @@ nav[aria-label="breadcrumb"] {
         text-decoration: none;
     }
     
-    .contact-info .contact-link:hover {
+    .contact-info .contact-link--phone:hover {
         background: rgba(147, 115, 65, 0.3);
-        transform: scale(1.05);
+        transform: scale(1.02);
     }
     
-    .contact-info .contact-link i {
-        font-size: 18px;
+    .contact-info .contact-link--phone i {
+        font-size: 16px;
         color: var(--accent);
         margin: 0;
+        flex-shrink: 0;
     }
-    
-    /* Hide text on mobile */
-    .contact-info .contact-text {
-        display: none;
+
+    .contact-info .contact-link--phone .contact-text {
+        display: inline;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--accent);
+        white-space: nowrap;
     }
-    
-    /* Hide social icons on mobile */
-    .contact-info .social-icon {
+
+    /* Hide social row on mobile — sticky button and footer cover these */
+    .top-bar .social-media-bar {
         display: none;
     }
     
@@ -428,7 +447,7 @@ nav[aria-label="breadcrumb"] {
         display: flex;
         align-items: center;
         white-space: nowrap;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
     
     .working-hours span {

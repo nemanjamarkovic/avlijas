@@ -23,23 +23,14 @@ const ICON_FONT_PRELOAD =
 const BOOTSTRAP_CSS_SYNC =
   '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />';
 
-const BOOTSTRAP_CSS_DEFER = `<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
-<noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" /></noscript>`;
-
 const ICONS_CSS_DEFER = `<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" media="print" onload="this.media='all'" />
 <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" /></noscript>`;
 
-const SYNC_BOOTSTRAP_PAGES = new Set([
-  "index.html",
-  "nemacka.html",
-  "austrija.html",
-  "svajcarska.html",
-  "italija.html",
-  "spanija.html",
-  "svedska.html",
-  "danska.html",
-  "contact.html",
-]);
+const GENERATED_HEAD_ASSETS = `${ICON_FONT_PRELOAD}
+  ${BOOTSTRAP_CSS_SYNC}
+  ${ICONS_CSS_DEFER}
+  <link href="styles.min.css?v=3" rel="stylesheet" />
+  <style>body{margin:0;background-color:#2b2b2b;color:#e9e9e9;font-family:system-ui,-apple-system,sans-serif}.container{max-width:1140px;margin:0 auto;padding:0 15px}</style>`;
 
 const HUB_PAGES = new Set([
   "index.html",
@@ -51,12 +42,6 @@ const HUB_PAGES = new Set([
   "svedska.html",
   "danska.html",
 ]);
-
-const GENERATED_HEAD_ASSETS = `${ICON_FONT_PRELOAD}
-  ${BOOTSTRAP_CSS_DEFER}
-  ${ICONS_CSS_DEFER}
-  <link href="styles.min.css?v=3" rel="stylesheet" />
-  <style>body{margin:0;background-color:#2b2b2b;color:#e9e9e9;font-family:system-ui,-apple-system,sans-serif}.container{max-width:1140px;margin:0 auto;padding:0 15px}</style>`;
 
 const GERMAN_CITIES = [
   {
@@ -1032,7 +1017,7 @@ function removeInlineGA4(html) {
 
 function updateHeadAssets() {
   const deferBootstrapRe =
-    /<link[^>]*bootstrap@5\.3\.3\/dist\/css\/bootstrap\.min\.css[^>]*media="print"[^>]*onload="this\.media='all'"[^>]*\/>[\s\n]*<noscript>\s*<link[^>]*bootstrap@5\.3\.3\/dist\/css\/bootstrap\.min\.css[^>]*\/>\s*<\/noscript>/g;
+    /<link[\s\S]*?bootstrap@5\.3\.3\/dist\/css\/bootstrap\.min\.css[\s\S]*?media="print"[\s\S]*?onload="this\.media='all'"[\s\S]*?\/>[\s\n]*(?:<!--[\s\S]*?-->\s*)?<noscript>[\s\S]*?bootstrap@5\.3\.3\/dist\/css\/bootstrap[\s\S]*?<\/noscript>/g;
 
   fs.readdirSync(ROOT)
     .filter((f) => f.endsWith(".html"))
@@ -1043,7 +1028,6 @@ function updateHeadAssets() {
       content = removeInlineGA4(content);
 
       if (
-        SYNC_BOOTSTRAP_PAGES.has(file) &&
         content.includes('media="print"') &&
         content.includes("bootstrap@5.3.3/dist/css/bootstrap")
       ) {
@@ -1242,6 +1226,59 @@ Sajt na srpskom jeziku. Glavne usluge: međunarodni transport pokojnika, repatri
   console.log("Generated llms.txt");
 }
 
+function fixAccessibilityLinks() {
+  const replacements = [
+    [
+      /<a href="#" class="text-white"><i class="bi bi-viber"><\/i><\/a>/g,
+      '<a href="viber://chat?number=381642492849" class="text-white" aria-label="Viber kontakt"><i class="bi bi-viber"></i></a>',
+    ],
+    [
+      /<a\s+href="#"\s+class="me-3 text-decoration-none text-white-50 hover-success"\s*>\s*<i class="bi bi-viber fs-4"><\/i>\s*<\/a>/g,
+      '<a href="viber://chat?number=381642492849" class="me-3 text-decoration-none text-white-50 hover-success" aria-label="Viber kontakt"><i class="bi bi-viber fs-4"></i></a>',
+    ],
+    [
+      /<a href="tel:\+381642492849" class="contact-link me-3"(?![^>]*aria-label)>/g,
+      '<a href="tel:+381642492849" class="contact-link me-3" aria-label="Pozovite nas: +381 64 249 28 49">',
+    ],
+    [
+      /<a href="mailto:kontakt@transportpokojnika\.com" class="contact-link me-3"(?![^>]*aria-label)>/g,
+      '<a href="mailto:kontakt@transportpokojnika.com" class="contact-link me-3" aria-label="Pošaljite email: kontakt@transportpokojnika.com">',
+    ],
+  ];
+
+  fs.readdirSync(ROOT)
+    .filter((f) => f.endsWith(".html"))
+    .forEach((file) => {
+      let content = fs.readFileSync(path.join(ROOT, file), "utf8");
+      let modified = false;
+
+      replacements.forEach(([pattern, replacement]) => {
+        const updated = content.replace(pattern, replacement);
+        if (updated !== content) {
+          content = updated;
+          modified = true;
+        }
+      });
+
+      const togglerFixed = content.replace(
+        /<button(\s+class="navbar-toggler"[\s\S]*?data-bs-target="#navbarNav")(\s*)>/g,
+        (match, attrs, space) => {
+          if (/aria-label=/.test(match)) return match;
+          return `<button${attrs} aria-controls="navbarNav" aria-expanded="false" aria-label="Otvori meni"${space}>`;
+        }
+      );
+      if (togglerFixed !== content) {
+        content = togglerFixed;
+        modified = true;
+      }
+
+      if (modified) {
+        fs.writeFileSync(path.join(ROOT, file), content, "utf8");
+        console.log(`Fixed accessibility links in ${file}`);
+      }
+    });
+}
+
 function syncStylesMin() {
   const src = path.join(ROOT, "styles.css");
   const dest = path.join(ROOT, "styles.min.css");
@@ -1276,6 +1313,7 @@ updateBlogListingImages();
 updateStaticPageImages();
 dedupeAllPictureTags();
 updateHeadAssets();
+fixAccessibilityLinks();
 syncStylesMin();
 verifyCls();
 
