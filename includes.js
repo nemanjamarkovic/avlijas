@@ -15,585 +15,178 @@
 })();
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Get the header and footer container elements
   const headerContainer = document.querySelector("#header-container");
   const footerContainer = document.querySelector("#footer-container");
-  // Look for a contact container
   const contactContainer = document.querySelector("#contact-container");
 
-  console.log("Loading includes for:", window.location.pathname);
-
-  // Function to inject content to containers
-  function injectContent() {
-    // Header content
-    if (headerContainer) {
-      headerContainer.innerHTML = `
-<div class="top-bar py-2">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <div class="contact-info">
-          <a href="tel:+381642492849" class="contact-link me-3">
-            <i class="bi bi-telephone-fill"></i>
-            <span class="contact-text">+381 64 249 28 49</span>
-            </a>
-          <a href="mailto:kontakt@transportpokojnika.com" class="contact-link me-3">
-            <i class="bi bi-envelope-fill"></i>
-            <span class="contact-text">kontakt@transportpokojnika.com</span>
-            </a>
-        </div>
-      </div>
-      <div class="col-md-6 text-end">
-        <div class="working-hours">
-          <span><i class="bi bi-clock-fill"></i> Dostupni 24/7</span>
-        </div>
-      </div>
-    </div>
-    <div class="row mt-2">
-      <div class="col-12">
-        <div class="social-media-bar text-center">
-          <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Facebook stranica">
-            <i class="bi bi-facebook"></i>
-          </a>
-          <a href="https://www.instagram.com/transportpokojnika/" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Instagram profil">
-            <i class="bi bi-instagram"></i>
-          </a>
-          <a href="https://wa.me/381642492849?text=Zdravo,%20trebam%20pomo%C4%87%20oko%20prevoza%20pokojnika" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="WhatsApp kontakt">
-            <i class="bi bi-whatsapp"></i>
-          </a>
-          <a href="viber://chat?number=381642492849" class="social-icon" aria-label="Viber kontakt">
-            <i class="bi bi-chat-dots-fill"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<nav
-  class="navbar navbar-expand-lg navbar-dark"
-  role="navigation"
-  aria-label="Main navigation"
->
-  <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="/">
-      <i class="bi bi-building me-2"></i>
-      <div>
-        <span class="brand-name">Pogrebno preduzeće</span>
-        <span class="brand-slogan d-block">Tradicija i poverenje</span>
-      </div>
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/">Početna</a>
-        </li>
-        <li class="nav-item dropdown medjunarodni-transport">
-          <a
-            href="#"
-            class="nav-link dropdown-toggle"
-            id="medjunarodni-dropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Medjunarodni Transport
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" href="/nemacka">Prevoz iz Nemačke</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/austrija">Prevoz iz Austrije</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/svajcarska">Prevoz iz Švajcarske</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/italija">Prevoz iz Italije</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/spanija">Prevoz iz Španije</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/svedska">Prevoz iz Švedske</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/danska">Prevoz iz Danske</a>
-            </li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" href="/#transport">Sve destinacije</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="/nemacka">Nemačka</a>
-        </li>
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="/austrija">Austrija</a>
-        </li>
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="/svajcarska">Švajcarska</a>
-        </li>
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="/italija">Italija</a>
-        </li>
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="/spanija">Španija</a>
-        </li>
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="/svedska">Švedska</a>
-        </li>
-        <li class="nav-item d-lg-none">
-          <a class="nav-link" href="/danska">Danska</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/cenovnik">Cenovnik</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/#showcase">Vozila</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/testimonials">Utisci</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/blog">Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/#faq">FAQ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/contact">Kontakt</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<style>
-  /* Make dropdown menus mobile-friendly */
-  @media screen and (max-width: 768px) {
-    /* Increase tap target size for mobile */
-    .nav-item,
-    .dropdown-item {
-      min-height: 44px;
-      padding: 12px 15px;
-      font-size: 16px;
-    }
-
-    /* Make sure dropdown items are visible when parent is tapped */
-    .dropdown-menu {
-      position: static;
-      width: 100%;
-      padding-left: 15px;
-      box-shadow: none;
-      display: none;
-    }
-
-    /* Add a toggle class for mobile dropdown visibility */
-    .dropdown-menu.show {
-      display: block;
-    }
-
-    /* Add a toggle button for subcategories */
-    .dropdown-toggle::after {
-      float: right;
-      margin-top: 8px;
-    }
-
-    /* Specifically target Medjunarodni Transport dropdown */
-    .medjunarodni-transport .dropdown-item {
-      padding: 12px 10px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-  }
-</style>
-
-<script>
-  // Complete revamp of the mobile dropdown behavior
-  document.addEventListener("DOMContentLoaded", function () {
-    // Check if we're on a mobile device (either by width or touch capability)
-    const isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
-
-    if (isMobile) {
-      // Handle specifically the Medjunarodni Transport dropdown
-      const medjunarodniBtns = document.querySelectorAll(
-        ".medjunarodni-transport > .nav-link"
-      );
-
-      medjunarodniBtns.forEach(function (btn) {
-        // Remove any Bootstrap data attributes that might interfere
-        btn.removeAttribute("data-bs-toggle");
-        btn.removeAttribute("data-bs-target");
-
-        // Simple click handler directly on the button
-        btn.onclick = function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          // Find the dropdown menu
-          const menu = this.parentNode.querySelector(".dropdown-menu");
-
-          // Toggle the show class
-          if (menu.classList.contains("show")) {
-            menu.classList.remove("show");
-          } else {
-            // Close all other dropdowns first
-            document
-              .querySelectorAll(".dropdown-menu.show")
-              .forEach(function (openMenu) {
-                openMenu.classList.remove("show");
-              });
-
-            // Show this dropdown
-            menu.classList.add("show");
-          }
-
-          return false;
-        };
-      });
-
-      // Styles are now in styles.css for better performance
-
-      // Close dropdowns when clicking outside
-      document.addEventListener("click", function (e) {
-        if (!e.target.closest(".dropdown")) {
-          document
-            .querySelectorAll(".dropdown-menu.show")
-            .forEach(function (menu) {
-              menu.classList.remove("show");
-            });
-        }
-      });
-    }
-  });
-</script>
-            `;
-      console.log("Header content injected");
-    }
-
-    // Contact section - lazy load from contact.html (only when visible)
-    if (contactContainer) {
-      // Use IntersectionObserver for lazy loading - only fetch when section is about to be visible
-      if ("IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                observer.unobserve(entry.target);
-
-                // Add a loading indicator
-                contactContainer.innerHTML =
-                  '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
-
-                fetch("contact.html")
-                  .then((response) => {
-                    if (!response.ok) {
-                      throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
-                  })
-                  .then((data) => {
-                    // Parse fetched HTML and extract only the contact section to avoid duplicating <head> and canonical tags
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, "text/html");
-                    const contactSection = doc.querySelector("section#contact");
-                    if (contactSection) {
-                      contactContainer.innerHTML = contactSection.outerHTML;
-                    } else {
-                      // Fallback to whole body content if section not found
-                      const mainContent = doc.querySelector("main");
-                      contactContainer.innerHTML = mainContent
-                        ? mainContent.innerHTML
-                        : data;
-                    }
-
-                    // Add contact form functionality
-                    initContactForm();
-
-                    // Add contact styles
-                    addContactStyles();
-                  })
-                  .catch((error) => {
-                    console.error("Error loading contact section:", error);
-                    contactContainer.innerHTML =
-                      '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
-                  });
-              }
-            });
-          },
-          {
-            rootMargin: "200px", // Start loading 200px before section is visible
-          }
-        );
-
-        observer.observe(contactContainer);
-      } else {
-        // Fallback for browsers without IntersectionObserver - load immediately
-        contactContainer.innerHTML =
-          '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
-
-        fetch("contact.html")
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.text();
-          })
-          .then((data) => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data, "text/html");
-            const contactSection = doc.querySelector("section#contact");
-            if (contactSection) {
-              contactContainer.innerHTML = contactSection.outerHTML;
-            } else {
-              const mainContent = doc.querySelector("main");
-              contactContainer.innerHTML = mainContent
-                ? mainContent.innerHTML
-                : data;
-            }
-            initContactForm();
-            addContactStyles();
-          })
-          .catch((error) => {
-            console.error("Error loading contact section:", error);
-            contactContainer.innerHTML =
-              '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
-          });
+  function loadPartial(url) {
+    return fetch(url).then(function (response) {
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
       }
-    }
-
-    // Footer content
-    if (footerContainer) {
-      footerContainer.innerHTML = `
-<footer class="bg-dark text-white py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 mb-4 mb-md-0">
-        <h2>O nama</h2>
-        <p>
-          Profesionalno pogrebno preduzeće sa dugogodišnjim iskustvom u
-          organizaciji međunarodnog transporta pokojnika.
-        </p>
-        <div class="mt-3 social-icons">
-          <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="text-white me-2" aria-label="Facebook stranica"><i class="bi bi-facebook"></i></a>
-          <a href="https://www.instagram.com/transportpokojnika/" target="_blank" rel="noopener noreferrer" class="text-white me-2" aria-label="Instagram profil"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="text-white"><i class="bi bi-viber"></i></a>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4 mb-md-0">
-        <h2>Kontakt</h2>
-        <address class="mb-0">
-          <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
-          <p>
-            <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
-          </p>
-          <p>
-            <i class="bi bi-geo-alt-fill me-2"></i>Beograd, Srbija
-          </p>
-        </address>
-      </div>
-      <div class="col-md-4">
-        <h2>Brzi linkovi</h2>
-        <ul class="list-unstyled">
-          <li><a href="/" class="text-white">Početna</a></li>
-          <li><a href="/#transport" class="text-white">Usluge</a></li>
-          <li><a href="/blog" class="text-white">Blog</a></li>
-          <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
-          <li><a href="/contact" class="text-white">Kontakt</a></li>
-          <li class="mt-2"><strong>Destinacije</strong></li>
-          <li><a href="/nemacka" class="text-white">Prevoz iz Nemačke</a></li>
-          <li><a href="/berlin" class="text-white">Prevoz iz Berlina</a></li>
-          <li><a href="/hamburg" class="text-white">Prevoz iz Hamburga</a></li>
-          <li><a href="/frankfurt" class="text-white">Prevoz iz Frankfurta</a></li>
-          <li><a href="/munchen" class="text-white">Prevoz iz Minhena (München)</a></li>
-          <li><a href="/dusseldorf" class="text-white">Prevoz iz Diseldorfa</a></li>
-          <li><a href="/koln" class="text-white">Prevoz iz Kelna</a></li>
-          <li><a href="/stuttgart" class="text-white">Prevoz iz Štutgarta</a></li>
-          <li><a href="/dortmund" class="text-white">Prevoz iz Dortmunda</a></li>
-          <li><a href="/leipzig" class="text-white">Prevoz iz Lajpciga</a></li>
-          <li><a href="/dresden" class="text-white">Prevoz iz Drezdena</a></li>
-          <li><a href="/austrija" class="text-white">Prevoz iz Austrije</a></li>
-          <li><a href="/bec" class="text-white">Prevoz iz Beča (Wien)</a></li>
-          <li><a href="/graz" class="text-white">Prevoz iz Graca (Graz)</a></li>
-          <li><a href="/linz" class="text-white">Prevoz iz Linca (Linz)</a></li>
-          <li><a href="/svajcarska" class="text-white">Prevoz iz Švajcarske</a></li>
-          <li><a href="/cirih" class="text-white">Prevoz iz Ciriha (Zürich)</a></li>
-          <li><a href="/zeneva" class="text-white">Prevoz iz Ženeve (Genève)</a></li>
-          <li><a href="/italija" class="text-white">Prevoz iz Italije</a></li>
-          <li><a href="/rim" class="text-white">Prevoz iz Rima (Roma)</a></li>
-          <li><a href="/spanija" class="text-white">Prevoz iz Španije</a></li>
-          <li><a href="/madrid" class="text-white">Prevoz iz Madrida</a></li>
-          <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
-          <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
-          <li class="mt-2"><strong>Usluge</strong></li>
-          <li><a href="/dokumentacija-za-prevoz-pokojnika" class="text-white">Dokumentacija</a></li>
-          <li><a href="/pogrebni-sanduci" class="text-white">Pogrebni sanduci</a></li>
-          <li><a href="/ekshumacija" class="text-white">Ekshumacija</a></li>
-          <li><a href="/repatrijacija-pokojnika" class="text-white">Repatrijacija</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-      <div class="container copyright mt-4 pt-3 border-top border-secondary">
-    <p class="mb-0 text-center">
-      &copy; <span id="current-year">2023</span> Transport Pokojnika. Sva prava
-      zadržana.
-    </p>
-  </div>
-</footer>
-
-<script>
-  // Set current year in footer
-  document.getElementById('current-year').textContent = new Date().getFullYear();
-</script>
-            `;
-      console.log("Footer content injected");
-    }
-
-    // Add sticky contact button
-    addStickyContactButton();
-
-    // Apply theme overrides (ensure no unexpected white backgrounds)
-    addThemeOverrides();
-
-    // Set active states after content is loaded
-    setActiveStates();
+      return response.text();
+    });
   }
 
-  // Initialize contact form functionality
-  function initContactForm() {
-    console.log("Initializing contact form...");
-    const contactForm = document.getElementById("contactForm");
-    if (contactForm) {
-      console.log("Contact form found, loading EmailJS...");
-      // Load EmailJS library
-      const script = document.createElement("script");
-      script.src =
-        "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
-      document.head.appendChild(script);
+  function injectContent() {
+    const tasks = [];
 
-      script.onload = function () {
-        console.log("EmailJS library loaded successfully");
-        // Initialize EmailJS with your user ID
-        emailjs.init("yN59DEa4iJObN4zOM");
-        console.log("EmailJS initialized with service ID");
-      };
+    if (headerContainer && !headerContainer.innerHTML.trim()) {
+      tasks.push(
+        loadPartial("/templates/partials/header.html").then(function (html) {
+          headerContainer.innerHTML = html;
+        })
+      );
+    }
 
-      script.onerror = function () {
-        console.error("Failed to load EmailJS library!");
-      };
+    if (footerContainer && !footerContainer.innerHTML.trim()) {
+      tasks.push(
+        loadPartial("/templates/partials/footer.html").then(function (html) {
+          footerContainer.innerHTML = html;
+        })
+      );
+    }
 
-      contactForm.addEventListener("submit", function (e) {
-        console.log("Form submitted, preventing default behavior");
-        e.preventDefault();
+    const afterPartials = function () {
+      addStickyContactButton();
+      setActiveStates();
+    };
 
-        // Show loading state
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML =
-          '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Šalje se...';
-        console.log("Submit button set to loading state");
+    if (contactContainer) {
+      const hasOnlyFallback =
+        contactContainer.querySelector("noscript") &&
+        !contactContainer.querySelector("section#contact");
 
-        // Prepare template parameters
-        const templateParams = {
-          name: document.getElementById("name").value,
-          email: document.getElementById("email").value,
-          phone: document.getElementById("phone").value,
-          subject: document.getElementById("subject").value,
-          message: document.getElementById("message").value,
-        };
-        console.log("Form data collected:", templateParams);
-
-        // IMPORTANT: Update these with your actual service and template IDs
-        const serviceID = "service_bmwfktw"; // Replace with your actual service ID
-        const templateID = "template_6lq0do3"; // Replace with your actual template ID
-
-        console.log(
-          `Attempting to send email with serviceID: ${serviceID}, templateID: ${templateID}`
-        );
-
-        // Send the email using EmailJS
-        emailjs.send(serviceID, templateID, templateParams).then(
-          function (response) {
-            console.log("Email sent successfully!", response);
-            alert(
-              "Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku."
+      if (hasOnlyFallback || !contactContainer.querySelector("section#contact")) {
+        Promise.all(tasks).then(function () {
+          afterPartials();
+          if ("IntersectionObserver" in window) {
+            const observer = new IntersectionObserver(
+              function (entries) {
+                entries.forEach(function (entry) {
+                  if (entry.isIntersecting) {
+                    observer.unobserve(entry.target);
+                    loadContactSection(contactContainer);
+                  }
+                });
+              },
+              { rootMargin: "200px" }
             );
-            contactForm.reset();
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
-          },
-          function (error) {
-            console.error("Error sending email:", error);
-            console.error("Error details:", JSON.stringify(error));
-            alert(
-              "Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom."
-            );
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
+            observer.observe(contactContainer);
+          } else {
+            loadContactSection(contactContainer);
           }
-        );
-      });
+        }).catch(afterPartials);
+      } else {
+        Promise.all(tasks).then(afterPartials).catch(afterPartials);
+      }
     } else {
-      console.error("Contact form element not found in the DOM!");
+      Promise.all(tasks).then(afterPartials).catch(afterPartials);
     }
   }
 
-  // Add contact section styles
-  function addContactStyles() {
-    // Styles are now in styles.css for better performance
-    // No need to inject styles dynamically
+  function loadContactSection(container) {
+    container.innerHTML =
+      '<div class="text-center py-5"><div class="spinner-border" role="status"></div><p class="mt-2">Loading contact form...</p></div>';
+
+    fetch("contact.html")
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+        return response.text();
+      })
+      .then(function (data) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, "text/html");
+        const contactSection = doc.querySelector("section#contact");
+        if (contactSection) {
+          container.innerHTML = contactSection.outerHTML;
+        } else {
+          const mainContent = doc.querySelector("main");
+          container.innerHTML = mainContent ? mainContent.innerHTML : data;
+        }
+        initContactForm();
+      })
+      .catch(function (error) {
+        console.error("Error loading contact section:", error);
+        container.innerHTML =
+          '<div class="alert alert-danger my-5">Error loading contact form. Please refresh and try again.</div>';
+      });
   }
 
-  // Function to add sticky contact button
-  function addStickyContactButton() {
-    // Create the sticky button element
-    const stickyButton = document.createElement("div");
-    stickyButton.className = "sticky-contact-button";
-    stickyButton.innerHTML = `
-            <a href="tel:+381642492849" class="btn btn-primary btn-lg rounded-circle">
-                <i class="bi bi-telephone-fill"></i>
-            </a>
-            <a href="/contact" class="btn btn-success btn-lg">
-                Kontaktirajte nas
-            </a>
-        `;
-
-    // Styles are now in styles.css for better performance
-    // Add the button to the document
-    document.body.appendChild(stickyButton);
-  }
-
-  // Theme overrides to align section backgrounds with dark theme
-  function addThemeOverrides() {
-    // Styles are now in styles.css for better performance
-    // No need to inject styles dynamically
-  }
-
-  // Inject the content directly
   injectContent();
 });
 
+function initContactForm() {
+  const contactForm = document.getElementById("contactForm");
+  if (!contactForm) return;
+
+  const script = document.createElement("script");
+  script.src =
+    "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+  document.head.appendChild(script);
+
+  script.onload = function () {
+    emailjs.init("yN59DEa4iJObN4zOM");
+  };
+
+  contactForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML =
+      '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Šalje se...';
+
+    const templateParams = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      subject: document.getElementById("subject").value,
+      message: document.getElementById("message").value,
+    };
+
+    emailjs.send("service_bmwfktw", "template_6lq0do3", templateParams).then(
+      function () {
+        alert(
+          "Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku."
+        );
+        contactForm.reset();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      },
+      function () {
+        alert(
+          "Došlo je do greške prilikom slanja poruke. Molimo pokušajte ponovo ili nas kontaktirajte telefonom."
+        );
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+    );
+  });
+}
+
+function addStickyContactButton() {
+  if (document.querySelector(".sticky-contact-button")) return;
+
+  const stickyButton = document.createElement("div");
+  stickyButton.className = "sticky-contact-button";
+  stickyButton.innerHTML =
+    '<a href="tel:+381642492849" class="btn btn-primary btn-lg rounded-circle">' +
+    '<i class="bi bi-telephone-fill"></i></a>' +
+    '<a href="/contact" class="btn btn-success btn-lg">Kontaktirajte nas</a>';
+  document.body.appendChild(stickyButton);
+}
+
 function setActiveStates() {
-  // Get current path
   const currentPath = window.location.pathname;
 
-  // Remove all active classes first
-  document.querySelectorAll(".nav-link, .dropdown-item").forEach((link) => {
+  document.querySelectorAll(".nav-link, .dropdown-item").forEach(function (link) {
     link.classList.remove("active");
   });
 
-  // Set active states based on current path
   if (currentPath === "/" || currentPath === "/index.html") {
     document.querySelector('a[href="/"]')?.classList.add("active");
   } else if (currentPath.includes("/nemacka")) {

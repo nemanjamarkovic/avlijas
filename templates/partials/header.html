@@ -6,37 +6,34 @@
           <a href="tel:+381642492849" class="contact-link me-3">
             <i class="bi bi-telephone-fill"></i>
             <span class="contact-text">+381 64 249 28 49</span>
-          </a>
-          <a
-            href="mailto:kontakt@transportpokojnika.com"
-            class="contact-link me-3"
-          >
+            </a>
+          <a href="mailto:kontakt@transportpokojnika.com" class="contact-link me-3">
             <i class="bi bi-envelope-fill"></i>
             <span class="contact-text">kontakt@transportpokojnika.com</span>
-          </a>
-          <a
-            href="https://www.facebook.com/yourpage"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon me-2"
-            aria-label="Facebook"
-          >
-            <i class="bi bi-facebook"></i>
-          </a>
-          <a
-            href="https://www.instagram.com/yourpage"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="social-icon"
-            aria-label="Instagram"
-          >
-            <i class="bi bi-instagram"></i>
-          </a>
+            </a>
         </div>
       </div>
       <div class="col-md-6 text-end">
         <div class="working-hours">
           <span><i class="bi bi-clock-fill"></i> Dostupni 24/7</span>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="social-media-bar text-center">
+          <a href="https://www.facebook.com/profile.php?id=61584921571392" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Facebook stranica">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="https://www.instagram.com/transportpokojnika/" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="Instagram profil">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a href="https://wa.me/381642492849?text=Zdravo,%20trebam%20pomo%C4%87%20oko%20prevoza%20pokojnika" target="_blank" rel="noopener noreferrer" class="social-icon me-2" aria-label="WhatsApp kontakt">
+            <i class="bi bi-whatsapp"></i>
+          </a>
+          <a href="viber://chat?number=381642492849" class="social-icon" aria-label="Viber kontakt">
+            <i class="bi bi-chat-dots-fill"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -73,6 +70,9 @@
             href="#"
             class="nav-link dropdown-toggle"
             id="medjunarodni-dropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
             Medjunarodni Transport
           </a>
@@ -84,15 +84,46 @@
               <a class="dropdown-item" href="/austrija">Prevoz iz Austrije</a>
             </li>
             <li>
-              <a class="dropdown-item" href="/svajcarska"
-                >Prevoz iz Švajcarske</a
-              >
+              <a class="dropdown-item" href="/svajcarska">Prevoz iz Švajcarske</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/italija">Prevoz iz Italije</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/spanija">Prevoz iz Španije</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/svedska">Prevoz iz Švedske</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/danska">Prevoz iz Danske</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="/#transport">Sve destinacije</a>
             </li>
           </ul>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/nemacka">Nemačka</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/austrija">Austrija</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/svajcarska">Švajcarska</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/italija">Italija</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/spanija">Španija</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/svedska">Švedska</a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link" href="/danska">Danska</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/cenovnik">Cenovnik</a>
@@ -102,6 +133,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/testimonials">Utisci</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/blog">Blog</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/#faq">FAQ</a>
@@ -117,7 +151,6 @@
 <style>
   /* Make dropdown menus mobile-friendly */
   @media screen and (max-width: 768px) {
-    /* Increase tap target size for mobile */
     .nav-item,
     .dropdown-item {
       min-height: 44px;
@@ -125,7 +158,6 @@
       font-size: 16px;
     }
 
-    /* Make sure dropdown items are visible when parent is tapped */
     .dropdown-menu {
       position: static;
       width: 100%;
@@ -134,18 +166,15 @@
       display: none;
     }
 
-    /* Add a toggle class for mobile dropdown visibility */
     .dropdown-menu.show {
       display: block;
     }
 
-    /* Add a toggle button for subcategories */
     .dropdown-toggle::after {
       float: right;
       margin-top: 8px;
     }
 
-    /* Specifically target Medjunarodni Transport dropdown */
     .medjunarodni-transport .dropdown-item {
       padding: 12px 10px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -154,42 +183,32 @@
 </style>
 
 <script>
-  // Complete revamp of the mobile dropdown behavior
   document.addEventListener("DOMContentLoaded", function () {
-    // Check if we're on a mobile device (either by width or touch capability)
     const isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
 
     if (isMobile) {
-      // Handle specifically the Medjunarodni Transport dropdown
       const medjunarodniBtns = document.querySelectorAll(
         ".medjunarodni-transport > .nav-link"
       );
 
       medjunarodniBtns.forEach(function (btn) {
-        // Remove any Bootstrap data attributes that might interfere
         btn.removeAttribute("data-bs-toggle");
         btn.removeAttribute("data-bs-target");
 
-        // Simple click handler directly on the button
         btn.onclick = function (e) {
           e.preventDefault();
           e.stopPropagation();
 
-          // Find the dropdown menu
           const menu = this.parentNode.querySelector(".dropdown-menu");
 
-          // Toggle the show class
           if (menu.classList.contains("show")) {
             menu.classList.remove("show");
           } else {
-            // Close all other dropdowns first
             document
               .querySelectorAll(".dropdown-menu.show")
               .forEach(function (openMenu) {
                 openMenu.classList.remove("show");
               });
-
-            // Show this dropdown
             menu.classList.add("show");
           }
 
@@ -197,26 +216,6 @@
         };
       });
 
-      // Add CSS to ensure dropdowns display properly
-      const style = document.createElement("style");
-      style.textContent = `
-        @media (max-width: 768px) {
-          .dropdown-menu.show {
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            transform: none !important;
-          }
-          
-          .medjunarodni-transport .dropdown-menu {
-            max-height: none !important;
-            overflow: visible !important;
-          }
-        }
-      `;
-      document.head.appendChild(style);
-
-      // Close dropdowns when clicking outside
       document.addEventListener("click", function (e) {
         if (!e.target.closest(".dropdown")) {
           document

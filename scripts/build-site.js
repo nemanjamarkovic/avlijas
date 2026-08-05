@@ -845,10 +845,231 @@ function updateStaticPageImages() {
   });
 }
 
+function updateStaticPageImages() {
+  ["index.html", "berlin.html", "nemacka.html"].forEach((file) => {
+    const filePath = path.join(ROOT, file);
+    if (!fs.existsSync(filePath)) return;
+    let content = fs.readFileSync(filePath, "utf8");
+    const updated = wrapImagesWithPicture(content);
+    if (updated !== content) {
+      fs.writeFileSync(filePath, updated, "utf8");
+      console.log(`Updated images in ${file}`);
+    }
+  });
+}
+
+const PARTIALS_DIR = path.join(ROOT, "templates", "partials");
+const INJECT_EXCLUDE = new Set(["404.html", "500.html", "contact.html"]);
+
+function readPartial(name) {
+  return fs.readFileSync(path.join(PARTIALS_DIR, name), "utf8").trim();
+}
+
+/** Replace inner HTML of a div#id, matching nested divs correctly. */
+function replaceDivById(html, id, innerContent) {
+  const openMatch = html.match(new RegExp(`<div id="${id}"[^>]*>`, "i"));
+  if (!openMatch) return html;
+
+  const start = openMatch.index;
+  let pos = start + openMatch[0].length;
+  let depth = 1;
+
+  while (pos < html.length && depth > 0) {
+    const nextOpen = html.indexOf("<div", pos);
+    const nextClose = html.indexOf("</div>", pos);
+    if (nextClose === -1) break;
+
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = nextOpen + 4;
+    } else {
+      depth--;
+      if (depth === 0) {
+        return (
+          html.slice(0, start) +
+          `<div id="${id}">\n${innerContent}\n    </div>` +
+          html.slice(nextClose + 6)
+        );
+      }
+      pos = nextClose + 6;
+    }
+  }
+  return html;
+}
+
+/** Remove duplicate header fragments left outside #header-container by a prior buggy inject. */
+function stripOrphanedHeaderFragments(html) {
+  const openMatch = html.match(/<div id="header-container"[^>]*>/i);
+  if (!openMatch) return html;
+
+  let pos = openMatch.index + openMatch[0].length;
+  let depth = 1;
+  while (pos < html.length && depth > 0) {
+    const nextOpen = html.indexOf("<div", pos);
+    const nextClose = html.indexOf("</div>", pos);
+    if (nextClose === -1) break;
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = nextOpen + 4;
+    } else {
+      depth--;
+      if (depth === 0) {
+        pos = nextClose + 6;
+        break;
+      }
+      pos = nextClose + 6;
+    }
+  }
+
+  const afterContainer = html.slice(pos);
+  const mainMatch = afterContainer.match(/<main\b/i);
+  if (!mainMatch) return html;
+
+  const between = afterContainer.slice(0, mainMatch.index);
+  if (!between.includes("navbar navbar-expand-lg")) return html;
+
+  return html.slice(0, pos) + afterContainer.slice(mainMatch.index);
+}
+
+function injectPartials() {
+  const header = readPartial("header.html");
+  const footer = readPartial("footer.html");
+  const contactFallback = readPartial("contact-fallback.html");
+
+  const htmlFiles = fs
+    .readdirSync(ROOT)
+    .filter((f) => f.endsWith(".html") && !INJECT_EXCLUDE.has(f));
+
+  htmlFiles.forEach((file) => {
+    let content = fs.readFileSync(path.join(ROOT, file), "utf8");
+    const original = content;
+
+    content = stripOrphanedHeaderFragments(content);
+    content = replaceDivById(content, "header-container", header);
+    content = replaceDivById(content, "footer-container", footer);
+
+    if (content.includes('id="contact-container"')) {
+      content = replaceDivById(content, "contact-container", contactFallback);
+    }
+
+    if (content !== original) {
+      fs.writeFileSync(path.join(ROOT, file), content, "utf8");
+      console.log(`Injected partials into ${file}`);
+    }
+  });
+}
+
+const LLMS_BASE = "https://transportpokojnika.com";
+const LLMS_COUNTRY_SLUGS = new Set([
+  "nemacka", "austrija", "svajcarska", "italija", "spanija", "svedska", "danska",
+]);
+const LLMS_CITY_SLUGS = new Set([
+  "berlin", "munchen", "hamburg", "frankfurt", "cirih", "zeneva", "bec", "graz",
+  "linz", "rim", "madrid", "dusseldorf", "koln", "stuttgart", "dortmund", "leipzig", "dresden",
+]);
+const LLMS_SERVICE_SLUGS = new Set([
+  "cenovnik", "dokumentacija-za-prevoz-pokojnika", "pogrebni-sanduci",
+  "ekshumacija", "repatrijacija-pokojnika",
+]);
+const LLMS_OPTIONAL_SLUGS = new Set(["testimonials", "contact"]);
+
+const LLMS_DESCRIPTIONS = {
+  "/": "Međunarodni prevoz pokojnika iz Evrope u Srbiju. 24/7, kompletna dokumentacija.",
+  "/cenovnik": "Cenovnik usluga transporta pokojnika — transparentne cene.",
+  "/dokumentacija-za-prevoz-pokojnika": "Kompletan vodič kroz dokumentaciju za međunarodni prevoz.",
+  "/pogrebni-sanduci": "Pogrebni sanduci usklađeni sa međunarodnim propisima.",
+  "/ekshumacija": "Ekshumacija i prenos umrle osobe sa kompletnom dokumentacijom.",
+  "/repatrijacija-pokojnika": "Repatrijacija pokojnika iz inostranstva u domovinu.",
+  "/blog": "Blog sa vodičima i savetima o prevozu pokojnika.",
+  "/testimonials": "Utisci zadovoljnih klijenata.",
+  "/contact": "Kontakt forma i podaci za hitne slučajeve.",
+  "/nemacka": "Prevoz pokojnika iz Nemačke — Berlin, Minhen, Hamburg i drugi gradovi.",
+  "/austrija": "Prevoz pokojnika iz Austrije — Beč, Graz, Linz.",
+  "/svajcarska": "Prevoz pokojnika iz Švajcarske — Cirih, Ženeva.",
+  "/italija": "Prevoz pokojnika iz Italije — Rim i ostali gradovi.",
+  "/spanija": "Prevoz pokojnika iz Španije — Madrid.",
+  "/svedska": "Prevoz pokojnika iz Švedske.",
+  "/danska": "Prevoz pokojnika iz Danske.",
+};
+
+function slugToTitle(slug) {
+  return slug
+    .replace(/^blog-/, "")
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+function getLlmsDescription(slug, pathname) {
+  if (LLMS_DESCRIPTIONS[pathname]) return LLMS_DESCRIPTIONS[pathname];
+  if (slug.startsWith("blog-")) {
+    return `Blog članak: ${slugToTitle(slug).replace(/_/g, " ")}.`;
+  }
+  if (LLMS_CITY_SLUGS.has(slug)) {
+    return `Prevoz pokojnika iz ${slugToTitle(slug)} za Srbiju.`;
+  }
+  return `Informacije o prevozu pokojnika — ${slugToTitle(slug)}.`;
+}
+
+function generateLlmsTxt() {
+  const sitemap = fs.readFileSync(path.join(ROOT, "sitemap.xml"), "utf8");
+  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+
+  const sections = {
+    Usluge: [],
+    Zemlje: [],
+    Gradovi: [],
+    Blog: [],
+    Optional: [],
+  };
+
+  urls.forEach((url) => {
+    const pathname = new URL(url).pathname.replace(/\/$/, "") || "/";
+    const slug = pathname === "/" ? "" : pathname.slice(1);
+    const title =
+      slug === ""
+        ? "Početna stranica"
+        : slug.startsWith("blog-")
+          ? slugToTitle(slug)
+          : slug.charAt(0).toUpperCase() + slug.slice(1);
+    const desc = getLlmsDescription(slug, pathname);
+    const entry = `- [${title}](${url}): ${desc}`;
+
+    if (pathname === "/" || LLMS_SERVICE_SLUGS.has(slug)) {
+      sections.Usluge.push(entry);
+    } else if (LLMS_COUNTRY_SLUGS.has(slug)) {
+      sections.Zemlje.push(entry);
+    } else if (LLMS_CITY_SLUGS.has(slug)) {
+      sections.Gradovi.push(entry);
+    } else if (slug === "blog" || slug.startsWith("blog-")) {
+      sections.Blog.push(entry);
+    } else if (LLMS_OPTIONAL_SLUGS.has(slug)) {
+      sections.Optional.push(entry);
+    }
+  });
+
+  let txt = `# Transport pokojnika - Pogrebno preduzeće
+
+> Profesionalno pogrebno preduzeće iz Beograda. Međunarodni prevoz pokojnika iz Nemačke, Austrije, Švajcarske i cele Evrope u Srbiju. Tel: +381 64 249 28 49. Dostupni 24/7. MI ZAVRŠAVAMO SVU DOKUMENTACIJU.
+
+Sajt na srpskom jeziku. Glavne usluge: međunarodni transport pokojnika, repatrijacija, ekshumacija, pribavljanje dokumentacije, pogrebni sanduci.
+
+`;
+
+  for (const [name, items] of Object.entries(sections)) {
+    if (items.length === 0) continue;
+    txt += `## ${name}\n\n${items.join("\n")}\n\n`;
+  }
+
+  fs.writeFileSync(path.join(ROOT, "llms.txt"), txt.trim() + "\n", "utf8");
+  console.log("Generated llms.txt");
+}
+
 // Main
 generateCityPages();
 generateServicePages();
 generateBlogPosts();
+injectPartials();
 
 const newUrls = [
   ...GERMAN_CITIES.map((c) => ({
@@ -863,6 +1084,7 @@ const newUrls = [
 ];
 
 updateSitemap(newUrls);
+generateLlmsTxt();
 updateBlogImageDimensions();
 updateStaticPageImages();
 
