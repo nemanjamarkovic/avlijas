@@ -18,7 +18,7 @@ const TODAY = new Date().toISOString().slice(0, 10);
 const PARTIALS_DIR = path.join(ROOT, "templates", "partials");
 
 const ICON_FONT_PRELOAD =
-  '<link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.woff2" as="font" type="font/woff2" crossorigin />';
+  '<link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2" as="font" type="font/woff2" crossorigin />';
 
 const BOOTSTRAP_CSS_SYNC =
   '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />';
@@ -1026,6 +1026,11 @@ function updateHeadAssets() {
       const original = content;
 
       content = removeInlineGA4(content);
+
+      content = content.replace(
+        /bootstrap-icons@1\.11\.3\/font\/bootstrap-icons\.woff2/g,
+        "bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2"
+      );
 
       if (
         content.includes('media="print"') &&

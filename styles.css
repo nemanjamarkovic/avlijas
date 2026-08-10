@@ -2,6 +2,10 @@
     --primary: #4A4A4A;
     --primary-dark: #333333;
     --accent: #937341;
+    --accent-dark: #6d5630;
+    --accent-readable: #d4b896;
+    --accent-on-gold: #1a1a1a;
+    --link-on-dark: #d4b896;
     --accent-light: rgba(147, 115, 65, 0.1);
     --text-dark: #1a1a1a;
     --text-light: #e9e9e9;
@@ -9,6 +13,10 @@
     --bg-light: #f1f1f1;
     --gradient-dark: linear-gradient(135deg, #2b2b2b 0%, #1a1a1a 100%);
     --gradient-light: linear-gradient(135deg, #f1f1f1 0%, #e9e9e9 100%);
+    --bs-primary: #937341;
+    --bs-primary-rgb: 147, 115, 65;
+    --bs-link-color: #d4b896;
+    --bs-link-hover-color: #e8d4b0;
 }
 
 body {
@@ -184,19 +192,23 @@ nav[aria-label="breadcrumb"] {
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 10px;
+    gap: 16px;
     z-index: 10;
 }
 
 .indicator {
-    width: 12px;
-    height: 12px;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
     border-radius: 50%;
     border: none;
     background-color: rgba(255, 255, 255, 0.5);
     cursor: pointer;
-    padding: 0;
+    padding: 6px;
     transition: background-color 0.3s ease;
+    background-clip: content-box;
+    box-sizing: border-box;
 }
 
 .indicator.active {
@@ -326,7 +338,7 @@ nav[aria-label="breadcrumb"] {
 
 .brand-slogan {
     font-size: 0.8rem;
-    color: #937341;
+    color: var(--accent-readable);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -433,7 +445,7 @@ nav[aria-label="breadcrumb"] {
         display: inline;
         font-size: 0.8rem;
         font-weight: 600;
-        color: var(--accent);
+        color: var(--accent-readable);
         white-space: nowrap;
     }
 
@@ -509,7 +521,7 @@ nav[aria-label="breadcrumb"] {
 }
 
 .accordion-button:not(.collapsed) {
-    color: var(--accent);
+    color: var(--accent-readable);
     background-color: var(--bg-dark);
     box-shadow: none;
 }
@@ -848,8 +860,8 @@ html {
     position: absolute;
     bottom: 40px;
     right: 0;
-    background: var(--accent);
-    color: white;
+    background: var(--accent-dark);
+    color: #ffffff;
     padding: 15px 25px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
@@ -861,11 +873,12 @@ html {
     font-weight: bold;
     display: block;
     line-height: 1;
+    color: #ffffff;
 }
 
 .experience-badge .text {
     font-size: 0.9rem;
-    opacity: 0.9;
+    color: #ffffff;
 }
 
 /* Animations */
@@ -1049,17 +1062,40 @@ html {
     }
 }
 
+/* Accessibility: readable contrast on dark surfaces */
+.text-primary,
+a.text-primary {
+    color: var(--link-on-dark) !important;
+}
+
+a.text-primary:hover,
+a.text-primary:focus {
+    color: var(--bs-link-hover-color) !important;
+    text-decoration: underline;
+}
+
+.bg-primary {
+    background-color: var(--accent-dark) !important;
+}
+
+.bg-primary.text-white,
+.bg-primary.text-white p {
+    color: #ffffff !important;
+}
+
 /* Update buttons */
 .btn-primary {
-    background-color: var(--accent);
-    border-color: var(--accent);
-    color: var(--text-light);
+    background-color: var(--accent-dark);
+    border-color: var(--accent-dark);
+    color: #ffffff;
     font-weight: 500;
 }
 
-.btn-primary:hover {
-    background-color: darken(var(--accent), 10%);
-    border-color: darken(var(--accent), 10%);
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #5a4628;
+    border-color: #5a4628;
+    color: #ffffff;
 }
 
 .btn-outline-primary {
@@ -1171,7 +1207,7 @@ footer a.text-light:hover {
 
 /* Update buttons text */
 .btn-primary {
-    color: var(--text-light);
+    color: #ffffff;
     font-weight: 500;
 }
 
@@ -1494,13 +1530,23 @@ footer a.text-light:hover {
     align-items: flex-end;
 }
 
-.sticky-contact-button .btn-primary {
-    width: 60px;
-    height: 60px;
-    display: flex;
+.sticky-contact-button .sticky-phone-number {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    border-radius: 50px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-decoration: none;
+    line-height: 1.2;
+}
+
+.sticky-contact-button .sticky-phone-number i {
+    font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
 .sticky-contact-button .btn-success {
@@ -1525,7 +1571,14 @@ footer a.text-light:hover {
 @media (max-width: 768px) {
     .sticky-contact-button {
         bottom: 20px;
-        right: 20px;
+        right: 16px;
+        align-items: flex-end;
+    }
+
+    .sticky-contact-button .sticky-phone-number {
+        font-size: 0.8rem;
+        padding: 10px 14px;
+        max-width: calc(100vw - 32px);
     }
     
     .sticky-contact-button .btn-success {

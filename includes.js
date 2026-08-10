@@ -174,8 +174,9 @@ function addStickyContactButton() {
   const stickyButton = document.createElement("div");
   stickyButton.className = "sticky-contact-button";
   stickyButton.innerHTML =
-    '<a href="tel:+381642492849" class="btn btn-primary btn-lg rounded-circle" aria-label="Pozovite nas: +381 64 249 28 49">' +
-    '<i class="bi bi-telephone-fill" aria-hidden="true"></i></a>' +
+    '<a href="tel:+381642492849" class="btn btn-primary btn-lg sticky-phone-number" aria-label="Pozovite nas: +381 64 249 28 49">' +
+    '<i class="bi bi-telephone-fill" aria-hidden="true"></i>' +
+    '<span class="sticky-phone-number__text">+381 64 249 28 49</span></a>' +
     '<a href="/contact" class="btn btn-success btn-lg">Kontaktirajte nas</a>';
   document.body.appendChild(stickyButton);
 }
