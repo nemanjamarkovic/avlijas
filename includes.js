@@ -211,5 +211,20 @@ function setActiveStates() {
   } else if (currentPath.includes("/danska")) {
     document.querySelector('a[href="/danska"]')?.classList.add("active");
     document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/francuska")) {
+    document.querySelector('a[href="/francuska"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/hrvatska")) {
+    document.querySelector('a[href="/hrvatska"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/crna-gora")) {
+    document.querySelector('a[href="/crna-gora"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/grcka")) {
+    document.querySelector('a[href="/grcka"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
+  } else if (currentPath.includes("/norveska")) {
+    document.querySelector('a[href="/norveska"]')?.classList.add("active");
+    document.querySelector(".dropdown-toggle")?.classList.add("active");
   }
 }

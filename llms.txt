@@ -22,6 +22,11 @@ Sajt na srpskom jeziku. Glavne usluge: međunarodni transport pokojnika, repatri
 - [Spanija](https://transportpokojnika.com/spanija): Prevoz pokojnika iz Španije — Madrid.
 - [Svedska](https://transportpokojnika.com/svedska): Prevoz pokojnika iz Švedske.
 - [Danska](https://transportpokojnika.com/danska): Prevoz pokojnika iz Danske.
+- [Francuska](https://transportpokojnika.com/francuska): Prevoz pokojnika iz Francuske — Pariz, Lion, Marsej.
+- [Hrvatska](https://transportpokojnika.com/hrvatska): Prevoz pokojnika iz Hrvatske — Zagreb, Split, Rijeka.
+- [Crna-gora](https://transportpokojnika.com/crna-gora): Prevoz pokojnika iz Crne Gore — Podgorica i primorje.
+- [Grcka](https://transportpokojnika.com/grcka): Prevoz pokojnika iz Grčke — Atina, Solun, Patra.
+- [Norveska](https://transportpokojnika.com/norveska): Prevoz pokojnika iz Norveške — Oslo, Bergen, Trondheim.
 
 ## Gradovi
 
