@@ -1,33 +1,30 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prevoz pokojnika iz Nemačke | Transport</title>
+    <title>Prevoz pokojnika iz Nemačke u Srbiju i BiH | 24/7</title>
 
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Hitni prevoz pokojnika iz Nemačke - Berlin, Minhen, Hamburg. Najpovoljnije cene, 24/7 podrška, govorimo nemački. Tel: 064 249 28 49."
+      content="Prevoz pokojnika iz Nemačke u Srbiju, BiH, Crnu Goru i Severnu Makedoniju. Leichenpass, sprovodnicu i svu dokumentaciju završavamo mi. Dostupni 24/7."
     />
-    <meta
-      name="keywords"
-      content="prevoz pokojnika nemačka, transport pokojnika nemačka, pogrebne usluge nemačka, prevoz umrlih nemačka"
-    />
-    <meta name="author" content="Vaše Pogrebno Preduzeće" />
+    <meta name="author" content="Transport pokojnika - Pogrebno preduzeće" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://transportpokojnika.com/nemacka" />
     <meta
       property="og:title"
-      content="Prevoz pokojnika iz Nemačke | Profesionalan Transport"
+      content="Prevoz pokojnika iz Nemačke u Srbiju, BiH i region"
     />
     <meta
       property="og:description"
-      content="Organizujemo prevoz pokojnika iz svih gradova Nemačke. Kompletna dokumentacija i podrška 24/7."
+      content="Prevoz pokojnika iz svih gradova Nemačke u Srbiju, BiH, Crnu Goru i Severnu Makedoniju. Kompletna dokumentacija i podrška 24/7."
     />
     <meta property="og:locale" content="sr_RS" />
+    <meta property="og:site_name" content="Transport pokojnika" />
     <meta
       property="og:image"
       content="https://transportpokojnika.com/pogrebni-sanduk.png"
@@ -38,11 +35,11 @@
     <meta name="twitter:url" content="https://transportpokojnika.com/nemacka" />
     <meta
       name="twitter:title"
-      content="Prevoz pokojnika iz Nemačke | Profesionalan Transport"
+      content="Prevoz pokojnika iz Nemačke u Srbiju, BiH i region"
     />
     <meta
       name="twitter:description"
-      content="Organizujemo prevoz pokojnika iz svih gradova Nemačke. Kompletna dokumentacija i podrška 24/7."
+      content="Prevoz pokojnika iz svih gradova Nemačke u Srbiju, BiH, Crnu Goru i Severnu Makedoniju. Kompletna dokumentacija i podrška 24/7."
     />
     <meta
       name="twitter:image"
@@ -111,22 +108,27 @@
         "name": "Prevoz pokojnika iz Nemačke",
         "description": "Profesionalan prevoz pokojnika iz svih gradova Nemačke sa kompletnom dokumentacijom i 24/7 podrškom",
         "url": "https://transportpokojnika.com/nemacka",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Germany"
+        },
+        "serviceType": [
+          "Transport pokojnika iz Nemačke",
+          "Dokumentacija za transport",
+          "Međunarodni transport umrlih"
+        ],
         "provider": {
-          "@type": "FuneralService",
+          "@type": "LocalBusiness",
+          "@id": "https://transportpokojnika.com/#business",
           "name": "Transport pokojnika - Pogrebno preduzeće",
+          "url": "https://transportpokojnika.com/",
           "telephone": "+381642492849",
-          "email": "kontakt@transportpokojnika.com",
-          "url": "https://transportpokojnika.com",
-          "availableLanguage": ["de", "sr"],
-          "areaServed": {
-            "@type": "Country",
-            "name": "Germany"
-          },
-          "serviceType": [
-            "Transport pokojnika iz Nemačke",
-            "Dokumentacija za transport",
-            "Međunarodni transport umrlih"
-          ]
+          "logo": "https://transportpokojnika.com/vijenac%20logo.png",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Beograd",
+            "addressCountry": "RS"
+          }
         }
       }
     </script>
@@ -184,6 +186,32 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="vijenac logo.png" />
     <link rel="apple-touch-icon" href="vijenac logo.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Početna",
+            "item": "https://transportpokojnika.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Međunarodni transport",
+            "item": "https://transportpokojnika.com/#transport"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Nemačka",
+            "item": "https://transportpokojnika.com/nemacka"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <!-- Header will be loaded here -->
@@ -260,14 +288,14 @@
         </li>
         <li class="nav-item dropdown medjunarodni-transport">
           <a
-            href="#"
+            href="/#transport"
             class="nav-link dropdown-toggle"
             id="medjunarodni-dropdown"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Medjunarodni Transport
+            Međunarodni transport
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -305,6 +333,17 @@
             </li>
             <li>
               <a class="dropdown-item" href="/norveska">Prevoz iz Norveške</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><h6 class="dropdown-header">Sahrana u</h6></li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-bih">Bosni i Hercegovini</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-crnu-goru">Crnoj Gori</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-severnu-makedoniju">Severnoj Makedoniji</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
@@ -452,6 +491,15 @@
   });
 </script>
     </div><main role="main">
+      <nav class="container" aria-label="breadcrumb">
+        <ol class="breadcrumb py-3">
+          <li class="breadcrumb-item"><a href="/">Početna</a></li>
+          <li class="breadcrumb-item">
+            <a href="/#transport">Međunarodni transport</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Nemačka</li>
+        </ol>
+      </nav>
       <!-- Hero Section -->
       <section class="container-fluid bg-light py-5">
         <div class="container">
@@ -459,9 +507,9 @@
             <div class="col-lg-6">
               <h1 class="display-4 mb-4">Hitni prevoz pokojnika iz Nemačke</h1>
               <p class="lead mb-4">
-                Pouzdano preduzeće sa višedecenijskim iskustvom. Najpovoljnije
-                cene za hitni transport iz Berlina, Minhena, Hamburga i cele
-                Nemačke. Kompletna organizacija u najkraćem roku, dostupni 24/7.
+                Prevoz pokojnika iz Berlina, Minhena, Hamburga, Frankfurta i cele
+                Nemačke u Srbiju, BiH, Crnu Goru i Severnu Makedoniju. Leichenpass,
+                sprovodnicu i svu dokumentaciju završavamo mi, dostupni smo 24/7.
               </p>
               <a href="tel:+381642492849" class="btn btn-primary btn-lg"
                 >Pozovite nas odmah</a
@@ -567,6 +615,41 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="container my-5">
+        <h2 class="mb-3">Prevoz pokojnika iz Nemačke u Bosnu i Hercegovinu, Crnu Goru i Severnu Makedoniju</h2>
+        <p>Pored prevoza za Srbiju, iz Nemačke redovno organizujemo prevoz pokojnika u Bosnu i Hercegovinu (Banja Luka, Bijeljina, Sarajevo, Tuzla, Mostar), Crnu Goru i Severnu Makedoniju. Za sahranu u svakoj od ovih zemalja potrebna je dozvola njenog predstavništva u Nemačkoj — i taj deo dokumentacije, kao i nemački Leichenpass, pribavljamo mi.</p>
+        <p>Udaljenost putem zavisi od grada u kom je nastupila smrt. Južna Nemačka je najbliža: iz Minhena do Banje Luke ima oko 730 km, a do Beograda oko 940 km.</p>
+        <div class="table-responsive">
+          <table class="table table-dark table-striped align-middle mb-2">
+            <caption class="visually-hidden">Udaljenost putem od Minhena, Frankfurta i Berlina do odredišta</caption>
+            <thead><tr><th scope="col">Odredište</th><th scope="col">iz Minhena</th><th scope="col">iz Frankfurta</th><th scope="col">iz Berlina</th></tr></thead>
+            <tbody>
+                <tr><td>Beograd <span class="small opacity-75">(Srbija)</span></td><td>940 km</td><td>1.290 km</td><td>1.240 km</td></tr>
+                <tr><td>Banja Luka <span class="small opacity-75">(BiH (Republika Srpska))</span></td><td>730 km</td><td>1.080 km</td><td>1.170 km</td></tr>
+                <tr><td>Sarajevo <span class="small opacity-75">(BiH)</span></td><td>950 km</td><td>1.300 km</td><td>1.370 km</td></tr>
+                <tr><td>Podgorica <span class="small opacity-75">(Crna Gora)</span></td><td>1.170 km</td><td>1.570 km</td><td>1.650 km</td></tr>
+                <tr><td>Skoplje <span class="small opacity-75">(Severna Makedonija)</span></td><td>1.370 km</td><td>1.720 km</td><td>1.670 km</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small opacity-75">Približna udaljenost putem. Za ostale gradove pogledajte stranicu konkretnog grada.</p>
+      </section>
+
+      <section class="container-fluid bg-light py-5">
+        <div class="container">
+          <h2 class="mb-3">Sprovodnica u Nemačkoj — nadležna srpska predstavništva</h2>
+          <p>Dozvolu za unos posmrtnih ostataka u Srbiju (sprovodnicu) izdaje predstavništvo nadležno za poslednje prebivalište pokojnika. U Nemačkoj ih ima šest, a zahtev u ime porodice podnosimo mi:</p>
+          <ul class="list-unstyled">
+              <li class="mb-3"><a href="https://berlin.mfa.gov.rs/" target="_blank" rel="noopener noreferrer" class="text-primary">Ambasada Republike Srbije u Berlinu (konzularno odeljenje)</a> — Berlin, Brandenburg, Meklenburg-Prednja Pomeranija, Saksonija, Saksonija-Anhalt i Tiringija. Stranice: <a href="/berlin" class="text-primary">prevoz iz Berlina</a>, <a href="/leipzig" class="text-primary">prevoz iz Lajpciga</a>, <a href="/dresden" class="text-primary">prevoz iz Drezdena</a>.</li>
+              <li class="mb-3"><a href="https://hamburg.mfa.gov.rs/" target="_blank" rel="noopener noreferrer" class="text-primary">Generalni konzulat Republike Srbije u Hamburgu</a> — Hamburg, Donja Saksonija, Bremen i Šlezvig-Holštajn. Stranice: <a href="/hamburg" class="text-primary">prevoz iz Hamburga</a>.</li>
+              <li class="mb-3"><a href="https://duesseldorf.mfa.gov.rs/" target="_blank" rel="noopener noreferrer" class="text-primary">Generalni konzulat Republike Srbije u Diseldorfu</a> — Severna Rajna-Vestfalija. Stranice: <a href="/dusseldorf" class="text-primary">prevoz iz Diseldorfa</a>, <a href="/koln" class="text-primary">prevoz iz Kelna</a>, <a href="/dortmund" class="text-primary">prevoz iz Dortmunda</a>.</li>
+              <li class="mb-3"><a href="https://frankfurt.mfa.gov.rs/" target="_blank" rel="noopener noreferrer" class="text-primary">Generalni konzulat Republike Srbije u Frankfurtu</a> — Hesen, Rajnland-Palatinat i Sarland. Stranice: <a href="/frankfurt" class="text-primary">prevoz iz Frankfurta</a>.</li>
+              <li class="mb-3"><a href="https://munich.mfa.gov.rs/" target="_blank" rel="noopener noreferrer" class="text-primary">Generalni konzulat Republike Srbije u Minhenu</a> — Bavarska. Stranice: <a href="/munchen" class="text-primary">prevoz iz Minhena</a>.</li>
+              <li class="mb-3"><a href="https://stuttgart.mfa.gov.rs/" target="_blank" rel="noopener noreferrer" class="text-primary">Generalni konzulat Republike Srbije u Štutgartu</a> — Baden-Virtemberg. Stranice: <a href="/stuttgart" class="text-primary">prevoz iz Štutgarta</a>.</li>
+          </ul>
         </div>
       </section>
 
@@ -1202,9 +1285,9 @@
       <div class="col-md-4 mb-4 mb-md-0">
         <h2>Kontakt</h2>
         <address class="mb-0">
-          <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
+          <p><i class="bi bi-telephone-fill me-2"></i><a href="tel:+381642492849" class="text-white">+381 64 249 28 49</a></p>
           <p>
-            <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
+            <i class="bi bi-envelope-fill me-2"></i><a href="mailto:kontakt@transportpokojnika.com" class="text-white">kontakt@transportpokojnika.com</a>
           </p>
           <p>
             <i class="bi bi-geo-alt-fill me-2"></i>Beograd, Srbija
@@ -1216,6 +1299,8 @@
         <ul class="list-unstyled">
           <li><a href="/" class="text-white">Početna</a></li>
           <li><a href="/#transport" class="text-white">Usluge</a></li>
+          <li><a href="/cenovnik" class="text-white">Cenovnik</a></li>
+          <li><a href="/testimonials" class="text-white">Utisci klijenata</a></li>
           <li><a href="/blog" class="text-white">Blog</a></li>
           <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
           <li><a href="/contact" class="text-white">Kontakt</a></li>
@@ -1235,32 +1320,57 @@
           <li><a href="/bec" class="text-white">Prevoz iz Beča (Wien)</a></li>
           <li><a href="/graz" class="text-white">Prevoz iz Graca (Graz)</a></li>
           <li><a href="/linz" class="text-white">Prevoz iz Linca (Linz)</a></li>
+          <li><a href="/salcburg" class="text-white">Prevoz iz Salcburga</a></li>
+          <li><a href="/insbruk" class="text-white">Prevoz iz Insbruka</a></li>
           <li><a href="/svajcarska" class="text-white">Prevoz iz Švajcarske</a></li>
           <li><a href="/cirih" class="text-white">Prevoz iz Ciriha (Zürich)</a></li>
           <li><a href="/zeneva" class="text-white">Prevoz iz Ženeve (Genève)</a></li>
+          <li><a href="/bern" class="text-white">Prevoz iz Berna</a></li>
           <li><a href="/italija" class="text-white">Prevoz iz Italije</a></li>
           <li><a href="/rim" class="text-white">Prevoz iz Rima (Roma)</a></li>
+          <li><a href="/milano" class="text-white">Prevoz iz Milana</a></li>
           <li><a href="/spanija" class="text-white">Prevoz iz Španije</a></li>
           <li><a href="/madrid" class="text-white">Prevoz iz Madrida</a></li>
+          <li><a href="/barselona" class="text-white">Prevoz iz Barselone</a></li>
           <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
+          <li><a href="/stokholm" class="text-white">Prevoz iz Stokholma</a></li>
+          <li><a href="/geteborg" class="text-white">Prevoz iz Geteborga</a></li>
           <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
+          <li><a href="/kopenhagen" class="text-white">Prevoz iz Kopenhagena</a></li>
           <li><a href="/francuska" class="text-white">Prevoz iz Francuske</a></li>
+          <li><a href="/pariz" class="text-white">Prevoz iz Pariza</a></li>
           <li><a href="/hrvatska" class="text-white">Prevoz iz Hrvatske</a></li>
+          <li><a href="/zagreb" class="text-white">Prevoz iz Zagreba</a></li>
           <li><a href="/crna-gora" class="text-white">Prevoz iz Crne Gore</a></li>
           <li><a href="/grcka" class="text-white">Prevoz iz Grčke</a></li>
+          <li><a href="/atina" class="text-white">Prevoz iz Atine</a></li>
+          <li><a href="/solun" class="text-white">Prevoz iz Soluna</a></li>
           <li><a href="/norveska" class="text-white">Prevoz iz Norveške</a></li>
+          <li><a href="/oslo" class="text-white">Prevoz iz Osla</a></li>
+          <li class="mt-2"><strong>Sahrana u</strong></li>
+          <li><a href="/prevoz-pokojnika-u-bih" class="text-white">Bosni i Hercegovini (i RS)</a></li>
+          <li><a href="/prevoz-pokojnika-u-crnu-goru" class="text-white">Crnoj Gori</a></li>
+          <li><a href="/prevoz-pokojnika-u-severnu-makedoniju" class="text-white">Severnoj Makedoniji</a></li>
           <li class="mt-2"><strong>Usluge</strong></li>
           <li><a href="/dokumentacija-za-prevoz-pokojnika" class="text-white">Dokumentacija</a></li>
           <li><a href="/pogrebni-sanduci" class="text-white">Pogrebni sanduci</a></li>
           <li><a href="/ekshumacija" class="text-white">Ekshumacija</a></li>
           <li><a href="/repatrijacija-pokojnika" class="text-white">Repatrijacija</a></li>
+          <li class="mt-2"><strong>Vodiči</strong></li>
+          <li><a href="/blog-sta-raditi-kada-neko-umre-u-inostranstvu" class="text-white">Šta raditi kada neko umre u inostranstvu</a></li>
+          <li><a href="/blog-sprovodnica-za-prenos-posmrtnih-ostataka" class="text-white">Sprovodnica za prenos posmrtnih ostataka</a></li>
+          <li><a href="/blog-kako-organizovati-prevoz-pokojnika" class="text-white">Kako organizovati prevoz pokojnika</a></li>
+          <li><a href="/blog-koliko-kosta-prevoz-pokojnika-nemacka" class="text-white">Koliko košta prevoz pokojnika</a></li>
+          <li><a href="/blog-prevoz-pokojnika-avionom-vs-kombijem" class="text-white">Prevoz avionom ili kombijem</a></li>
+          <li><a href="/blog-prevoz-urne-iz-inostranstva" class="text-white">Prevoz urne iz inostranstva</a></li>
+          <li><a href="/blog-smrt-na-odmoru-u-inostranstvu" class="text-white">Smrt na odmoru u inostranstvu</a></li>
         </ul>
       </div>
     </div>
   </div>
       <div class="container copyright mt-4 pt-3 border-top border-secondary">
     <p class="mb-0 text-center">
-      &copy; <span id="current-year">2023</span> Transport Pokojnika. Sva prava
+      &copy; <span id="current-year">2026</span> Transport Pokojnika. Sva prava
       zadržana.
     </p>
   </div>

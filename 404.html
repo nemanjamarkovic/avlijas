@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,6 +12,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="404 - Stranica nije pronađena" />
     <meta property="og:locale" content="sr_RS" />
+    <meta property="og:site_name" content="Transport pokojnika" />
 
     <!-- Preconnect for faster CDN loading -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -129,14 +130,14 @@
         </li>
         <li class="nav-item dropdown medjunarodni-transport">
           <a
-            href="#"
+            href="/#transport"
             class="nav-link dropdown-toggle"
             id="medjunarodni-dropdown"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Medjunarodni Transport
+            Međunarodni transport
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -174,6 +175,17 @@
             </li>
             <li>
               <a class="dropdown-item" href="/norveska">Prevoz iz Norveške</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><h6 class="dropdown-header">Sahrana u</h6></li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-bih">Bosni i Hercegovini</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-crnu-goru">Crnoj Gori</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-severnu-makedoniju">Severnoj Makedoniji</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
@@ -415,9 +427,9 @@
       <div class="col-md-4 mb-4 mb-md-0">
         <h2>Kontakt</h2>
         <address class="mb-0">
-          <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
+          <p><i class="bi bi-telephone-fill me-2"></i><a href="tel:+381642492849" class="text-white">+381 64 249 28 49</a></p>
           <p>
-            <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
+            <i class="bi bi-envelope-fill me-2"></i><a href="mailto:kontakt@transportpokojnika.com" class="text-white">kontakt@transportpokojnika.com</a>
           </p>
           <p>
             <i class="bi bi-geo-alt-fill me-2"></i>Beograd, Srbija
@@ -429,6 +441,8 @@
         <ul class="list-unstyled">
           <li><a href="/" class="text-white">Početna</a></li>
           <li><a href="/#transport" class="text-white">Usluge</a></li>
+          <li><a href="/cenovnik" class="text-white">Cenovnik</a></li>
+          <li><a href="/testimonials" class="text-white">Utisci klijenata</a></li>
           <li><a href="/blog" class="text-white">Blog</a></li>
           <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
           <li><a href="/contact" class="text-white">Kontakt</a></li>
@@ -448,32 +462,57 @@
           <li><a href="/bec" class="text-white">Prevoz iz Beča (Wien)</a></li>
           <li><a href="/graz" class="text-white">Prevoz iz Graca (Graz)</a></li>
           <li><a href="/linz" class="text-white">Prevoz iz Linca (Linz)</a></li>
+          <li><a href="/salcburg" class="text-white">Prevoz iz Salcburga</a></li>
+          <li><a href="/insbruk" class="text-white">Prevoz iz Insbruka</a></li>
           <li><a href="/svajcarska" class="text-white">Prevoz iz Švajcarske</a></li>
           <li><a href="/cirih" class="text-white">Prevoz iz Ciriha (Zürich)</a></li>
           <li><a href="/zeneva" class="text-white">Prevoz iz Ženeve (Genève)</a></li>
+          <li><a href="/bern" class="text-white">Prevoz iz Berna</a></li>
           <li><a href="/italija" class="text-white">Prevoz iz Italije</a></li>
           <li><a href="/rim" class="text-white">Prevoz iz Rima (Roma)</a></li>
+          <li><a href="/milano" class="text-white">Prevoz iz Milana</a></li>
           <li><a href="/spanija" class="text-white">Prevoz iz Španije</a></li>
           <li><a href="/madrid" class="text-white">Prevoz iz Madrida</a></li>
+          <li><a href="/barselona" class="text-white">Prevoz iz Barselone</a></li>
           <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
+          <li><a href="/stokholm" class="text-white">Prevoz iz Stokholma</a></li>
+          <li><a href="/geteborg" class="text-white">Prevoz iz Geteborga</a></li>
           <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
+          <li><a href="/kopenhagen" class="text-white">Prevoz iz Kopenhagena</a></li>
           <li><a href="/francuska" class="text-white">Prevoz iz Francuske</a></li>
+          <li><a href="/pariz" class="text-white">Prevoz iz Pariza</a></li>
           <li><a href="/hrvatska" class="text-white">Prevoz iz Hrvatske</a></li>
+          <li><a href="/zagreb" class="text-white">Prevoz iz Zagreba</a></li>
           <li><a href="/crna-gora" class="text-white">Prevoz iz Crne Gore</a></li>
           <li><a href="/grcka" class="text-white">Prevoz iz Grčke</a></li>
+          <li><a href="/atina" class="text-white">Prevoz iz Atine</a></li>
+          <li><a href="/solun" class="text-white">Prevoz iz Soluna</a></li>
           <li><a href="/norveska" class="text-white">Prevoz iz Norveške</a></li>
+          <li><a href="/oslo" class="text-white">Prevoz iz Osla</a></li>
+          <li class="mt-2"><strong>Sahrana u</strong></li>
+          <li><a href="/prevoz-pokojnika-u-bih" class="text-white">Bosni i Hercegovini (i RS)</a></li>
+          <li><a href="/prevoz-pokojnika-u-crnu-goru" class="text-white">Crnoj Gori</a></li>
+          <li><a href="/prevoz-pokojnika-u-severnu-makedoniju" class="text-white">Severnoj Makedoniji</a></li>
           <li class="mt-2"><strong>Usluge</strong></li>
           <li><a href="/dokumentacija-za-prevoz-pokojnika" class="text-white">Dokumentacija</a></li>
           <li><a href="/pogrebni-sanduci" class="text-white">Pogrebni sanduci</a></li>
           <li><a href="/ekshumacija" class="text-white">Ekshumacija</a></li>
           <li><a href="/repatrijacija-pokojnika" class="text-white">Repatrijacija</a></li>
+          <li class="mt-2"><strong>Vodiči</strong></li>
+          <li><a href="/blog-sta-raditi-kada-neko-umre-u-inostranstvu" class="text-white">Šta raditi kada neko umre u inostranstvu</a></li>
+          <li><a href="/blog-sprovodnica-za-prenos-posmrtnih-ostataka" class="text-white">Sprovodnica za prenos posmrtnih ostataka</a></li>
+          <li><a href="/blog-kako-organizovati-prevoz-pokojnika" class="text-white">Kako organizovati prevoz pokojnika</a></li>
+          <li><a href="/blog-koliko-kosta-prevoz-pokojnika-nemacka" class="text-white">Koliko košta prevoz pokojnika</a></li>
+          <li><a href="/blog-prevoz-pokojnika-avionom-vs-kombijem" class="text-white">Prevoz avionom ili kombijem</a></li>
+          <li><a href="/blog-prevoz-urne-iz-inostranstva" class="text-white">Prevoz urne iz inostranstva</a></li>
+          <li><a href="/blog-smrt-na-odmoru-u-inostranstvu" class="text-white">Smrt na odmoru u inostranstvu</a></li>
         </ul>
       </div>
     </div>
   </div>
       <div class="container copyright mt-4 pt-3 border-top border-secondary">
     <p class="mb-0 text-center">
-      &copy; <span id="current-year">2023</span> Transport Pokojnika. Sva prava
+      &copy; <span id="current-year">2026</span> Transport Pokojnika. Sva prava
       zadržana.
     </p>
   </div>

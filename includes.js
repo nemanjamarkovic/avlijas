@@ -1,43 +1,14 @@
+// Header and footer are pre-rendered into every page by scripts/build-site.js.
 document.addEventListener("DOMContentLoaded", function () {
-  const headerContainer = document.querySelector("#header-container");
-  const footerContainer = document.querySelector("#footer-container");
   const contactContainer = document.querySelector("#contact-container");
 
-  function loadPartial(url) {
-    return fetch(url).then(function (response) {
-      if (!response.ok) {
-        throw new Error("HTTP " + response.status);
-      }
-      return response.text();
-    });
-  }
-
   function injectContent() {
-    const tasks = [];
-
-    if (headerContainer && !headerContainer.innerHTML.trim()) {
-      tasks.push(
-        loadPartial("/templates/partials/header.html").then(function (html) {
-          headerContainer.innerHTML = html;
-        })
-      );
+    addStickyContactButton();
+    setActiveStates();
+    trackContactClicks();
+    if (document.getElementById("contactForm")) {
+      initContactForm();
     }
-
-    if (footerContainer && !footerContainer.innerHTML.trim()) {
-      tasks.push(
-        loadPartial("/templates/partials/footer.html").then(function (html) {
-          footerContainer.innerHTML = html;
-        })
-      );
-    }
-
-    const afterPartials = function () {
-      addStickyContactButton();
-      setActiveStates();
-      if (document.getElementById("contactForm")) {
-        initContactForm();
-      }
-    };
 
     const hasPreRenderedContact =
       (contactContainer && contactContainer.querySelector("section#contact")) ||
@@ -45,29 +16,22 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("contactForm"));
 
     if (contactContainer && !hasPreRenderedContact) {
-      Promise.all(tasks)
-        .then(function () {
-          afterPartials();
-          if ("IntersectionObserver" in window) {
-            const observer = new IntersectionObserver(
-              function (entries) {
-                entries.forEach(function (entry) {
-                  if (entry.isIntersecting) {
-                    observer.unobserve(entry.target);
-                    loadContactSection(contactContainer);
-                  }
-                });
-              },
-              { rootMargin: "200px" }
-            );
-            observer.observe(contactContainer);
-          } else {
-            loadContactSection(contactContainer);
-          }
-        })
-        .catch(afterPartials);
-    } else {
-      Promise.all(tasks).then(afterPartials).catch(afterPartials);
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                observer.unobserve(entry.target);
+                loadContactSection(contactContainer);
+              }
+            });
+          },
+          { rootMargin: "200px" }
+        );
+        observer.observe(contactContainer);
+      } else {
+        loadContactSection(contactContainer);
+      }
     }
   }
 
@@ -117,6 +81,33 @@ document.addEventListener("DOMContentLoaded", function () {
   gtag("config", "G-9FMNRLMTK3");
 })();
 
+function trackEvent(name, params) {
+  if (typeof window.gtag !== "function") return;
+  window.gtag(
+    "event",
+    name,
+    Object.assign({ language: document.documentElement.lang }, params)
+  );
+}
+
+/** GA4 events for every way a family can reach us (mark them as key events in GA4). */
+function trackContactClicks() {
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest("a[href]");
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (href.startsWith("tel:")) {
+      trackEvent("click_call", { link_url: href });
+    } else if (href.startsWith("mailto:")) {
+      trackEvent("click_email", { link_url: href });
+    } else if (href.includes("wa.me/")) {
+      trackEvent("click_whatsapp", { link_url: href });
+    } else if (href.startsWith("viber:")) {
+      trackEvent("click_viber", { link_url: href });
+    }
+  });
+}
+
 function initContactForm() {
   const contactForm = document.getElementById("contactForm");
   if (!contactForm || contactForm.dataset.initialized) return;
@@ -134,6 +125,13 @@ function initContactForm() {
   contactForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
+    if (typeof window.emailjs === "undefined") {
+      alert(
+        "Forma se još učitava. Pokušajte ponovo za nekoliko sekundi ili nas pozovite na +381 64 249 28 49."
+      );
+      return;
+    }
+
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
@@ -150,6 +148,7 @@ function initContactForm() {
 
     emailjs.send("service_bmwfktw", "template_6lq0do3", templateParams).then(
       function () {
+        trackEvent("generate_lead", { form_id: "contactForm" });
         alert(
           "Hvala na poruci! Kontaktiraćemo vas u najkraćem mogućem roku."
         );

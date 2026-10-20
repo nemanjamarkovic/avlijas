@@ -10,12 +10,113 @@
 
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const { execSync } = require("child_process");
 
 const ROOT = path.join(__dirname, "..");
 const TODAY = new Date().toISOString().slice(0, 10);
+const SITE_URL = "https://transportpokojnika.com";
 
 const PARTIALS_DIR = path.join(ROOT, "templates", "partials");
+
+/**
+ * Single source of truth for the business entity (LocalBusiness JSON-LD).
+ * Fill the null fields from the Google Business Profile / company registration —
+ * null values are left out of the generated markup.
+ */
+const BUSINESS = {
+  name: "Transport pokojnika - Pogrebno preduzeće",
+  legalName: null,
+  taxID: null, // PIB
+  telephone: "+381642492849",
+  email: "kontakt@transportpokojnika.com",
+  streetAddress: null,
+  postalCode: null,
+  addressLocality: "Beograd",
+  addressCountry: "RS",
+  latitude: 44.8154, // TODO: replace with the Google Business Profile pin
+  longitude: 20.4612,
+  googleBusinessProfileUrl: null,
+  logo: `${SITE_URL}/vijenac%20logo.png`,
+  sameAs: [
+    "https://www.facebook.com/profile.php?id=61584921571392",
+    "https://www.instagram.com/transportpokojnika/",
+  ],
+  areaServed: [
+    "Serbia", "Bosnia and Herzegovina", "Montenegro", "North Macedonia",
+    "Germany", "Austria", "Switzerland", "Italy", "Spain", "France",
+    "Sweden", "Denmark", "Norway", "Croatia", "Greece",
+  ],
+};
+const BUSINESS_ID = `${SITE_URL}/#business`;
+
+/** Drop null/undefined/empty values so optional BUSINESS fields can stay null. */
+function compact(obj) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([, v]) => v !== null && v !== undefined && !(Array.isArray(v) && v.length === 0)
+    )
+  );
+}
+
+function businessAddress() {
+  return compact({
+    "@type": "PostalAddress",
+    streetAddress: BUSINESS.streetAddress,
+    postalCode: BUSINESS.postalCode,
+    addressLocality: BUSINESS.addressLocality,
+    addressCountry: BUSINESS.addressCountry,
+  });
+}
+
+/** Full LocalBusiness entity — emitted once, on the homepage. */
+function businessJsonLd() {
+  return compact({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": BUSINESS_ID,
+    additionalType: "https://en.wikipedia.org/wiki/Funeral_home",
+    name: BUSINESS.name,
+    legalName: BUSINESS.legalName,
+    taxID: BUSINESS.taxID,
+    url: `${SITE_URL}/`,
+    logo: BUSINESS.logo,
+    image: `${SITE_URL}/pogrebni-kombi-sa-sandukom.jpg`,
+    description:
+      "Pogrebno preduzeće iz Beograda specijalizovano za međunarodni prevoz pokojnika iz cele Evrope u Srbiju, Bosnu i Hercegovinu, Crnu Goru i Severnu Makedoniju. Kompletna dokumentacija, dostupni 24/7.",
+    telephone: BUSINESS.telephone,
+    email: BUSINESS.email,
+    address: businessAddress(),
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: BUSINESS.latitude,
+      longitude: BUSINESS.longitude,
+    },
+    hasMap: BUSINESS.googleBusinessProfileUrl,
+    openingHoursSpecification: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      opens: "00:00",
+      closes: "23:59",
+    },
+    priceRange: "€€",
+    areaServed: BUSINESS.areaServed.map((name) => ({ "@type": "Country", name })),
+    sameAs: [BUSINESS.googleBusinessProfileUrl, ...BUSINESS.sameAs].filter(Boolean),
+  });
+}
+
+/** Compact, self-contained reference to the business for provider/publisher/author fields. */
+function businessRef() {
+  return compact({
+    "@type": "LocalBusiness",
+    "@id": BUSINESS_ID,
+    name: BUSINESS.name,
+    url: `${SITE_URL}/`,
+    telephone: BUSINESS.telephone,
+    logo: BUSINESS.logo,
+    address: businessAddress(),
+  });
+}
 
 const ICON_FONT_PRELOAD =
   '<link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/fonts/bootstrap-icons.woff2" as="font" type="font/woff2" crossorigin />';
@@ -48,746 +149,157 @@ const HUB_PAGES = new Set([
   "norveska.html",
 ]);
 
-/** Country hub pages — add entries here, then run `npm run build`. */
-const COUNTRY_HUBS = [
-  {
-    slug: "francuska",
-    name: "Francuska",
-    nameGenitive: "Francuske",
-    schemaCountry: "France",
-    languages: ["fr", "sr"],
-    keywords:
-      "prevoz pokojnika francuska, transport pokojnika francuska, repatrijacija iz francuske, prevoz umrlih francuska",
-    metaDescription:
-      "Prevoz pokojnika iz Francuske - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Hitni transport iz Pariza, Liona, Marseja. 15+ godina iskustva, 24/7. Tel: 064 249 28 49.",
-    heroLead:
-      "Pouzdano preduzeće sa dugogodišnjim iskustvom. Prevoz iz Pariza, Liona, Marseja i cele Francuske. Kompletna organizacija u najkraćem roku, dostupni 24/7.",
-    servicePoints: [
-      "Prevoz iz svih francuskih gradova i regiona",
-      "Kompletna dokumentacija i carinske procedure (EU)",
-      "Dostupnost 24 časa dnevno",
-      "Specijalizovana vozila za međunarodni transport",
-      "Tim sa iskustvom u saradnji sa francuskim prefekturama i opštinama",
-    ],
-    documents: [
-      ["Acte de décès", "Potvrda o smrti"],
-      ["Autorisation de transport", "Dozvola za prenos pokojnika"],
-      ["Passeport du défunt", "Lična dokumenta pokojnika"],
-    ],
-    relatedLinks: [
-      { href: "/italija", label: "transport iz Italije" },
-      { href: "/spanija", label: "transport iz Španije" },
-    ],
-    howItWorks: [
-      "Kada nas kontaktirate, prikupljamo osnovne podatke o mestu smrti i željenoj destinaciji u Srbiji. Naš tim odmah započinje koordinaciju sa opštinom (mairie) i prefekturom gde je smrt registrovana.",
-      "U Francuskoj se izdaje acte de décès i posebna autorisation de transport za prelazak granice. Mi završavamo svu administraciju — vi ne morate ići u institucije. Sanduk i vozilo moraju biti usklađeni sa EU propisima o prenosu umrlih.",
-      "Transport obavljamo specijalizovanim pogrebnim vozilom do granice i dalje do Beograda ili drugog grada u Srbiji. Carinske formalnosti unutar EU obično su pojednostavljene, ali i dalje zahtevaju tačnu dokumentaciju.",
-      "Po dolasku pomažemo oko predaje pokojnika porodici ili pogrebnoj službi. Detaljan vodič kroz papire: <a href=\"/dokumentacija-za-prevoz-pokojnika\" class=\"text-primary\">dokumentacija za prevoz pokojnika</a>.",
-    ],
-    transportDuration: "2–4 dana",
-    cities: [
-      { name: "Pariz", note: "Prevoz iz Pariza i Île-de-France regiona" },
-      { name: "Lion", note: "Organizacija iz Auvergne-Rhône-Alpes" },
-      { name: "Marsej", note: "Transport iz Provence-Alpes-Côte d'Azur" },
-      { name: "Toulouse", note: "Prevoz iz Occitanie i jugozapada Francuske" },
-    ],
-    cityFaqs: [
-      {
-        id: "Pariz",
-        title: "Prevoz pokojnika iz Pariza",
-        body:
-          "Organizujemo prevoz pokojnika iz Pariza za Srbiju i region, uz kompletnu francusku dokumentaciju i podršku porodici na srpskom i francuskom jeziku.",
-      },
-      {
-        id: "Lion",
-        title: "Prevoz pokojnika iz Liona",
-        body:
-          "Prevoz iz Liona vršimo diskretno, uz poštovanje francuskih i srpskih propisa. Preuzimamo kontakt sa lokalnim institucijama umesto porodice.",
-      },
-      {
-        id: "Marsej",
-        title: "Prevoz pokojnika iz Marseja",
-        body:
-          "Brza organizacija transporta iz Marseja i obalnih gradova, uključujući carinske i zdravstvene dozvole.",
-      },
-      {
-        id: "Toulouse",
-        title: "Prevoz pokojnika iz Toulousea",
-        body:
-          "Kompletna logistika i transparentne cene za prevoz iz Toulousea. <a href=\"/cenovnik\" class=\"text-primary\">Pogledajte cenovnik</a>.",
-      },
-    ],
-    faqSchema: [
-      {
-        q: "Kako se vrši prevoz pokojnika iz Pariza?",
-        a: "Prevoz pokojnika iz Pariza obavljamo profesionalno i diskretno, uz poštovanje svih francuskih i srpskih propisa. Dostupni smo 24/7.",
-      },
-      {
-        q: "Da li organizujete prevoz iz Liona?",
-        a: "Da, organizujemo kompletnu uslugu transporta iz Liona, uključujući dokumentaciju i carinske procedure.",
-      },
-      {
-        q: "Koliko traje transport iz Francuske?",
-        a: "Uobičajeno vreme je 2-4 dana u zavisnosti od grada i dokumentacije. Za hitne slučajeve kontaktirajte nas na +381 64 249 28 49.",
-      },
-    ],
-  },
-  {
-    slug: "hrvatska",
-    name: "Hrvatska",
-    nameGenitive: "Hrvatske",
-    schemaCountry: "Croatia",
-    languages: ["hr", "sr"],
-    keywords:
-      "prevoz pokojnika hrvatska, transport pokojnika hrvatska, repatrijacija iz hrvatske, prevoz umrlih zagreb",
-    metaDescription:
-      "Prevoz pokojnika iz Hrvatske - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Hitni transport iz Zagreba, Splita, Rijeke. 15+ godina iskustva, 24/7. Tel: 064 249 28 49.",
-    heroLead:
-      "Profesionalan prevoz pokojnika iz Hrvatske u Srbiju. Zagreb, Split, Rijeka, Osijek i svi gradovi — kompletna dokumentacija, brza organizacija, dostupni 24/7.",
-    servicePoints: [
-      "Prevoz iz svih hrvatskih gradova",
-      "Dokumentacija u matičnim uredima i zdravstvenim ustanovama",
-      "Dostupnost 24 časa dnevno",
-      "Specijalizovana vozila za međunarodni transport",
-      "Tim koji govori hrvatski i srpski jezik",
-    ],
-    documents: [
-      ["Smrtovnica / izvod iz matične knjige umrlih", "Potvrda o smrti"],
-      ["Dozvola za transport pokojnika", "Sprovodnica za prelazak granice"],
-      ["Lična dokumenta pokojnika", "Pasoš ili lična karta"],
-    ],
-    relatedLinks: [
-      { href: "/austrija", label: "transport iz Austrije" },
-      { href: "/italija", label: "transport iz Italije" },
-    ],
-    howItWorks: [
-      "Nakon vašeg poziva koordiniramo sa bolnicom, domom za stare ili mrtvačnicom u Hrvatskoj i matičnim uredom (grad/općina) gde se vodi matična knjiga umrlih.",
-      "Pribavljamo smrtovnicu, dozvolu za transport i dokumentaciju potrebnu za uvoz u Srbiju. Kao susedna zemlja, put može biti brži nego iz zapadne Evrope — ali birokratija i dalje zahteva tačne rokove i pečate.",
-      "Prevoz obavljamo pogrebnim kombijem sa odgovarajućim sandukom. Na granici i u Srbiji koordiniramo sa carinom i domaćim institucijama.",
-      "Porodici ostavljamo jednu kontakt osobu tokom celog procesa. Više o <a href=\"/repatrijacija-pokojnika\" class=\"text-primary\">repatrijaciji pokojnika</a> i <a href=\"/blog-kako-organizovati-prevoz-pokojnika\" class=\"text-primary\">koracima organizacije</a>.",
-    ],
-    transportDuration: "1–3 dana",
-    cities: [
-      { name: "Zagreb", note: "Glavni grad i najčešća polazna tačka" },
-      { name: "Split", note: "Dalmacija i obalna regija" },
-      { name: "Rijeka", note: "Primorje i Gorski kotar" },
-      { name: "Osijek", note: "Slavonija i istok Hrvatske" },
-    ],
-    cityFaqs: [
-      {
-        id: "Zagreb",
-        title: "Prevoz pokojnika iz Zagreba",
-        body:
-          "Organizujemo kompletan prevoz iz Zagreba sa svom dokumentacijom. Dostupni smo non-stop za hitne slučajeve.",
-      },
-      {
-        id: "Split",
-        title: "Prevoz pokojnika iz Splita",
-        body:
-          "Prevoz iz Splita i Dalmacije — koordinacija sa lokalnim matičnim uredima i zdravstvenim službama.",
-      },
-      {
-        id: "Rijeka",
-        title: "Prevoz pokojnika iz Rijeke",
-        body:
-          "Brza organizacija transporta iz Rijeke i okoline, diskretna podrška porodici.",
-      },
-      {
-        id: "Osijek",
-        title: "Prevoz pokojnika iz Osijeka",
-        body:
-          "Transport iz Slavonije u Srbiju uz poštovanje hrvatskih i srpskih propisa.",
-      },
-    ],
-    faqSchema: [
-      {
-        q: "Koliko traje prevoz pokojnika iz Hrvatske?",
-        a: "Zbog geografske blizine, transport iz Hrvatske često traje 1-3 dana ukupno, uključujući dokumentaciju.",
-      },
-      {
-        q: "Da li je potreban pasoš pokojnika za prevoz iz Zagreba?",
-        a: "Da, uobičajeno su potrebni lični dokumenti pokojnika i dozvola za transport. Mi pomažemo u pribavljanju svih papira.",
-      },
-      {
-        q: "Da li radite 24/7 za prevoz iz Hrvatske?",
-        a: "Da, dostupni smo non-stop na +381 64 249 28 49.",
-      },
-    ],
-  },
-  {
-    slug: "crna-gora",
-    name: "Crna Gora",
-    nameGenitive: "Crne Gore",
-    schemaCountry: "Montenegro",
-    languages: ["sr", "cnr"],
-    keywords:
-      "prevoz pokojnika crna gora, transport pokojnika podgorica, repatrijacija crna gora, prevoz umrlih crna gora",
-    metaDescription:
-      "Prevoz pokojnika iz Crne Gore - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Hitni transport iz Podgorice, Nikšića, Buda. 15+ godina iskustva, 24/7. Tel: 064 249 28 49.",
-    heroLead:
-      "Prevoz pokojnika iz Crne Gore u Srbiju — Podgorica, Nikšić, Budva, Bar i svi gradovi. Kompletna dokumentacija, diskretnost i podrška 24/7.",
-    servicePoints: [
-      "Prevoz iz svih crnogorskih opština",
-      "Kompletna dokumentacija i granične procedure",
-      "Dostupnost 24 časa dnevno",
-      "Specijalizovana vozila za međunarodni transport",
-      "Tim sa iskustvom u crnogorskim institucijama",
-    ],
-    documents: [
-      ["Izvod iz matične knjige umrlih", "Potvrda o smrti"],
-      ["Dozvola za transport / sanitarna dozvola", "Sprovodnica"],
-      ["Lična dokumenta pokojnika", "Pasoš ili lična karta"],
-    ],
-    relatedLinks: [
-      { href: "/hrvatska", label: "transport iz Hrvatske" },
-      { href: "/austrija", label: "transport iz Austrije" },
-    ],
-    howItWorks: [
-      "Kontaktirate nas telefonom ili putem forme; prikupljamo podatke o mestu smrti u Crnoj Gori i destinaciji u Srbiji.",
-      "Naš tim preuzima saradnju sa matičnim uredom, zdravstvenom stanicom ili mrtvačnicom radi izdavanja smrtovnice i dozvole za prenos. Crna Gora i Srbija imaju bliske administrativne procedure, što olakšava koordinaciju.",
-      "Organizujemo prevoz pogrebnim vozilom do Beograda, Novog Sada ili drugog grada. Granični prelaz i carinska dokumentacija su deo naše usluge.",
-      "Na kraju procesa pokojnik se predaje porodici ili dogovorenoj pogrebnoj službi. Pročitajte <a href=\"/dokumentacija-za-prevoz-pokojnika\" class=\"text-primary\">šta je potrebno od papira</a>.",
-    ],
-    transportDuration: "1–2 dana",
-    cities: [
-      { name: "Podgorica", note: "Glavni grad i administrativni centar" },
-      { name: "Nikšić", note: "Sjeverna Crna Gora" },
-      { name: "Budva", note: "Primorje" },
-      { name: "Bar", note: "Južna obala" },
-    ],
-    cityFaqs: [
-      {
-        id: "Podgorica",
-        title: "Prevoz pokojnika iz Podgorice",
-        body:
-          "Kompletna organizacija prevoza iz Podgorice — dokumentacija, vozilo i dostava u Srbiju.",
-      },
-      {
-        id: "Niksic",
-        title: "Prevoz pokojnika iz Nikšića",
-        body:
-          "Diskretan transport iz Nikšića uz poštovanje svih propisa Crne Gore i Srbije.",
-      },
-      {
-        id: "Budva",
-        title: "Prevoz pokojnika iz Budve",
-        body:
-          "Brza koordinacija za primorske gradove i turističke zone.",
-      },
-      {
-        id: "Bar",
-        title: "Prevoz pokojnika iz Bara",
-        body:
-          "Prevoz iz Bara i južne obale — kontaktirajte nas za besplatnu procenu.",
-      },
-    ],
-    faqSchema: [
-      {
-        q: "Koliko brzo možete organizovati prevoz iz Podgorice?",
-        a: "U hitnim slučajevima transport iz Podgorice možemo organizovati u roku od 24-48 sati, u zavisnosti od dokumentacije.",
-      },
-      {
-        q: "Da li završavate dokumentaciju za prevoz iz Crne Gore?",
-        a: "Da, mi završavamo svu potrebnu dokumentaciju umesto porodice.",
-      },
-      {
-        q: "Koliko košta prevoz pokojnika iz Crne Gore?",
-        a: "Cena zavisi od udaljenosti i tipa usluge. Pogledajte <a href=\"/cenovnik\">cenovnik</a> ili pozovite +381 64 249 28 49.",
-      },
-    ],
-  },
-  {
-    slug: "grcka",
-    name: "Grčka",
-    nameGenitive: "Grčke",
-    schemaCountry: "Greece",
-    languages: ["el", "sr"],
-    keywords:
-      "prevoz pokojnika grcka, transport pokojnika grcka, repatrijacija iz grcke, prevoz umrlih atina",
-    metaDescription:
-      "Prevoz pokojnika iz Grčke - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Hitni transport iz Atine, Soluna, Patra. 15+ godina iskustva, 24/7. Tel: 064 249 28 49.",
-    heroLead:
-      "Organizujemo prevoz pokojnika iz Grčke u Srbiju — Atina, Solun, Patra, Larisa i sva ostrva dostupna kopnenim rutama. Kompletna dokumentacija, 24/7.",
-    servicePoints: [
-      "Prevoz iz kopnenih delova Grčke i glavnih gradova",
-      "Dokumentacija kod grčkih opština i zdravstvenih vlasti",
-      "Dostupnost 24 časa dnevno",
-      "Specijalizovana vozila za međunarodni transport",
-      "Koordinacija sa grčkim i srpskim institucijama",
-    ],
-    documents: [
-      ["Πιστοποιητικό θανάτου", "Potvrda o smrti (death certificate)"],
-      ["Άδεια μεταφοράς", "Dozvola za transport pokojnika"],
-      ["Ταυτότητα / διαβατήριο", "Lična dokumenta pokojnika"],
-    ],
-    relatedLinks: [
-      { href: "/italija", label: "transport iz Italije" },
-      { href: "/hrvatska", label: "transport iz Hrvatske" },
-    ],
-    howItWorks: [
-      "Smrt se u Grčkoj registruje kod lokalne opštine i zdravstvenih organa. Nakon vašeg poziva, naš tim kontaktira relevantne institucije na grčkom jeziku i započinje pribavljanje potvrde o smrti i dozvole za prenos.",
-      "Za prevoz ka Srbiji potrebni su odgovarajući sanduk, sanitarna dozvola i carinska dokumentacija na graničnim prelazima (npr. preko Severne Makedonije ili Bugarske, u zavisnosti od rute). Mi biramo najpogodniju i legalnu rutu.",
-      "Transport obavljamo specijalizovanim pogrebnim vozilom. Vreme putovanja zavisi od polaznog grada — iz Atine obično je nekoliko dana ukupno sa papirologijom.",
-      "Porodici pružamo jasne korake i rokove. Detalji u vodiču <a href=\"/blog-sta-raditi-kada-neko-umre-u-inostranstvu\" class=\"text-primary\">šta raditi kada neko umre u inostranstvu</a>.",
-    ],
-    transportDuration: "3–5 dana",
-    cities: [
-      { name: "Atina", note: "Attica i glavni grad" },
-      { name: "Solun", note: "Severna Grčka — bliža ruta ka Srbiji" },
-      { name: "Patra", note: "Peloponez i zapadna Grčka" },
-      { name: "Larisa", note: "Tesalija i centralna Grčka" },
-    ],
-    cityFaqs: [
-      {
-        id: "Atina",
-        title: "Prevoz pokojnika iz Atine",
-        body:
-          "Organizujemo prevoz iz Atine uz kompletnu grčku dokumentaciju i podršku porodici.",
-      },
-      {
-        id: "Solun",
-        title: "Prevoz pokojnika iz Soluna",
-        body:
-          "Solun je česta polazna tačka zbog geografske blizine — brža organizacija transporta ka Srbiji.",
-      },
-      {
-        id: "Patra",
-        title: "Prevoz pokojnika iz Patra",
-        body:
-          "Prevoz iz Patra i zapadne Grčke — koordinacija sa lokalnim vlastima i carinskim procedurama.",
-      },
-      {
-        id: "Larisa",
-        title: "Prevoz pokojnika iz Larise",
-        body:
-          "Kompletna logistika iz Larise i centralne Grčke.",
-      },
-    ],
-    faqSchema: [
-      {
-        q: "Koliko traje prevoz pokojnika iz Atine u Srbiju?",
-        a: "Ukupno obično 3-5 dana, uključujući grčku dokumentaciju i transport kopnenim putem.",
-      },
-      {
-        q: "Da li organizujete prevoz iz Soluna?",
-        a: "Da, Solun je jedna od najčešćih destinacija zbog blizine — organizujemo kompletnu uslugu.",
-      },
-      {
-        q: "Da li mi završavate grčku dokumentaciju?",
-        a: "Da, naše preduzeće preuzima kompletnu administraciju umesto porodice.",
-      },
-    ],
-  },
-  {
-    slug: "norveska",
-    name: "Norveška",
-    nameGenitive: "Norveške",
-    schemaCountry: "Norway",
-    languages: ["no", "sr"],
-    keywords:
-      "prevoz pokojnika norveska, transport pokojnika norveska, repatrijacija norveska, prevoz umrlih oslo",
-    metaDescription:
-      "Prevoz pokojnika iz Norveške - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Hitni transport iz Osla, Bergena, Trondheim. 15+ godina iskustva, 24/7. Tel: 064 249 28 49.",
-    heroLead:
-      "Prevoz pokojnika iz Norveške u Srbiju — Oslo, Bergen, Trondheim, Stavanger. Kompletna norveška dokumentacija, međunarodni transport, podrška 24/7.",
-    servicePoints: [
-      "Prevoz iz svih norveških gradova",
-      "Dokumentacija (Dødsattest, transporttillatelse)",
-      "Dostupnost 24 časa dnevno",
-      "Specijalizovana vozila za duge međunarodne rute",
-      "Iskustvo sa norveškim zdravstvenim i matičnim službama",
-    ],
-    documents: [
-      ["Dødsattest", "Potvrda o smrti"],
-      ["Transporttillatelse", "Dozvola za transport"],
-      ["Identifikasija pokojnika", "Pasoš ili lična dokumenta"],
-    ],
-    relatedLinks: [
-      { href: "/svedska", label: "transport iz Švedske" },
-      { href: "/danska", label: "transport iz Danske" },
-    ],
-    howItWorks: [
-      "Norveška ima stroge procedure oko registracije smrti i izdavanja Dødsattest. Nakon kontakta, naš tim komunicira sa norveškim institucijama i započinje pribavljanje dozvole za međunarodni prenos.",
-      "Transport ka Srbiji obično ide kopnenim putem kroz Švedsku, Dansku i Nemačku ili alternativnim EU koridorima — u zavisnosti od dozvola i vremena. Mi planiramo rutu i carinske formalnosti.",
-      "Koristimo pogrebna vozila usklađena sa norveškim i EU standardima. Porodica dobija redovne informacije o statusu prevoza.",
-      "Za pomoć oko papira i rokova pogledajte <a href=\"/dokumentacija-za-prevoz-pokojnika\" class=\"text-primary\">dokumentaciju za prevoz</a> i <a href=\"/contact\" class=\"text-primary\">kontaktirajte nas</a> u bilo kom trenutku.",
-    ],
-    transportDuration: "4–7 dana",
-    cities: [
-      { name: "Oslo", note: "Glavni grad i administrativni centar" },
-      { name: "Bergen", note: "Zapadna obala" },
-      { name: "Trondheim", note: "Centralna Norveška" },
-      { name: "Stavanger", note: "Rogaland region" },
-    ],
-    cityFaqs: [
-      {
-        id: "Oslo",
-        title: "Prevoz pokojnika iz Osla",
-        body:
-          "Kompletan prevoz iz Osla sa norveškom dokumentacijom i međunarodnim transportom do Srbije.",
-      },
-      {
-        id: "Bergen",
-        title: "Prevoz pokojnika iz Bergena",
-        body:
-          "Organizacija transporta sa zapadne obale — planiranje rute i dozvola.",
-      },
-      {
-        id: "Trondheim",
-        title: "Prevoz pokojnika iz Trondheima",
-        body:
-          "Prevoz iz centralne Norveške uz diskretnu podršku porodici.",
-      },
-      {
-        id: "Stavanger",
-        title: "Prevoz pokojnika iz Stavanger",
-        body:
-          "Brza koordinacija sa lokalnim institucijama u Rogalandu.",
-      },
-    ],
-    faqSchema: [
-      {
-        q: "Koliko traje transport pokojnika iz Norveške?",
-        a: "Zbog udaljenosti i dokumentacije, ukupno obično 4-7 dana do isporuke u Srbiji.",
-      },
-      {
-        q: "Da li organizujete prevoz iz Osla?",
-        a: "Da, Oslo je naša najčešća polazna tačka u Norveškoj — kompletna usluga 24/7.",
-      },
-      {
-        q: "Koja dokumentacija je potrebna u Norveškoj?",
-        a: "Potrebni su Dødsattest, transporttillatelse i lični dokumenti pokojnika. Mi završavamo administraciju umesto vas.",
-      },
-    ],
-  },
+/** Country hub pages — add entries in scripts/content/countries.js, then run `npm run build`. */
+const COUNTRY_HUBS = require("./content/countries");
+
+const { CONSULATES, DESTINATIONS, ROUTE_TABLE, COUNTRY_META } = require("./content/facts");
+
+/** City pages — one entry per city in scripts/content/cities-*.js. */
+const CITIES = [
+  ...require("./content/cities-de-a"),
+  ...require("./content/cities-de-b"),
+  ...require("./content/cities-other"),
+  ...require("./content/cities-new-a"),
+  ...require("./content/cities-new-b"),
+  ...require("./content/cities-new-c"),
 ];
 
-const GERMAN_CITIES = [
-  {
-    slug: "dusseldorf",
-    name: "Düsseldorf",
-    nameSr: "Diseldorfa",
-    description:
-      "Prevoz pokojnika iz Diseldorfa - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Brza organizacija transporta iz NRW, 15+ godina iskustva. Tel: 064 249 28 49.",
-    intro:
-      "Brza i pouzdana organizacija prevoza pokojnika iz Diseldorfa (Düsseldorf) u Srbiju. Specijalizovani smo za transport iz Severne Rajne-Vestfalije sa potpunom dokumentacijom i 24/7 podrškom.",
-    docs: "Totenbescheinigung, Leichenpass, izvozna dozvola",
-    services: [
-      "Preuzimanje u bolnicama i domovima u Diseldorfu i okolini",
-      "Kompletna nemačka dokumentacija (Standesamt, Gesundheitsamt)",
-      "Transport do Beograda, Novog Sada i celog regiona",
-      "Transparentne cene bez skrivenih troškova",
-    ],
-    faqs: [
-      {
-        q: "Koliko traje prevoz iz Diseldorfa?",
-        a: "U proseku 2–3 dana do Srbije, u zavisnosti od dokumentacije i termina preuzimanja.",
-      },
-      {
-        q: "Da li pokrivate ceo NRW region?",
-        a: "Da, organizujemo prevoz iz Diseldorfa, Keln, Essen, Dortmund i svih gradova u Severnoj Rajni-Vestfaliji.",
-      },
-      {
-        q: "Koja dokumentacija je potrebna u Diseldorfu?",
-        a: "Potrebni su Totenbescheinigung, Leichenpass i dozvola za izvoz. Naš tim završava kompletnu administraciju.",
-      },
-    ],
-    relatedBlog: [
-      {
-        href: "/blog-koliko-kosta-prevoz-pokojnika-nemacka",
-        title: "Koliko košta prevoz pokojnika iz Nemačke",
-      },
-      {
-        href: "/blog-dokumentacija-za-prevoz-pokojnika",
-        title: "Dokumentacija za prevoz pokojnika",
-      },
-    ],
-  },
-  {
-    slug: "koln",
-    name: "Köln",
-    nameSr: "Kelna",
-    description:
-      "Prevoz pokojnika iz Kelna - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Brza organizacija transporta, govorimo nemački. Tel: 064 249 28 49.",
-    intro:
-      "Profesionalan prevoz pokojnika iz Kelna (Köln) za Srbiju. Naš tim ima dugogodišnje iskustvo sa kelnским institucijama i obezbeđuje diskretan, brz transport sa kompletnom dokumentacijom.",
-    docs: "Totenbescheinigung, Sterbeurkunde, Leichenpass",
-    services: [
-      "Preuzimanje u bolnicama, kapela i domovima u Keln",
-      "Završavanje svih nemačkih administrativnih procedura",
-      "Specijalizovana vozila sa rashladnim uređajem",
-      "Podrška porodici na srpskom i nemačkom jeziku",
-    ],
-    faqs: [
-      {
-        q: "Koliko košta prevoz iz Kelna?",
-        a: "Cena zavisi od udaljenosti i tipa sanduka. Kontaktirajte nas na +381 64 249 28 49 za besplatnu procenu.",
-      },
-      {
-        q: "Da li radite sa kelnским Standesamt-om?",
-        a: "Da, naš tim redovno saradjuje sa kelnским opštinskim i zdravstvenim institucijama.",
-      },
-      {
-        q: "Koliko brzo možete organizovati transport?",
-        a: "U hitnim slučajevima transport možemo organizovati u roku od 24–48 sati.",
-      },
-    ],
-    relatedBlog: [
-      {
-        href: "/blog-koliko-kosta-prevoz-pokojnika-nemacka",
-        title: "Koliko košta prevoz pokojnika iz Nemačke",
-      },
-      {
-        href: "/blog-kako-organizovati-prevoz-pokojnika",
-        title: "Kako organizovati prevoz pokojnika",
-      },
-    ],
-  },
-  {
-    slug: "stuttgart",
-    name: "Stuttgart",
-    nameSr: "Štutgarta",
-    description:
-      "Prevoz pokojnika iz Štutgarta - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Transport iz Baden-Württemberg, 24/7 podrška. Tel: 064 249 28 49.",
-    intro:
-      "Organizujemo prevoz pokojnika iz Štutgarta (Stuttgart) i cele Baden-Württemberg regije za Srbiju. Pružamo kompletnu uslugu od preuzimanja do isporuke sa svom potrebnom dokumentacijom.",
-    docs: "Totenbescheinigung, Leichenpass, carinska dokumentacija",
-    services: [
-      "Preuzimanje u Štutgartu i okolnim gradovima",
-      "Kompletna dokumentacija za izvoz iz Nemačke",
-      "Međunarodni transport specijalizovanim vozilom",
-      "Koordinacija sa srpskim ambasadama i carinom",
-    ],
-    faqs: [
-      {
-        q: "Da li organizujete prevoz iz cele Baden-Württemberg?",
-        a: "Da, pokrivamo Štutgart, Karlsruhe, Mannheim i celu južnu Nemačku.",
-      },
-      {
-        q: "Koliko traje prevoz iz Štutgarta do Beograda?",
-        a: "Putovanje traje oko 12–14 sati vozilom, a kompletan proces 2–4 dana sa dokumentacijom.",
-      },
-      {
-        q: "Da li govorite nemački?",
-        a: "Da, deo našeg tima tečno govori nemački i komunicira sa lokalnim institucijama.",
-      },
-    ],
-    relatedBlog: [
-      {
-        href: "/blog-dokumentacija-za-prevoz-pokojnika",
-        title: "Dokumentacija za prevoz pokojnika",
-      },
-      {
-        href: "/blog-hitni-prevoz-pokojnika-sta-treba-znati",
-        title: "Hitni prevoz pokojnika",
-      },
-    ],
-  },
-  {
-    slug: "dortmund",
-    name: "Dortmund",
-    nameSr: "Dortmunda",
-    description:
-      "Prevoz pokojnika iz Dortmunda - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Brza organizacija iz NRW, 15+ godina iskustva. Tel: 064 249 28 49.",
-    intro:
-      "Pouzdana organizacija prevoza pokojnika iz Dortmunda (Dortmund) u Srbiju. Naš tim preuzima kompletnu dokumentaciju i obezbeđuje dostojanstven transport iz Ruhr regiona.",
-    docs: "Totenbescheinigung, Leichenpass",
-    services: [
-      "Preuzimanje u Dortmundu i Ruhr oblasti",
-      "Administracija kod lokalnih nemačkih institucija",
-      "Transport specijalizovanim pogrebnim vozilom",
-      "Dostava na bilo koju lokaciju u Srbiji",
-    ],
-    faqs: [
-      {
-        q: "Da li radite u celom Ruhr regionu?",
-        a: "Da, organizujemo prevoz iz Dortmunda, Essen, Bochum, Duisburg i okolnih gradova.",
-      },
-      {
-        q: "Koliko traje organizacija prevoza?",
-        a: "Prosečno 2–4 dana uključujući pribavljanje dokumentacije.",
-      },
-    ],
-    relatedBlog: [
-      {
-        href: "/blog-koliko-kosta-prevoz-pokojnika-nemacka",
-        title: "Koliko košta prevoz pokojnika iz Nemačke",
-      },
-    ],
-  },
-  {
-    slug: "leipzig",
-    name: "Leipzig",
-    nameSr: "Lajpciga",
-    description:
-      "Prevoz pokojnika iz Lajpciga - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Transport iz Saksonije, 24/7 podrška. Tel: 064 249 28 49.",
-    intro:
-      "Profesionalan prevoz pokojnika iz Lajpciga (Leipzig) za Srbiju. Specijalizovani smo za transport iz istočne Nemačke sa kompletnom dokumentacijom i podrškom porodici.",
-    docs: "Totenbescheinigung, Leichenpass, izvozna dozvola",
-    services: [
-      "Preuzimanje u Lajpcigu i Saksoniji",
-      "Kompletna nemačka i srpska dokumentacija",
-      "Specijalizovana vozila za međunarodni transport",
-      "Transparentne cene i 24/7 dostupnost",
-    ],
-    faqs: [
-      {
-        q: "Da li organizujete prevoz iz celog Lajpciga?",
-        a: "Da, pokrivamo Lajpcig i celu Saksoniju, uključujući Dresden i Chemnitz.",
-      },
-      {
-        q: "Koliko traje prevoz iz Lajpciga?",
-        a: "Kompletan proces traje 2–4 dana, u zavisnosti od brzine izdavanja dokumentacije.",
-      },
-    ],
-    relatedBlog: [
-      {
-        href: "/blog-kako-organizovati-prevoz-pokojnika",
-        title: "Kako organizovati prevoz pokojnika",
-      },
-    ],
-  },
-  {
-    slug: "dresden",
-    name: "Dresden",
-    nameSr: "Drezdena",
-    description:
-      "Prevoz pokojnika iz Drezdena - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Transport iz Saksonije, govorimo nemački. Tel: 064 249 28 49.",
-    intro:
-      "Organizujemo prevoz pokojnika iz Drezdena (Dresden) u Srbiju. Naš tim ima iskustva sa saksonskim institucijama i obezbeđuje brz, diskretan transport sa kompletnom papirologijom.",
-    docs: "Totenbescheinigung, Leichenpass",
-    services: [
-      "Preuzimanje u Drezden i okolini",
-      "Završavanje svih administrativnih procedura",
-      "Međunarodni transport pogrebnim vozilom",
-      "Podrška porodici tokom celog procesa",
-    ],
-    faqs: [
-      {
-        q: "Koliko traje prevoz iz Drezdena do Srbije?",
-        a: "Vozno putovanje traje oko 10–12 sati, a kompletan proces sa dokumentacijom 2–4 dana.",
-      },
-      {
-        q: "Da li radite sa drezdenskim institucijama?",
-        a: "Da, redovno saradujemo sa Standesamt i Gesundheitsamt u Drezden.",
-      },
-    ],
-    relatedBlog: [
-      {
-        href: "/blog-dokumentacija-za-prevoz-pokojnika",
-        title: "Dokumentacija za prevoz pokojnika",
-      },
-    ],
-  },
-];
+const PHONE_DISPLAY = "+381 64 249 28 49";
+const WHATSAPP_URL =
+  "https://wa.me/381642492849?text=Zdravo,%20trebam%20pomo%C4%87%20oko%20prevoza%20pokojnika";
 
-function renderCityPage(city) {
-  const faqHtml = city.faqs
+/** 1240 → "1.240" (Serbian thousands separator) */
+function formatKm(km) {
+  return km.toLocaleString("de-DE");
+}
+
+/** Road distance and driving time from one place to every destination in DESTINATIONS. */
+function routeTableHtml(routeKey, fromGen) {
+  const routes = ROUTE_TABLE[routeKey];
+  if (!routes) return "";
+  const rows = DESTINATIONS.map((d, i) =>
+    routes[i]
+      ? `<tr><td>${d.name} <span class="small opacity-75">(${d.country})</span></td><td>oko ${formatKm(routes[i].km)} km</td><td>oko ${routes[i].h} h</td></tr>`
+      : ""
+  )
+    .filter(Boolean)
+    .join("\n                ");
+  return `<div class="table-responsive">
+            <table class="table table-dark table-striped align-middle mb-2">
+              <caption class="visually-hidden">Udaljenost i vreme vožnje iz ${fromGen}</caption>
+              <thead><tr><th scope="col">Odredište</th><th scope="col">Udaljenost putem</th><th scope="col">Čista vožnja</th></tr></thead>
+              <tbody>
+                ${rows}
+              </tbody>
+            </table>
+          </div>
+          <p class="small opacity-75">Vreme je čista vožnja bez pauza i čekanja na granici. Vozači pogrebnog vozila poštuju propisane odmore, pa je stvarno trajanje puta duže.</p>`;
+}
+
+function faqAccordionHtml(faqs, accordionId) {
+  return faqs
     .map(
-      (faq, i) => `
-          <div class="accordion-item">
-            <h3 class="accordion-header" id="q${i + 1}">
-              <button
-                class="accordion-button${i > 0 ? " collapsed" : ""}"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#a${i + 1}"
-              >
+      (faq, i) => `<div class="accordion-item">
+            <h3 class="accordion-header" id="${accordionId}-h${i + 1}">
+              <button class="accordion-button${i === 0 ? "" : " collapsed"}" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionId}-a${i + 1}" aria-expanded="${i === 0}" aria-controls="${accordionId}-a${i + 1}">
                 ${faq.q}
               </button>
             </h3>
-            <div
-              id="a${i + 1}"
-              class="accordion-collapse collapse${i === 0 ? " show" : ""}"
-              data-bs-parent="#faqAccordion${city.slug}"
-            >
+            <div id="${accordionId}-a${i + 1}" class="accordion-collapse collapse${i === 0 ? " show" : ""}" aria-labelledby="${accordionId}-h${i + 1}" data-bs-parent="#${accordionId}">
               <div class="accordion-body">${faq.a}</div>
             </div>
           </div>`
     )
-    .join("");
+    .join("\n          ");
+}
 
-  const faqSchema = city.faqs
-    .map(
-      (faq) => `{
-            "@type": "Question",
-            "name": ${JSON.stringify(faq.q)},
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": ${JSON.stringify(faq.a)}
-            }
-          }`
-    )
-    .join(",\n          ");
+function faqSchemaJson(faqs) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: stripTags(f.q),
+      acceptedAnswer: { "@type": "Answer", text: stripTags(f.a) },
+    })),
+  };
+}
 
-  const servicesHtml = city.services
-    .map(
-      (s) => `<li class="mb-3">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>${s}
-              </li>`
-    )
-    .join("\n              ");
+function renderCityPage(city) {
+  const country = COUNTRY_META[city.country];
+  const consulate = CONSULATES[city.consulate];
+  const route = (ROUTE_TABLE[city.slug] || [])[0];
+  const url = `${SITE_URL}/${city.slug}`;
+  const title = city.title || `Prevoz pokojnika iz ${city.nameGen} u Srbiju i BiH | 24/7`;
+  const ogTitle = `Prevoz pokojnika iz ${city.nameGen} u Srbiju, BiH i region`;
+  const accordionId = `faq-${city.slug}`;
+  const duration = city.duration || country.duration;
+  const siblings = CITIES.filter((c) => c.country === city.country && c.slug !== city.slug);
+  const docNames = country.documents.map(([local]) => local.split(" (")[0].split(" / ")[0]);
 
-  const relatedBlogHtml = (city.relatedBlog || [])
-    .map(
-      (b) =>
-        `<li><a href="${b.href}" class="text-primary">${b.title}</a></li>`
-    )
-    .join("\n                  ");
+  const paragraphs = (list) => list.map((p) => `<p>${p}</p>`).join("\n            ");
+  const documentsHtml = country.documents
+    .map(([local, sr]) => `<li class="mb-2"><i class="bi bi-file-text me-2"></i><strong>${local}</strong> — ${sr}</li>`)
+    .join("\n                ");
+  const extractNote = country.multilingualExtract
+    ? `${country.name} i Srbija su potpisnice Bečke konvencije o višejezičnim izvodima iz matičnih knjiga (1976), pa se višejezični (internacionalni) izvod o smrti u Srbiji u pravilu prihvata bez dodatne overe i prevoda.`
+    : `Dokumenta izdata u ${country.nameLoc} za srpske organe overavaju se apostilom i prevode na srpski jezik — i to je deo naše usluge.`;
+  const siblingLinks = siblings
+    .map((c) => `<a href="/${c.slug}" class="text-primary">${c.nameNom}</a>`)
+    .join(", ");
+  const relatedHtml = [
+    ...(city.relatedBlog || []),
+    { href: "/dokumentacija-za-prevoz-pokojnika", title: "Dokumentacija za prevoz pokojnika — kompletan vodič" },
+    { href: "/blog-sta-raditi-kada-neko-umre-u-inostranstvu", title: "Šta raditi kada neko umre u inostranstvu" },
+  ]
+    .map((b) => `<li><a href="${b.href}" class="text-primary">${b.title}</a></li>`)
+    .join("\n            ");
 
-  const url = `https://transportpokojnika.com/${city.slug}`;
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `Prevoz pokojnika iz ${city.nameGen}`,
+    serviceType: "Međunarodni prevoz pokojnika",
+    description: city.description,
+    url,
+    provider: businessRef(),
+    areaServed: {
+      "@type": "City",
+      name: city.name,
+      containedInPlace: { "@type": "Country", name: country.schemaCountry },
+    },
+  };
 
   return `<!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prevoz pokojnika iz ${city.nameSr} | Transport</title>
+    <title>${title}</title>
 
     <meta name="description" content="${city.description}" />
-    <meta name="author" content="Transport pokojnika - Pogrebno preduzeće" />
+    <meta name="author" content="${BUSINESS.name}" />
 
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="sr_RS" />
+    <meta property="og:site_name" content="Transport pokojnika" />
     <meta property="og:url" content="${url}" />
-    <meta property="og:title" content="Prevoz pokojnika iz ${city.nameSr} (${city.name}) | Međunarodni transport" />
-    <meta property="og:description" content="Organizujemo prevoz pokojnika iz ${city.nameSr} za Srbiju. Kompletna dokumentacija i 24/7 podrška." />
-    <meta property="og:image" content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg" />
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${city.description}" />
+    <meta property="og:image" content="${SITE_URL}/pogrebni-kombi-sa-sandukom.jpg" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="${url}" />
-    <meta name="twitter:title" content="Prevoz pokojnika iz ${city.nameSr} (${city.name})" />
-    <meta name="twitter:description" content="Organizujemo prevoz pokojnika iz ${city.nameSr} za Srbiju." />
-    <meta name="twitter:image" content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:description" content="${city.description}" />
+    <meta name="twitter:image" content="${SITE_URL}/pogrebni-kombi-sa-sandukom.jpg" />
 
     <link rel="canonical" href="${url}" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     ${GENERATED_HEAD_ASSETS}
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Service",
-        "name": "Prevoz pokojnika iz ${city.nameSr}",
-        "description": "Profesionalan prevoz pokojnika iz ${city.nameSr} sa kompletnom dokumentacijom i 24/7 podrškom",
-        "url": "${url}",
-        "provider": {
-          "@type": "FuneralService",
-          "name": "Transport pokojnika - Pogrebno preduzeće",
-          "telephone": "+381642492849",
-          "email": "kontakt@transportpokojnika.com",
-          "url": "https://transportpokojnika.com"
-        },
-        "areaServed": { "@type": "City", "name": "${city.name}" }
-      }
-    </script>
-
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [${faqSchema}]
-      }
-    </script>
+    ${jsonLdScript(serviceSchema)}
+    ${jsonLdScript(faqSchemaJson(city.faqs))}
 
     <link rel="icon" type="image/png" href="vijenac logo.png" />
     <link rel="apple-touch-icon" href="vijenac logo.png" />
@@ -800,27 +312,25 @@ function renderCityPage(city) {
         <ol class="breadcrumb py-3">
           <li class="breadcrumb-item"><a href="/">Početna</a></li>
           <li class="breadcrumb-item"><a href="/#transport">Međunarodni transport</a></li>
-          <li class="breadcrumb-item"><a href="/nemacka">Nemačka</a></li>
-          <li class="breadcrumb-item active" aria-current="page">${city.nameSr}</li>
+          <li class="breadcrumb-item"><a href="/${city.country}">${country.name}</a></li>
+          <li class="breadcrumb-item active" aria-current="page">${city.nameNom}</li>
         </ol>
       </nav>
 
       <section class="container-fluid bg-light py-5">
         <div class="container">
-          <div class="row align-items-center">
+          <div class="row align-items-center g-4">
             <div class="col-lg-6">
-              <h1 class="display-4 mb-4">Prevoz pokojnika iz ${city.nameSr}</h1>
-              <p class="lead mb-4">${city.intro}</p>
-              <a href="tel:+381642492849" class="btn btn-primary btn-lg">Pozovite nas odmah</a>
+              <span class="hero-subtitle text-primary mb-2 d-block">${city.name} → Srbija · BiH · Crna Gora · Severna Makedonija</span>
+              <h1 class="display-4 mb-4">Prevoz pokojnika iz ${city.nameGen}</h1>
+              <p class="lead mb-4">${city.lead}</p>
+              <a href="tel:+381642492849" class="btn btn-primary btn-lg me-2 mb-2"><i class="bi bi-telephone-fill me-2"></i>Pozovite 24/7</a>
+              <a href="${WHATSAPP_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-lg mb-2"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
             </div>
             <div class="col-lg-6">
               <picture>
                 <source srcset="pogrebni-kombi-sa-sandukom.webp" type="image/webp" />
-                <img loading="lazy" decoding="async" src="pogrebni-kombi-sa-sandukom.jpg" alt="Vozilo za prevoz pokojnika iz ${city.nameSr}" class="img-fluid rounded shadow mb-3" width="500" height="300" />
-              </picture>
-              <picture>
-                <source srcset="pogrebni-sanduk.webp" type="image/webp" />
-                <img loading="lazy" decoding="async" src="pogrebni-sanduk.png" alt="Pogrebni sanduk za prevoz iz ${city.nameSr}" class="img-fluid rounded shadow" width="500" height="300" />
+                <img loading="lazy" decoding="async" src="pogrebni-kombi-sa-sandukom.jpg" alt="Pogrebno vozilo za međunarodni prevoz pokojnika iz ${city.nameGen}" class="img-fluid rounded shadow" width="600" height="400" />
               </picture>
             </div>
           </div>
@@ -828,78 +338,134 @@ function renderCityPage(city) {
       </section>
 
       <section class="container my-5">
-        <div class="row">
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <h2 class="mb-3">Prevoz pokojnika iz ${city.nameGen} u Srbiju, BiH, Crnu Goru i Severnu Makedoniju</h2>
+            ${paragraphs(city.intro)}
+
+            <h2 class="mt-5 mb-3">Kako izgleda postupak u ${city.nameLoc}</h2>
+            ${paragraphs(city.process)}
+            <ol class="mt-3">
+              <li class="mb-2"><strong>Poziv</strong> — javite nam se u bilo koje doba. Potrebni su nam ime pokojnika, mesto smrti u ${city.nameLoc} i mesto gde želite sahranu.</li>
+              <li class="mb-2"><strong>Preuzimanje</strong> — dogovaramo preuzimanje iz bolnice, doma za stare ili stana i preuzimamo kontakt sa lokalnim organima.</li>
+              <li class="mb-2"><strong>Dokumentacija</strong> — pribavljamo ${docNames.join(", ")} i sprovodnicu nadležnog srpskog predstavništva.</li>
+              <li class="mb-2"><strong>Priprema</strong> — pokojnik se priprema i polaže u hermetički zatvoren sanduk propisan za međunarodni prevoz.</li>
+              <li class="mb-2"><strong>Prevoz</strong> — specijalizovanim pogrebnim vozilom${route ? `, oko ${formatKm(route.km)} km do Beograda` : ""}, uz sve granične i carinske formalnosti.</li>
+              <li><strong>Predaja</strong> — pokojnika predajemo porodici ili pogrebnoj službi u mestu sahrane.</li>
+            </ol>
+          </div>
+          <aside class="col-lg-4">
+            <div class="service-card">
+              <h2 class="h5 mb-3">Ukratko: prevoz iz ${city.nameGen}</h2>
+              <ul class="list-unstyled mb-4">
+                ${route ? `<li class="mb-2"><i class="bi bi-signpost-2 me-2 text-primary"></i>Do Beograda: oko ${formatKm(route.km)} km</li>` : ""}
+                <li class="mb-2"><i class="bi bi-hourglass-split me-2 text-primary"></i>Ceo postupak: najčešće ${duration}</li>
+                <li class="mb-2"><i class="bi bi-bank me-2 text-primary"></i>Sprovodnica: ${consulate.name}</li>
+                <li class="mb-2"><i class="bi bi-file-earmark-check me-2 text-primary"></i>Svu dokumentaciju završavamo mi</li>
+                <li><i class="bi bi-clock me-2 text-primary"></i>Dostupni 24/7, na srpskom jeziku</li>
+              </ul>
+              <a href="tel:+381642492849" class="btn btn-primary w-100 mb-2"><i class="bi bi-telephone-fill me-2"></i>${PHONE_DISPLAY}</a>
+              <a href="/contact" class="btn btn-outline-primary w-100">Pošaljite upit</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="container-fluid bg-light py-5">
+        <div class="container">
+          <h2 class="mb-4">Dokumenta potrebna za prevoz pokojnika iz ${city.nameGen}</h2>
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <h3 class="h5 mb-3">Dokumenta iz ${country.nameGen}</h3>
+              <ul class="list-unstyled">
+                ${documentsHtml}
+                <li class="mb-2"><i class="bi bi-file-text me-2"></i><strong>Pasoš ili lična karta pokojnika</strong> — u originalu</li>
+              </ul>
+              <p class="mb-0">${country.authorityNote}</p>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="h5 mb-3">Sprovodnica — nadležno srpsko predstavništvo</h3>
+              <p>Dozvolu za unos posmrtnih ostataka u Srbiju (sprovodnicu) za ${city.nameNom} izdaje <a href="${consulate.url}" target="_blank" rel="noopener noreferrer" class="text-primary">${consulate.name}</a>${consulate.area ? `, nadležan za: ${consulate.area}` : ""}. Zahtev podnosi porodica ili ovlašćeno pogrebno preduzeće — taj korak preuzimamo mi.</p>
+              <p>${extractNote}</p>
+              <p class="mb-0">Ako je sahrana u Bosni i Hercegovini, Crnoj Gori ili Severnoj Makedoniji, dozvolu izdaje predstavništvo te zemlje, a pribavljamo je na isti način. Detaljno: <a href="/dokumentacija-za-prevoz-pokojnika" class="text-primary">dokumentacija za prevoz pokojnika</a>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container my-5">
+        <h2 class="mb-3">Udaljenost i trajanje prevoza iz ${city.nameGen}</h2>
+        <p>Ceo postupak — od poziva do predaje porodici — iz ${city.nameGen} najčešće traje ${duration}. Najviše vremena odlazi na dokumenta, dok sama vožnja do odredišta izgleda ovako:</p>
+          ${routeTableHtml(city.slug, city.nameGen)}
+      </section>
+
+      <section class="container my-5">
+        <div class="row g-4">
           <div class="col-md-6">
-            <h2 class="mb-4">Usluge za ${city.nameSr}</h2>
+            <h2 class="h3 mb-3">Šta je uključeno u uslugu</h2>
             <ul class="list-unstyled">
-              ${servicesHtml}
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Kompletna dokumentacija u ${country.nameLoc} i za zemlju sahrane</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Preuzimanje pokojnika iz bolnice, doma ili stana u ${city.nameLoc} i okolini</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Priprema pokojnika i sanduk propisan za međunarodni prevoz</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Prevoz specijalizovanim pogrebnim vozilom do mesta sahrane</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Granične i carinske formalnosti${country.eu ? "" : " (izlazak iz zemlje van EU)"}</li>
+              <li><i class="bi bi-check-circle-fill text-success me-2"></i>Jedna kontakt osoba za porodicu tokom celog postupka</li>
             </ul>
-            <p class="mt-3">Potrebna dokumentacija uključuje: ${city.docs}. Više informacija na stranici <a href="/dokumentacija-za-prevoz-pokojnika" class="text-primary">dokumentacija za prevoz pokojnika</a>.</p>
           </div>
           <div class="col-md-6">
-            <h2 class="mb-4">Kako izgleda postupak</h2>
-            <div class="card service-card">
-              <div class="card-body">
-                <ol class="mb-0">
-                  <li>Kontakt i procena situacije</li>
-                  <li>Prikupljanje dokumentacije</li>
-                  <li>Organizacija transporta iz ${city.nameSr}</li>
-                  <li>Isporučenje na željenu adresu u Srbiji</li>
-                </ol>
-              </div>
-            </div>
-            ${relatedBlogHtml ? `<div class="mt-4"><h3 class="h5">Korisni članci</h3><ul>${relatedBlogHtml}</ul></div>` : ""}
+            <h2 class="h3 mb-3">Od čega zavisi cena prevoza pokojnika iz ${city.nameGen}</h2>
+            <ul>
+              <li class="mb-2"><strong>Udaljenost</strong>${route ? ` — iz ${city.nameGen} do Beograda je oko ${formatKm(route.km)} km` : ""}, a cena zavisi i od tačnog mesta sahrane.</li>
+              <li class="mb-2"><strong>Dokumentacija</strong> — lokalne takse u ${country.nameLoc} i konzularne takse.</li>
+              <li class="mb-2"><strong>Sanduk i oprema</strong> — standardni ili po izboru porodice.</li>
+              <li class="mb-2"><strong>Priprema pokojnika</strong> — npr. balsamovanje, kada ga propisi ili dužina puta zahtevaju.</li>
+              <li><strong>Okolnosti slučaja</strong> — npr. čekanje na obdukciju ili dozvolu tužilaštva.</li>
+            </ul>
+            <p class="mb-0">Tačnu cenu dobijate već u prvom razgovoru, bez obaveze. Više u <a href="/cenovnik" class="text-primary">cenovniku</a>.</p>
           </div>
         </div>
       </section>
 
       <section class="container my-5">
-        <h2 class="mb-4">O prevozu iz ${city.nameSr}</h2>
-        <p>Prevoz pokojnika iz ${city.nameSr} (${city.name}) zahteva poštovanje nemačkih i srpskih propisa o prenosu umrlih preko granice. Naše pogrebno preduzeće sa više od 15 godina iskustva preuzima kompletnu organizaciju — od kontakta sa lokalnim Standesamt-om i bolnicama, preko pribavljanja Totenbescheinigung i Leichenpass, do transporta specijalizovanim vozilom sa rashladnim uređajem.</p>
-        <p>Porodice koje žive u Srbiji a umrla im je bliska osoba u ${city.nameSr} ne moraju da brinu o birokratiji. Naš tim govori nemački i srpski, dostupan je 24 sata dnevno i pruža diskretnu podršku u najtežim trenucima. Za detalje o cenama pogledajte naš <a href="/cenovnik" class="text-primary">cenovnik</a>, a za opšte informacije o prevozu iz Nemačke posetite stranicu <a href="/nemacka" class="text-primary">prevoz pokojnika iz Nemačke</a>.</p>
-        <p>Takođe organizujemo prevoz iz drugih nemačkih gradova: <a href="/berlin" class="text-primary">Berlin</a>, <a href="/munchen" class="text-primary">Minhen</a>, <a href="/hamburg" class="text-primary">Hamburg</a>, <a href="/frankfurt" class="text-primary">Frankfurt</a>, <a href="/koln" class="text-primary">Keln</a> i <a href="/dusseldorf" class="text-primary">Diseldorf</a>.</p>
+        <h2 class="mb-3">Prevoz pokojnika iz okoline ${city.nameGen}</h2>
+        <p>Pored samog grada, preuzimamo pokojnike iz celog područja: ${city.nearby.join(", ")} i ostalih mesta u ${city.regionLoc}.${siblingLinks ? ` Organizujemo i prevoz iz drugih gradova ${country.nameGen}: ${siblingLinks} — ili pogledajte stranicu <a href="/${city.country}" class="text-primary">prevoz pokojnika iz ${country.nameGen}</a>.` : ` Više o celoj zemlji: <a href="/${city.country}" class="text-primary">prevoz pokojnika iz ${country.nameGen}</a>.`}</p>
+      </section>
+
+      <section class="container my-5">
+        <h2 class="mb-4 text-center">Najčešća pitanja o prevozu pokojnika iz ${city.nameGen}</h2>
+        <div class="accordion" id="${accordionId}">
+          ${faqAccordionHtml(city.faqs, accordionId)}
+        </div>
+        <div class="mt-4">
+          <h3 class="h5">Korisni vodiči</h3>
+          <ul>
+            ${relatedHtml}
+          </ul>
+        </div>
       </section>
 
       <section class="py-5 bg-primary text-white">
         <div class="container text-center">
-          <h2 class="mb-3">Potrebna vam je pomoć oko prevoza iz ${city.nameSr}?</h2>
-          <p class="lead mb-4">Kontaktirajte nas 24/7 ili pogledajte sve informacije za Nemačku.</p>
-          <a href="tel:+381642492849" class="btn btn-light btn-lg me-2"><i class="bi bi-telephone-fill me-2"></i>Pozovite odmah</a>
-          <a href="/nemacka" class="btn btn-outline-light btn-lg">Nazad na Nemačku</a>
-        </div>
-      </section>
-
-      <section class="container my-5" id="faq-${city.slug}">
-        <h2 class="mb-4 text-center">Najčešća pitanja za ${city.nameSr}</h2>
-        <div class="accordion" id="faqAccordion${city.slug}">${faqHtml}
+          <h2 class="mb-3">Potrebna vam je pomoć oko prevoza iz ${city.nameGen}?</h2>
+          <p class="lead mb-4">Pozovite nas u bilo koje doba — preuzimamo kompletnu organizaciju, a vi dobijate jednu osobu za sva pitanja.</p>
+          <a href="tel:+381642492849" class="btn btn-light btn-lg me-2 mb-2"><i class="bi bi-telephone-fill me-2"></i>Pozovite odmah</a>
+          <a href="${WHATSAPP_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-lg mb-2"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
         </div>
       </section>
     </main>
 
+    <div id="contact-container"></div>
     <div id="footer-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="includes.js?v=3" defer></script>
-
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Početna", "item": "https://transportpokojnika.com/" },
-          { "@type": "ListItem", "position": 2, "name": "Međunarodni transport", "item": "https://transportpokojnika.com/#transport" },
-          { "@type": "ListItem", "position": 3, "name": "Nemačka", "item": "https://transportpokojnika.com/nemacka" },
-          { "@type": "ListItem", "position": 4, "name": "${city.nameSr}", "item": "${url}" }
-        ]
-      }
-    </script>
   </body>
 </html>
 `;
 }
 
 function generateCityPages() {
-  GERMAN_CITIES.forEach((city) => {
+  CITIES.forEach((city) => {
     const filePath = path.join(ROOT, `${city.slug}.html`);
     fs.writeFileSync(filePath, renderCityPage(city), "utf8");
     console.log(`Generated ${city.slug}.html`);
@@ -908,7 +474,6 @@ function generateCityPages() {
 
 function renderCountryPage(country) {
   const url = `https://transportpokojnika.com/${country.slug}`;
-  const langs = JSON.stringify(country.languages);
   const faqSchema = country.faqSchema
     .map(
       (f) => `{
@@ -930,7 +495,8 @@ function renderCountryPage(country) {
     )
     .join("\n              ");
 
-  const documentsHtml = country.documents
+  const meta = COUNTRY_META[country.slug] || {};
+  const documentsHtml = (country.documents || meta.documents)
     .map(
       ([foreign, sr]) => `<li class="mb-3">
                     <i class="bi bi-file-text me-2"></i>${foreign}
@@ -938,6 +504,14 @@ function renderCountryPage(country) {
                   </li>`
     )
     .join("\n                  ");
+
+  const introHtml = (country.intro || []).map((p) => `<p>${p}</p>`).join("\n          ");
+  const consulatesHtml = (meta.consulates || [])
+    .map((key) => {
+      const c = CONSULATES[key];
+      return `<li class="mb-2"><a href="${c.url}" target="_blank" rel="noopener noreferrer" class="text-primary">${c.name}</a>${c.area ? ` — ${c.area}` : ""}</li>`;
+    })
+    .join("\n              ");
 
   const relatedLinksHtml = country.relatedLinks
     .map(
@@ -955,7 +529,7 @@ function renderCountryPage(country) {
       (c) => `<div class="col-6 col-md-3">
             <div class="card h-100 text-center">
               <div class="card-body d-flex flex-column justify-content-between">
-                <h3 class="h5 mb-2">${c.name}</h3>
+                <h3 class="h5 mb-2">${c.href ? `<a href="${c.href}" class="text-primary">${c.name}</a>` : c.name}</h3>
                 <p class="small text-muted mb-0">${c.note}</p>
               </div>
             </div>
@@ -964,7 +538,12 @@ function renderCountryPage(country) {
     .join("\n          ");
 
   const accordionId = `faqAccordion${country.slug.replace(/-/g, "")}`;
-  const cityFaqsHtml = country.cityFaqs
+  // Every question in the FAQPage schema must also be visible on the page.
+  const faqItems = [
+    ...country.cityFaqs,
+    ...country.faqSchema.map((f, i) => ({ id: `Pitanje${i + 1}`, title: f.q, body: f.a })),
+  ];
+  const faqHtml = faqItems
     .map(
       (f, i) => `<div class="accordion-item">
             <h3 class="accordion-header" id="heading${f.id}">
@@ -992,17 +571,18 @@ function renderCountryPage(country) {
     .join("\n          ");
 
   return `<!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prevoz pokojnika iz ${country.nameGenitive} | Transport</title>
+    <title>${country.title || `Prevoz pokojnika iz ${country.nameGenitive} u Srbiju i BiH | 24/7`}</title>
 
     <meta name="description" content="${country.metaDescription}" />
-    <meta name="keywords" content="${country.keywords}" />
     <meta name="author" content="Transport pokojnika - Pogrebno preduzeće" />
 
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="sr_RS" />
+    <meta property="og:site_name" content="Transport pokojnika" />
     <meta property="og:url" content="${url}" />
     <meta property="og:title" content="Prevoz pokojnika iz ${country.nameGenitive} | Profesionalan Transport" />
     <meta property="og:description" content="Organizujemo prevoz pokojnika iz svih gradova ${country.nameGenitive}. Kompletna dokumentacija i podrška 24/7." />
@@ -1026,23 +606,16 @@ function renderCountryPage(country) {
         "name": "Prevoz pokojnika iz ${country.nameGenitive}",
         "description": "Profesionalan prevoz pokojnika iz svih gradova ${country.nameGenitive} sa kompletnom dokumentacijom i 24/7 podrškom",
         "url": "${url}",
-        "provider": {
-          "@type": "FuneralService",
-          "name": "Transport pokojnika - Pogrebno preduzeće",
-          "telephone": "+381642492849",
-          "email": "kontakt@transportpokojnika.com",
-          "url": "https://transportpokojnika.com",
-          "availableLanguage": ${langs},
-          "areaServed": {
-            "@type": "Country",
-            "name": "${country.schemaCountry}"
-          },
-          "serviceType": [
-            "Transport pokojnika iz ${country.nameGenitive}",
-            "Dokumentacija za transport",
-            "Međunarodni transport umrlih"
-          ]
-        }
+        "provider": ${JSON.stringify(businessRef())},
+        "areaServed": {
+          "@type": "Country",
+          "name": "${country.schemaCountry}"
+        },
+        "serviceType": [
+          "Transport pokojnika iz ${country.nameGenitive}",
+          "Dokumentacija za transport",
+          "Međunarodni transport umrlih"
+        ]
       }
     </script>
     <script type="application/ld+json">
@@ -1093,7 +666,12 @@ function renderCountryPage(country) {
           </div>
         </div>
       </section>
-
+${introHtml ? `
+      <section class="container my-5">
+        <h2 class="mb-3">Prevoz pokojnika iz ${country.nameGenitive} u ${country.slug === "crna-gora" ? "Srbiju, BiH i Severnu Makedoniju" : "Srbiju, BiH, Crnu Goru i Severnu Makedoniju"}</h2>
+          ${introHtml}
+      </section>
+` : ""}
       <section class="container my-5">
         <div class="row">
           <div class="col-md-6">
@@ -1127,14 +705,31 @@ function renderCountryPage(country) {
             ${howItWorksHtml}
             <p class="mb-0">
               <strong>Procenjeno trajanje celog procesa:</strong> ${country.transportDuration} (dokumentacija + transport).
-              MI ZAVRŠAVAMO SVU DOKUMENTACIJU — pozovite
+              Svu dokumentaciju završavamo mi — pozovite
               <a href="tel:+381642492849" class="text-primary">+381 64 249 28 49</a>
               u bilo koje doba.
             </p>
           </div>
         </div>
       </section>
-
+${consulatesHtml || country.routeFrom ? `
+      <section class="container my-5">
+        <div class="row g-4">
+          ${consulatesHtml ? `<div class="col-lg-6">
+            <h2 class="h3 mb-3">Sprovodnica: srpska predstavništva u ${meta.nameLoc}</h2>
+            <p>Dozvolu za unos posmrtnih ostataka u Srbiju (sprovodnicu) izdaje predstavništvo nadležno za poslednje prebivalište pokojnika:</p>
+            <ul class="list-unstyled">
+              ${consulatesHtml}
+            </ul>
+            <p class="mb-0">Za sahranu u Bosni i Hercegovini, Crnoj Gori ili Severnoj Makedoniji dozvolu izdaje predstavništvo te zemlje. Zahtev u ime porodice podnosimo mi.</p>
+          </div>` : ""}
+          ${country.routeFrom ? `<div class="col-lg-6">
+            <h2 class="h3 mb-3">Udaljenost iz ${country.routeFromGen} do odredišta</h2>
+            ${routeTableHtml(country.routeFrom, country.routeFromGen)}
+          </div>` : ""}
+        </div>
+      </section>
+` : ""}
       <section class="container-fluid bg-light py-5">
         <div class="container">
           <h2 class="text-center mb-5">Proces organizacije prevoza</h2>
@@ -1153,7 +748,7 @@ function renderCountryPage(country) {
                 <div class="card-body text-center">
                   <div class="display-4 mb-3 text-primary">2</div>
                   <h3 class="h5">Dokumentacija</h3>
-                  <p class="mb-0">Pripremamo svu potrebnu dokumentaciju u ${country.nameGenitive}</p>
+                  <p class="mb-0">Pripremamo svu potrebnu dokumentaciju za prevoz iz ${country.nameGenitive}</p>
                 </div>
               </div>
             </div>
@@ -1171,7 +766,7 @@ function renderCountryPage(country) {
                 <div class="card-body text-center">
                   <div class="display-4 mb-3 text-primary">4</div>
                   <h3 class="h5">Primopredaja</h3>
-                  <p class="mb-0">Dostava na željenu lokaciju u Srbiji</p>
+                  <p class="mb-0">Dostava na željenu lokaciju u Srbiji ili regionu</p>
                 </div>
               </div>
             </div>
@@ -1182,7 +777,7 @@ function renderCountryPage(country) {
       <section class="container my-5">
         <div class="row">
           <div class="col-12 text-center mb-4">
-            <h2>Gradovi u ${country.nameGenitive}</h2>
+            <h2>Gradovi ${country.nameGenitive}</h2>
             <p class="text-muted mb-0">Organizujemo prevoz iz svih navedenih i drugih gradova</p>
           </div>
         </div>
@@ -1196,7 +791,7 @@ function renderCountryPage(country) {
           Najčešća pitanja o prevozu pokojnika iz ${country.nameGenitive}
         </h2>
         <div class="accordion" id="${accordionId}">
-          ${cityFaqsHtml}
+          ${faqHtml}
         </div>
       </section>
     </main>
@@ -1230,25 +825,81 @@ function generateCountryPages() {
   });
 }
 
-function updateSitemap(extraUrls) {
+const LASTMOD_MANIFEST = path.join(__dirname, "page-lastmod.json");
+
+function htmlFiles() {
+  return fs.readdirSync(ROOT).filter((f) => f.endsWith(".html"));
+}
+
+function isIndexable(html) {
+  return !/<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html);
+}
+
+function pageUrl(file) {
+  const slug = file.replace(/\.html$/, "");
+  return slug === "index" ? `${SITE_URL}/` : `${SITE_URL}/${slug}`;
+}
+
+/** Hash of what a visitor reads (title, description, <main>) — ignores header/footer/asset churn. */
+function pageContentHash(html) {
+  const pick = (re) => (html.match(re) || [""])[0];
+  const content = [
+    pick(/<title>[\s\S]*?<\/title>/i),
+    pick(/<meta\s+name="description"[\s\S]*?>/i),
+    pick(/<main[\s\S]*?<\/main>/i) || html,
+  ]
+    .join("\n")
+    .replace(/\s+/g, " ");
+  return crypto.createHash("sha1").update(content).digest("hex");
+}
+
+/**
+ * Rebuild sitemap.xml from every indexable page. A page's lastmod only moves to
+ * today when its content hash changes (tracked in scripts/page-lastmod.json).
+ */
+function updateSitemap() {
   const sitemapPath = path.join(ROOT, "sitemap.xml");
-  let content = fs.readFileSync(sitemapPath, "utf8");
+  const previous = fs.existsSync(sitemapPath) ? fs.readFileSync(sitemapPath, "utf8") : "";
+  const previousOrder = [...previous.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  const previousLastmod = Object.fromEntries(
+    [...previous.matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)].map((m) => [m[1], m[2]])
+  );
+  const oldManifest = fs.existsSync(LASTMOD_MANIFEST)
+    ? JSON.parse(fs.readFileSync(LASTMOD_MANIFEST, "utf8"))
+    : {};
+  const manifest = {};
 
-  extraUrls.forEach(({ loc, priority = "0.7" }) => {
-    if (content.includes(loc)) return;
-    const entry = `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${TODAY}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>${priority}</priority>
-  </url>
-`;
-    content = content.replace("</urlset>", entry + "</urlset>");
-  });
+  const pages = htmlFiles()
+    .map((file) => ({ file, html: fs.readFileSync(path.join(ROOT, file), "utf8") }))
+    .filter(({ html }) => isIndexable(html))
+    .map(({ file, html }) => {
+      const loc = pageUrl(file);
+      const hash = pageContentHash(html);
+      const known = oldManifest[loc];
+      let lastmod = TODAY;
+      if (known && known.hash === hash) lastmod = known.lastmod;
+      else if (!known && previousLastmod[loc]) lastmod = previousLastmod[loc];
+      manifest[loc] = { hash, lastmod };
+      return { loc, lastmod };
+    });
 
-  content = content.replace(/<lastmod>[\d-]+<\/lastmod>/g, `<lastmod>${TODAY}</lastmod>`);
-  fs.writeFileSync(sitemapPath, content, "utf8");
-  console.log("Updated sitemap.xml");
+  // Keep the existing sitemap order; new pages go at the end.
+  const rank = (loc) => {
+    const i = previousOrder.indexOf(loc);
+    return i === -1 ? previousOrder.length : i;
+  };
+  pages.sort((a, b) => rank(a.loc) - rank(b.loc));
+
+  const urls = pages
+    .map(({ loc, lastmod }) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`)
+    .join("\n");
+  fs.writeFileSync(
+    sitemapPath,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+    "utf8"
+  );
+  fs.writeFileSync(LASTMOD_MANIFEST, JSON.stringify(manifest, null, 2) + "\n", "utf8");
+  console.log(`Updated sitemap.xml (${pages.length} URLs)`);
 }
 
 function convertImages() {
@@ -1280,8 +931,16 @@ function convertImages() {
   });
 }
 
+/** Close `<picture><source/><img>` wrappers that an earlier version of wrapAsset left open. */
+function closeUnclosedPictures(html) {
+  return html.replace(
+    /(<picture><source srcset="[^"]+" type="image\/webp" \/>\s*<img\b[^>]*>)(?!\s*<\/picture>)/g,
+    "$1</picture>"
+  );
+}
+
 function wrapImagesWithPicture(html) {
-  html = dedupePictureTags(html);
+  html = closeUnclosedPictures(dedupePictureTags(html));
 
   const wrapAsset = (filename, webp) => {
     const re = new RegExp(`<img([^>]*?)src="${filename.replace(".", "\\.")}"([^>]*?)>`, "gi");
@@ -1290,7 +949,7 @@ function wrapImagesWithPicture(html) {
       const lastOpen = prefix.lastIndexOf("<picture>");
       const lastClose = prefix.lastIndexOf("</picture>");
       if (lastOpen > lastClose) return match;
-      return `<picture><source srcset="${webp}" type="image/webp" /><img${before}src="${filename}"${after}>`;
+      return `<picture><source srcset="${webp}" type="image/webp" /><img${before}src="${filename}"${after}></picture>`;
     });
   };
 
@@ -1411,7 +1070,7 @@ function updateStaticPageImages() {
     });
 }
 
-function renderServicePage({ slug, title, description, h1, lead, sections, faqs, relatedLinks }) {
+function renderServicePage({ slug, title, description, h1, lead, sections, faqs, relatedLinks, areaServed }) {
   const url = `https://transportpokojnika.com/${slug}`;
   const faqHtml = (faqs || [])
     .map(
@@ -1427,14 +1086,13 @@ function renderServicePage({ slug, title, description, h1, lead, sections, faqs,
     )
     .join("");
 
-  const faqSchema = (faqs || [])
-    .map(
-      (faq) => `{"@type":"Question","name":${JSON.stringify(faq.q)},"acceptedAnswer":{"@type":"Answer","text":${JSON.stringify(faq.a)}}}`
-    )
-    .join(",");
-
+  // sections: [{ h, p[], list?[], ordered? }]
   const sectionsHtml = sections
-    .map((s) => `<h2 class="mt-4">${s.h}</h2>${s.p.map((para) => `<p>${para}</p>`).join("")}`)
+    .map((s) => {
+      const tag = s.ordered ? "ol" : "ul";
+      const list = s.list ? `<${tag}>${s.list.map((li) => `<li>${li}</li>`).join("")}</${tag}>` : "";
+      return `<h2 class="mt-4">${s.h}</h2>${s.p.map((para) => `<p>${para}</p>`).join("")}${list}`;
+    })
     .join("");
 
   const relatedHtml = (relatedLinks || [])
@@ -1442,7 +1100,7 @@ function renderServicePage({ slug, title, description, h1, lead, sections, faqs,
     .join("");
 
   return `<!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1450,6 +1108,8 @@ function renderServicePage({ slug, title, description, h1, lead, sections, faqs,
   <meta name="description" content="${description}" />
   <meta name="author" content="Transport pokojnika - Pogrebno preduzeće" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="sr_RS" />
+  <meta property="og:site_name" content="Transport pokojnika" />
   <meta property="og:url" content="${url}" />
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${description}" />
@@ -1458,8 +1118,8 @@ function renderServicePage({ slug, title, description, h1, lead, sections, faqs,
   <link rel="canonical" href="${url}" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   ${GENERATED_HEAD_ASSETS}
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":${JSON.stringify(h1)},"description":${JSON.stringify(description)},"url":"${url}","provider":{"@type":"FuneralService","name":"Transport pokojnika - Pogrebno preduzeće","telephone":"+381642492849","url":"https://transportpokojnika.com"}}</script>
-  ${faqs && faqs.length ? `<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[${faqSchema}]}</script>` : ""}
+  ${jsonLdScript({ "@context": "https://schema.org", "@type": "Service", name: h1, description, url, provider: businessRef(), ...(areaServed ? { areaServed: { "@type": "Country", name: areaServed } } : {}) })}
+  ${faqs && faqs.length ? jsonLdScript(faqSchemaJson(faqs)) : ""}
   <link rel="icon" type="image/png" href="vijenac logo.png" />
 </head>
 <body>
@@ -1499,86 +1159,57 @@ function renderServicePage({ slug, title, description, h1, lead, sections, faqs,
 </html>`;
 }
 
-const SERVICE_PAGES = [
-  {
-    slug: "dokumentacija-za-prevoz-pokojnika",
-    title: "Dokumentacija za prevoz pokojnika | Kompletan vodič",
-    description: "Sva dokumentacija potrebna za prevoz pokojnika iz inostranstva. MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Standesamt, ambasade, carina. Tel: 064 249 28 49.",
-    h1: "Dokumentacija za prevoz pokojnika",
-    lead: "Kompletna usluga pribavljanja dokumentacije za međunarodni transport pokojnika. Naš tim preuzima svu papirologiju — vi se fokusirate na porodicu.",
-    sections: [
-      { h: "Koja dokumentacija je potrebna?", p: ["Za međunarodni prevoz pokojnika potrebni su: izvod iz matične knjige umrlih, potvrda o smrti, sprovodnica (dozvola za transport), pasoš pokojnika, dozvola za izvoz iz zemlje polaska i dozvola za uvoz u Srbiju.", "Dokumenti se razlikuju po zemljama. Za prevoz iz <a href=\"/nemacka\" class=\"text-primary\">Nemačke</a> potrebni su Totenbescheinigung i Leichenpass, iz <a href=\"/austrija\" class=\"text-primary\">Austrije</a> Sterbeurkunde, a iz <a href=\"/svajcarska\" class=\"text-primary\">Švajcarske</a> dodatne carinske dozvole."] },
-      { h: "Mi završavamo svu dokumentaciju", p: ["Naše pogrebno preduzeće sa 15+ godina iskustva preuzima kompletnu administraciju. Kontaktiramo Standesamt, bolnice, ambasade i carinske organe umesto vas.", "Proces obično traje 2–5 radnih dana, u hitnim slučajevima i brže. Detaljniji vodič možete pročitati u našem <a href=\"/blog-dokumentacija-za-prevoz-pokojnika\" class=\"text-primary\">blog članku o dokumentaciji</a>."] },
-    ],
-    faqs: [
-      { q: "Koliko traje pribavljanje dokumentacije?", a: "Prosečno 2–5 radnih dana, u zavisnosti od zemlje i kompleksnosti slučaja." },
-      { q: "Da li moram lično da idem po dokumente?", a: "Ne — naš tim preuzima kompletnu administraciju umesto porodice." },
-    ],
-    relatedLinks: [{ href: "/nemacka", title: "Prevoz iz Nemačke" }, { href: "/blog-dokumentacija-za-prevoz-pokojnika", title: "Blog: Dokumentacija za prevoz" }, { href: "/cenovnik", title: "Cenovnik" }],
-  },
-  {
-    slug: "pogrebni-sanduci",
-    title: "Pogrebni sanduci | Transport pokojnika",
-    description: "Pogrebni sanduci za međunarodni transport pokojnika. Standardni i premium modeli, usklađeni sa međunarodnim propisima. Tel: 064 249 28 49.",
-    h1: "Pogrebni sanduci",
-    lead: "Obezbeđujemo pogrebne sanduke usklađene sa međunarodnim propisima za transport pokojnika iz Evrope u Srbiju.",
-    sections: [
-      { h: "Sanduci za međunarodni transport", p: ["Za prevoz pokojnika preko granice potreban je sanduk koji ispunjava međunarodne standarde — hermetički zatvoren, od odgovarajućeg materijala i sa potrebnim oznakama.", "Nudimo standardne i premium modele u zavisnosti od želja porodice. Sanduk je uključen u cenu prevoza."] },
-      { h: "Usklađenost sa propisima", p: ["Svi sanduci ispunjavaju zahteve nemačkih, austrijskih, švajcarskih i srpskih propisa. Ovo je ključno za carinske i granične kontrole tokom transporta."] },
-    ],
-    faqs: [
-      { q: "Da li je sanduk uključen u cenu prevoza?", a: "Da, standardni sanduk je uključen u cenu međunarodnog transporta." },
-      { q: "Mogu li izabrati premium sanduk?", a: "Da, nudimo različite modele. Kontaktirajte nas za detalje i cenovnik." },
-    ],
-    relatedLinks: [{ href: "/cenovnik", title: "Cenovnik usluga" }, { href: "/nemacka", title: "Prevoz iz Nemačke" }],
-  },
-  {
-    slug: "ekshumacija",
-    title: "Ekshumacija i prenos pokojnika | Transport pokojnika",
-    description: "Profesionalna ekshumacija i prenos umrle osobe. Pravna dokumentacija, diskretan transport. 15+ godina iskustva. Tel: 064 249 28 49.",
-    h1: "Ekshumacija i prenos umrle osobe",
-    lead: "Organizujemo ekshumaciju i prenos umrlih sa kompletnom pravnom dokumentacijom i profesionalnim transportom.",
-    sections: [
-      { h: "Šta je ekshumacija?", p: ["Ekshumacija je izvlačenje posmrtnih ostataka iz groba radi prenosa na drugu lokaciju — u drugi grob, grad ili zemlju.", "Proces zahteva sudsku dozvolu, saglasnost nadležnih organa i poštovanje zakonskih rokova."] },
-      { h: "Naša usluga", p: ["Preuzimamo kompletnu organizaciju: pribavljanje dozvola, koordinaciju sa grobljem, ekshumaciju, opremanje i transport na novu lokaciju.", "Više informacija u našem <a href=\"/blog-ekshumacija-i-prenos-umrle-osobe\" class=\"text-primary\">blog članku o ekshumaciji</a>."] },
-    ],
-    faqs: [
-      { q: "Koliko traje proces ekshumacije?", a: "U zavisnosti od dozvola i lokacije, proces traje 1–4 nedelje." },
-      { q: "Da li je potrebna sudska dozvola?", a: "Da, ekshumacija zahteva odobrenje nadležnog suda i groblja." },
-    ],
-    relatedLinks: [{ href: "/blog-ekshumacija-i-prenos-umrle-osobe", title: "Blog: Ekshumacija vodič" }, { href: "/repatrijacija-pokojnika", title: "Repatrijacija pokojnika" }],
-  },
-  {
-    slug: "repatrijacija-pokojnika",
-    title: "Repatrijacija pokojnika | Međunarodni transport",
-    description: "Repatrijacija pokojnika iz inostranstva u Srbiju. Pravni okvir, dokumentacija, transport 24/7. MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Tel: 064 249 28 49.",
-    h1: "Repatrijacija pokojnika",
-    lead: "Repatrijacija je prenos pokojnika iz inostranstva u domovinu. Organizujemo kompletan proces — od dokumentacije do isporuke.",
-    sections: [
-      { h: "Šta je repatrijacija?", p: ["Repatrijacija pokojnika podrazumeva legalni prenos umrle osobe iz zemlje boravka u Srbiju (ili drugu zemlju porijekla).", "Proces uključuje pribavljanje dozvola, carinske procedure i međunarodni transport specijalizovanim vozilom."] },
-      { h: "Zemlje iz kojih repatriramo", p: ["Organizujemo repatrijaciju iz <a href=\"/nemacka\" class=\"text-primary\">Nemačke</a>, <a href=\"/austrija\" class=\"text-primary\">Austrije</a>, <a href=\"/svajcarska\" class=\"text-primary\">Švajcarske</a>, <a href=\"/italija\" class=\"text-primary\">Italije</a>, <a href=\"/spanija\" class=\"text-primary\">Španije</a>, <a href=\"/svedska\" class=\"text-primary\">Švedske</a>, <a href=\"/danska\" class=\"text-primary\">Danske</a>, <a href=\"/francuska\" class=\"text-primary\">Francuske</a>, <a href=\"/hrvatska\" class=\"text-primary\">Hrvatske</a>, <a href=\"/crna-gora\" class=\"text-primary\">Crne Gore</a>, <a href=\"/grcka\" class=\"text-primary\">Grčke</a> i <a href=\"/norveska\" class=\"text-primary\">Norveške</a>."] },
-      { h: "Pravni aspekti", p: ["Repatrijacija mora biti u skladu sa međunarodnim konvencijama i nacionalnim zakonima. Detaljan pregled pravnih aspekata: <a href=\"/blog-repatrijacija-pokojnika-pravni-aspekti\" class=\"text-primary\">blog o repatrijaciji</a>."] },
-    ],
-    faqs: [
-      { q: "Koliko traje repatrijacija?", a: "Prosečno 2–4 dana uključujući dokumentaciju i transport." },
-      { q: "Da li pomažete oko ambasade?", a: "Da, koordinišemo sa ambasadama i konzulatima obe zemlje." },
-    ],
-    relatedLinks: [{ href: "/blog-repatrijacija-pokojnika-pravni-aspekti", title: "Blog: Pravni aspekti" }, { href: "/dokumentacija-za-prevoz-pokojnika", title: "Dokumentacija" }, { href: "/nemacka", title: "Prevoz iz Nemačke" }],
-  },
+const SERVICE_PAGES = [...require("./content/services"), ...require("./content/destinations")];
+
+const MONTHS_SR = [
+  "januar", "februar", "mart", "april", "maj", "jun",
+  "jul", "avgust", "septembar", "oktobar", "novembar", "decembar",
 ];
 
-function renderBlogPost({ slug, title, description, h1, lead, date, readTime, sections, relatedLinks }) {
+/** "2026-08-05" → "5. avgust 2026" */
+function formatDateSr(isoDate) {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  return `${day}. ${MONTHS_SR[month - 1]} ${year}`;
+}
+
+/**
+ * Blog post. sections: [{ h, p[], list?[], ordered? }]; optional: updated (ISO date of the last
+ * substantial edit — becomes dateModified), faqs [{ q, a }] (rendered + FAQPage schema).
+ */
+function renderBlogPost({ slug, title, description, h1, lead, date, updated, readTime, sections, faqs, relatedLinks }) {
   const url = `https://transportpokojnika.com/${slug}`;
+  const modified = updated || date;
   const sectionsHtml = sections
-    .map((s) => `<h2>${s.h}</h2>${s.p.map((para) => `<p>${para}</p>`).join("")}${s.list ? `<ul>${s.list.map((li) => `<li>${li}</li>`).join("")}</ul>` : ""}`)
+    .map((s) => {
+      const tag = s.ordered ? "ol" : "ul";
+      const list = s.list ? `<${tag}>${s.list.map((li) => `<li>${li}</li>`).join("")}</${tag}>` : "";
+      return `<h2>${s.h}</h2>${s.p.map((para) => `<p>${para}</p>`).join("")}${list}`;
+    })
     .join("");
 
   const relatedHtml = (relatedLinks || [])
     .map((l) => `<li><a href="${l.href}" class="text-primary">${l.title}</a></li>`)
     .join("");
 
+  const faqHtml = faqs && faqs.length
+    ? `<h2 class="mt-5">Najčešća pitanja</h2><div class="accordion mb-4" id="faq-${slug}">${faqAccordionHtml(faqs, `faq-${slug}`)}</div>`
+    : "";
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: h1,
+    description,
+    image: `${SITE_URL}/pogrebni-kombi-sa-sandukom.jpg`,
+    author: businessRef(),
+    publisher: businessRef(),
+    datePublished: date,
+    dateModified: modified,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+  };
+
   return `<!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${title}</title>
@@ -1589,7 +1220,10 @@ function renderBlogPost({ slug, title, description, h1, lead, date, readTime, se
   <meta property="og:title" content="${h1}" />
   <meta property="og:description" content="${description}" />
   <meta property="og:locale" content="sr_RS" />
+  <meta property="og:site_name" content="Transport pokojnika" />
   <meta property="og:image" content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg" />
+  <meta property="article:published_time" content="${date}" />
+  <meta property="article:modified_time" content="${modified}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="${url}" />
   <meta name="twitter:title" content="${h1}" />
@@ -1597,7 +1231,8 @@ function renderBlogPost({ slug, title, description, h1, lead, date, readTime, se
   <meta name="twitter:image" content="https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg" />
   <link rel="canonical" href="${url}" />
   ${GENERATED_HEAD_ASSETS}
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":${JSON.stringify(h1)},"description":${JSON.stringify(description)},"image":"https://transportpokojnika.com/pogrebni-kombi-sa-sandukom.jpg","author":{"@type":"Organization","name":"Transport pokojnika - Pogrebno preduzeće"},"publisher":{"@type":"Organization","name":"Transport pokojnika - Pogrebno preduzeće","logo":{"@type":"ImageObject","url":"https://transportpokojnika.com/vijenac%20logo.png"}},"datePublished":"${date}","dateModified":"${date}","mainEntityOfPage":{"@type":"WebPage","@id":"${url}"}}</script>
+  ${jsonLdScript(articleSchema)}
+  ${faqs && faqs.length ? jsonLdScript(faqSchemaJson(faqs)) : ""}
   <link rel="icon" type="image/png" href="vijenac logo.png" />
 </head>
 <body>
@@ -1606,13 +1241,14 @@ function renderBlogPost({ slug, title, description, h1, lead, date, readTime, se
     <nav class="container py-3" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">Početna</a></li><li class="breadcrumb-item"><a href="/blog">Blog</a></li><li class="breadcrumb-item active">${h1}</li></ol></nav>
     <article class="container py-5"><div class="row"><div class="col-lg-8 mx-auto">
       <header class="mb-4"><h1 class="display-4 mb-3">${h1}</h1><p class="lead text-muted">${lead}</p>
-      <div class="d-flex text-muted small mb-4"><i class="bi bi-calendar me-2"></i><span>${date}</span><span class="mx-2">|</span><i class="bi bi-clock me-2"></i><span>${readTime}</span></div></header>
+      <div class="d-flex flex-wrap text-muted small mb-4"><i class="bi bi-calendar me-2"></i><time datetime="${date}">${formatDateSr(date)}</time>${updated && updated !== date ? `<span class="mx-2">|</span><span>Ažurirano: <time datetime="${updated}">${formatDateSr(updated)}</time></span>` : ""}<span class="mx-2">|</span><i class="bi bi-clock me-2"></i><span>${readTime}</span></div></header>
       <picture><source srcset="pogrebni-kombi-sa-sandukom.webp" type="image/webp" /><img src="pogrebni-kombi-sa-sandukom.jpg" alt="${h1}" class="img-fluid rounded shadow mb-4" width="800" height="450" loading="eager" /></picture>
       <div class="article-content">${sectionsHtml}
+      ${faqHtml}
       ${relatedHtml ? `<h2 class="mt-5">Povezani resursi</h2><ul>${relatedHtml}</ul>` : ""}
       </div>
     </div></div></article>
-    <section class="py-5 bg-primary text-white"><div class="container text-center"><h2 class="mb-3">Trebate pomoć?</h2><a href="tel:+381642492849" class="btn btn-light btn-lg">Pozovite nas 24/7</a></div></section>
+    <section class="py-5 bg-primary text-white"><div class="container text-center"><h2 class="mb-3">Potrebna vam je pomoć?</h2><p class="lead mb-4">Dostupni smo 24/7 — preuzimamo kompletnu organizaciju i dokumentaciju.</p><a href="tel:+381642492849" class="btn btn-light btn-lg me-2 mb-2">Pozovite nas 24/7</a><a href="${WHATSAPP_URL}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-lg mb-2">WhatsApp</a></div></section>
   </main>
   <div id="footer-container"></div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
@@ -1622,39 +1258,10 @@ function renderBlogPost({ slug, title, description, h1, lead, date, readTime, se
 }
 
 const BLOG_POSTS = [
-  {
-    slug: "blog-sta-raditi-kada-neko-umre-u-inostranstvu",
-    title: "Šta raditi kada neko umre u inostranstvu | Transport pokojnika",
-    description: "Vodič: šta raditi kada neko umre u inostranstvu. Prvi koraci, dokumentacija, kontakt ambasade i organizacija prevoza. Dostupni 24/7.",
-    h1: "Šta raditi kada neko umre u inostranstvu",
-    lead: "Gubitak bliske osobe u inostranstvu je emocionalno naporan i administrativno zahtevan. Ovaj vodič objašnjava prve korake koje porodica treba da preduzme.",
-    date: "5. avgust 2025",
-    readTime: "10 min čitanja",
-    sections: [
-      { h: "Prvi koraci — šta odmah uraditi", p: ["Kontaktirajte lokalnu policiju ili bolnicu u zemlji gde se smrt dogodila. Oni izdaju zvaničnu potvrdu o smrti.", "Obavestite srpsku ambasadu ili konzulat u toj zemlji. Ambasada vam može pomoći oko dokumentacije i prevoda.", "Pozovite profesionalno pogrebno preduzeće koje se bavi međunarodnim transportom — mi preuzimamo celu organizaciju."], list: ["Pozovite nas na +381 64 249 28 49 (24/7)", "Pripremite pasoš pokojnika i podatke o mestu smrti", "Ne potpisujte dokumente bez saveta stručnjaka"] },
-      { h: "Dokumentacija i rokovi", p: ["Svaka zemlja ima specifične procedure. U <a href=\"/nemacka\" class=\"text-primary\">Nemačkoj</a> se dokumenti izdaju u Standesamt, u <a href=\"/austrija\" class=\"text-primary\">Austriji</a> u matičnom uredu, a u <a href=\"/italija\" class=\"text-primary\">Italiji</a> u opštini (Comune).", "Naš tim završava kompletnu dokumentaciju — vi se ne morate baviti birokratijom. Detaljan spisak: <a href=\"/dokumentacija-za-prevoz-pokojnika\" class=\"text-primary\">dokumentacija za prevoz pokojnika</a>."] },
-      { h: "Organizacija prevoza u domovinu", p: ["Prevoz pokojnika se obavlja specijalizovanim vozilom sa rashladnim uređajem. Proces traje 2–4 dana u proseku.", "Organizujemo prevoz iz svih evropskih zemalja u Srbiju. Za hitne slučajeve pogledajte <a href=\"/blog-hitni-prevoz-pokojnika-sta-treba-znati\" class=\"text-primary\">hitni prevoz pokojnika</a>."] },
-      { h: "Zaključak", p: ["U najtežim trenucima važno je imati pouzdanog partnera. Naše preduzeće sa 15+ godina iskustva preuzima kompletnu organizaciju — od prve do poslednje dozvole."] },
-    ],
-    relatedLinks: [{ href: "/blog-hitni-prevoz-pokojnika-sta-treba-znati", title: "Hitni prevoz pokojnika" }, { href: "/nemacka", title: "Prevoz iz Nemačke" }, { href: "/dokumentacija-za-prevoz-pokojnika", title: "Dokumentacija" }],
-  },
-  {
-    slug: "blog-prevoz-pokojnika-iz-italije-vodic",
-    title: "Prevoz pokojnika iz Italije — vodič | Transport pokojnika",
-    description: "Kompletan vodič za prevoz pokojnika iz Italije. Rим, Milan, Napulj — dokumentacija, cene, rokovi. MI ZAVRŠAVAMO SVU DOKUMENTACIJU!",
-    h1: "Prevoz pokojnika iz Italije — kompletan vodič",
-    lead: "Italija je jedna od najčešćih destinacija srpske dijaspore. Ovaj vodič pokriva sve što treba znati o prevozu pokojnika iz Italije u Srbiju.",
-    date: "5. avgust 2025",
-    readTime: "12 min čitanja",
-    sections: [
-      { h: "Specifičnosti italijanskog sistema", p: ["U Italiji se smrt prijavljuje u opštini (Comune) gde se dogodila. Izdaje se certificato di morte i permesso di trasporto.", "Italijanski propisi zahtevaju poseban sanduk i carinske procedure za izvoz. Naš tim ima iskustva sa svim italijanskim regionima."] },
-      { h: "Gradovi iz kojih organizujemo prevoz", p: ["Organizujemo prevoz iz <a href=\"/rim\" class=\"text-primary\">Rima</a>, Milana, Napulja, Torina i svih italijanskih gradova.", "Za opšte informacije o transportu iz Italije posetite stranicu <a href=\"/italija\" class=\"text-primary\">prevoz pokojnika iz Italije</a>."] },
-      { h: "Dokumentacija i rokovi", p: ["Potrebni dokumenti uključuju certificato di morte, permesso di trasporto, pasoš pokojnika i srpsku uvoznu dozvolu.", "Proces traje 2–4 dana. U hitnim slučajevima možemo ubrzati proceduru. Više o dokumentaciji: <a href=\"/dokumentacija-za-prevoz-pokojnika\" class=\"text-primary\">dokumentacija za prevoz</a>."] },
-      { h: "Cena prevoza iz Italije", p: ["Cena zavisi od udaljenosti (Rim je udaljeniji od Beča, npr.) i tipa sanduka. Kontaktirajte nas za besplatnu procenu ili pogledajte <a href=\"/cenovnik\" class=\"text-primary\">cenovnik</a>."] },
-      { h: "Zaključak", p: ["Prevoz pokojnika iz Italije zahteva poznavanje lokalnih propisa i srpskih procedura. Sa 15+ godina iskustva, preuzimamo kompletnu organizaciju umesto vas."] },
-    ],
-    relatedLinks: [{ href: "/italija", title: "Prevoz iz Italije" }, { href: "/rim", title: "Prevoz iz Rima" }, { href: "/blog-dokumentacija-za-prevoz-pokojnika", title: "Dokumentacija" }],
-  },
+  ...require("./content/blog-guides"),
+  ...require("./content/blog-countries"),
+  ...require("./content/blog-legacy"),
+  ...require("./content/blog-new"),
 ];
 
 function generateServicePages() {
@@ -1868,70 +1475,26 @@ function injectPartials() {
   });
 }
 
-const LLMS_BASE = "https://transportpokojnika.com";
-const LLMS_COUNTRY_SLUGS = new Set([
-  "nemacka", "austrija", "svajcarska", "italija", "spanija", "svedska", "danska",
-  "francuska", "hrvatska", "crna-gora", "grcka", "norveska",
-]);
-const LLMS_CITY_SLUGS = new Set([
-  "berlin", "munchen", "hamburg", "frankfurt", "cirih", "zeneva", "bec", "graz",
-  "linz", "rim", "madrid", "dusseldorf", "koln", "stuttgart", "dortmund", "leipzig", "dresden",
-]);
 const LLMS_SERVICE_SLUGS = new Set([
   "cenovnik", "dokumentacija-za-prevoz-pokojnika", "pogrebni-sanduci",
   "ekshumacija", "repatrijacija-pokojnika",
 ]);
 const LLMS_OPTIONAL_SLUGS = new Set(["testimonials", "contact"]);
 
-const LLMS_DESCRIPTIONS = {
-  "/": "Međunarodni prevoz pokojnika iz Evrope u Srbiju. 24/7, kompletna dokumentacija.",
-  "/cenovnik": "Cenovnik usluga transporta pokojnika — transparentne cene.",
-  "/dokumentacija-za-prevoz-pokojnika": "Kompletan vodič kroz dokumentaciju za međunarodni prevoz.",
-  "/pogrebni-sanduci": "Pogrebni sanduci usklađeni sa međunarodnim propisima.",
-  "/ekshumacija": "Ekshumacija i prenos umrle osobe sa kompletnom dokumentacijom.",
-  "/repatrijacija-pokojnika": "Repatrijacija pokojnika iz inostranstva u domovinu.",
-  "/blog": "Blog sa vodičima i savetima o prevozu pokojnika.",
-  "/testimonials": "Utisci zadovoljnih klijenata.",
-  "/contact": "Kontakt forma i podaci za hitne slučajeve.",
-  "/nemacka": "Prevoz pokojnika iz Nemačke — Berlin, Minhen, Hamburg i drugi gradovi.",
-  "/austrija": "Prevoz pokojnika iz Austrije — Beč, Graz, Linz.",
-  "/svajcarska": "Prevoz pokojnika iz Švajcarske — Cirih, Ženeva.",
-  "/italija": "Prevoz pokojnika iz Italije — Rim i ostali gradovi.",
-  "/spanija": "Prevoz pokojnika iz Španije — Madrid.",
-  "/svedska": "Prevoz pokojnika iz Švedske.",
-  "/danska": "Prevoz pokojnika iz Danske.",
-  "/francuska": "Prevoz pokojnika iz Francuske — Pariz, Lion, Marsej.",
-  "/hrvatska": "Prevoz pokojnika iz Hrvatske — Zagreb, Split, Rijeka.",
-  "/crna-gora": "Prevoz pokojnika iz Crne Gore — Podgorica i primorje.",
-  "/grcka": "Prevoz pokojnika iz Grčke — Atina, Solun, Patra.",
-  "/norveska": "Prevoz pokojnika iz Norveške — Oslo, Bergen, Trondheim.",
-};
-
-function slugToTitle(slug) {
-  return slug
-    .replace(/^blog-/, "")
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+function decodeEntities(text) {
+  return text.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
 }
 
-function getLlmsDescription(slug, pathname) {
-  if (LLMS_DESCRIPTIONS[pathname]) return LLMS_DESCRIPTIONS[pathname];
-  if (slug.startsWith("blog-")) {
-    return `Blog članak: ${slugToTitle(slug).replace(/_/g, " ")}.`;
-  }
-  if (LLMS_CITY_SLUGS.has(slug)) {
-    return `Prevoz pokojnika iz ${slugToTitle(slug)} za Srbiju.`;
-  }
-  return `Informacije o prevozu pokojnika — ${slugToTitle(slug)}.`;
-}
-
+/** llms.txt index built from every sitemap page's own H1 and meta description. */
 function generateLlmsTxt() {
   const sitemap = fs.readFileSync(path.join(ROOT, "sitemap.xml"), "utf8");
   const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  const countrySlugs = new Set(Object.keys(COUNTRY_META));
+  const citySlugs = new Set(CITIES.map((c) => c.slug));
 
   const sections = {
     Usluge: [],
+    "Odredišta (sahrana)": [],
     Zemlje: [],
     Gradovi: [],
     Blog: [],
@@ -1939,22 +1502,20 @@ function generateLlmsTxt() {
   };
 
   urls.forEach((url) => {
-    const pathname = new URL(url).pathname.replace(/\/$/, "") || "/";
-    const slug = pathname === "/" ? "" : pathname.slice(1);
-    const title =
-      slug === ""
-        ? "Početna stranica"
-        : slug.startsWith("blog-")
-          ? slugToTitle(slug)
-          : slug.charAt(0).toUpperCase() + slug.slice(1);
-    const desc = getLlmsDescription(slug, pathname);
-    const entry = `- [${title}](${url}): ${desc}`;
+    const slug = new URL(url).pathname.slice(1);
+    const html = fs.readFileSync(path.join(ROOT, `${slug || "index"}.html`), "utf8");
+    const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const description = html.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
+    const title = slug === "" ? "Početna stranica" : decodeEntities(stripTags(h1 ? h1[1] : slug));
+    const entry = `- [${title}](${url}): ${decodeEntities(description ? description[1] : "")}`;
 
-    if (pathname === "/" || LLMS_SERVICE_SLUGS.has(slug)) {
+    if (slug === "" || LLMS_SERVICE_SLUGS.has(slug)) {
       sections.Usluge.push(entry);
-    } else if (LLMS_COUNTRY_SLUGS.has(slug)) {
+    } else if (slug.startsWith("prevoz-pokojnika-u-")) {
+      sections["Odredišta (sahrana)"].push(entry);
+    } else if (countrySlugs.has(slug)) {
       sections.Zemlje.push(entry);
-    } else if (LLMS_CITY_SLUGS.has(slug)) {
+    } else if (citySlugs.has(slug)) {
       sections.Gradovi.push(entry);
     } else if (slug === "blog" || slug.startsWith("blog-")) {
       sections.Blog.push(entry);
@@ -1963,11 +1524,11 @@ function generateLlmsTxt() {
     }
   });
 
-  let txt = `# Transport pokojnika - Pogrebno preduzeće
+  let txt = `# ${BUSINESS.name}
 
-> Profesionalno pogrebno preduzeće iz Beograda. Međunarodni prevoz pokojnika iz Nemačke, Austrije, Švajcarske i cele Evrope u Srbiju. Tel: +381 64 249 28 49. Dostupni 24/7. MI ZAVRŠAVAMO SVU DOKUMENTACIJU.
+> Pogrebno preduzeće iz Beograda specijalizovano za međunarodni prevoz pokojnika iz cele Evrope (Nemačka, Austrija, Švajcarska, Italija, Španija, Francuska, Skandinavija i druge zemlje) u Srbiju, Bosnu i Hercegovinu, Crnu Goru i Severnu Makedoniju. Kompletnu dokumentaciju (uključujući sprovodnicu) pribavljamo mi. Tel: +381 64 249 28 49, dostupni 24/7.
 
-Sajt na srpskom jeziku. Glavne usluge: međunarodni transport pokojnika, repatrijacija, ekshumacija, pribavljanje dokumentacije, pogrebni sanduci.
+Sajt je na srpskom jeziku (latinica). Glavne usluge: međunarodni prevoz pokojnika, repatrijacija, ekshumacija i prenos posmrtnih ostataka, pribavljanje dokumentacije, pogrebni sanduci.
 
 `;
 
@@ -2033,6 +1594,228 @@ function fixAccessibilityLinks() {
     });
 }
 
+function jsonLdScript(data) {
+  const json = JSON.stringify(data, null, 2).replace(/\n/g, "\n      ");
+  return `<script type="application/ld+json">\n      ${json}\n    </script>`;
+}
+
+function stripTags(html) {
+  return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+/** Append to the end of <head>; adds the closing tag on pages that omit it. */
+function appendToHead(html, snippet) {
+  if (/<\/head>/i.test(html)) return html.replace(/<\/head>/i, `  ${snippet}\n  </head>`);
+  return html.replace(/(\s*)<body\b/i, `\n    ${snippet}\n  </head>$1<body`);
+}
+
+/** Insert `tag` right after the first match of `afterRe` (or at the end of <head> as a fallback). */
+function insertHeadTag(html, afterRe, tag) {
+  const match = html.match(afterRe);
+  if (match) {
+    const end = match.index + match[0].length;
+    return `${html.slice(0, end)}\n    ${tag}${html.slice(end)}`;
+  }
+  return appendToHead(html, tag);
+}
+
+/** Canonical, og:locale/site_name, lang and stale meta tags — enforced on every page. */
+function ensureHeadTags() {
+  htmlFiles().forEach((file) => {
+    let content = fs.readFileSync(path.join(ROOT, file), "utf8");
+    const original = content;
+
+    content = content.replace(/<html lang="sr">/i, '<html lang="sr-Latn">');
+    if (!/<\/head>/i.test(content)) {
+      content = content.replace(/(\s*)<body\b/i, "\n  </head>$1<body");
+    }
+    content = content.replace(/\s*<meta\s+name="keywords"[\s\S]*?\/>/i, "");
+    content = content.replace(
+      /(<meta\s+name="author"\s+content=")Vaše Pogrebno Preduzeće(")/i,
+      `$1${BUSINESS.name}$2`
+    );
+
+    if (isIndexable(content)) {
+      const canonical = `<link rel="canonical" href="${pageUrl(file)}" />`;
+      if (/<link\s+rel="canonical"[^>]*>/i.test(content)) {
+        content = content.replace(/<link\s+rel="canonical"[^>]*>/i, canonical);
+      } else {
+        content = insertHeadTag(content, /<meta\s+name="description"[\s\S]*?\/>/i, canonical);
+      }
+    }
+
+    if (!/property="og:locale"/.test(content)) {
+      content = insertHeadTag(
+        content,
+        /<meta\s+property="og:type"[\s\S]*?\/>/i,
+        '<meta property="og:locale" content="sr_RS" />'
+      );
+    }
+    if (!/property="og:site_name"/.test(content)) {
+      content = insertHeadTag(
+        content,
+        /<meta\s+property="og:locale"[\s\S]*?\/>/i,
+        '<meta property="og:site_name" content="Transport pokojnika" />'
+      );
+    }
+
+    if (content !== original) {
+      fs.writeFileSync(path.join(ROOT, file), content, "utf8");
+      console.log(`Updated head tags in ${file}`);
+    }
+  });
+}
+
+// Not schema.org types — replaced by a reference to the LocalBusiness entity.
+const INVALID_BUSINESS_TYPES = new Set(["FuneralService", "FuneralHome"]);
+
+function normalizeJsonLdNode(node) {
+  if (Array.isArray(node)) return node.map(normalizeJsonLdNode);
+  if (!node || typeof node !== "object") return node;
+
+  const out = {};
+  for (const [key, value] of Object.entries(node)) {
+    if (value && typeof value === "object" && INVALID_BUSINESS_TYPES.has(value["@type"])) {
+      // Service details were attached to the business node — move them to the Service.
+      if (node["@type"] === "Service") {
+        ["areaServed", "serviceType"].forEach((k) => {
+          if (value[k] && !node[k]) out[k] = value[k];
+        });
+      }
+      out[key] = businessRef();
+    } else {
+      out[key] = normalizeJsonLdNode(value);
+    }
+  }
+  return out;
+}
+
+function normalizeText(html) {
+  return stripTags(html).replace(/&nbsp;/g, " ").toLowerCase();
+}
+
+/** Returns the cleaned JSON-LD object, or null when the whole block should be dropped. */
+function normalizeJsonLd(data, file, visibleText) {
+  if (file === "index.html" && data["@type"] === "LocalBusiness") return businessJsonLd();
+
+  const out = normalizeJsonLdNode(data);
+  if (out["@type"] === "ProfessionalService") out["@type"] = "Service";
+  if (out["@type"] === "WebSite") delete out.potentialAction; // no on-site search exists
+
+  // FAQ markup may only contain questions that are visible on the page.
+  if (out["@type"] === "FAQPage" && Array.isArray(out.mainEntity)) {
+    out.mainEntity = out.mainEntity.filter((q) => visibleText.includes(normalizeText(q.name || "")));
+    if (out.mainEntity.length === 0) return null;
+  }
+
+  // Self-serving review markup that isn't backed by visible, verifiable reviews.
+  if (out.aggregateRating || out.review) {
+    delete out.aggregateRating;
+    delete out.review;
+    const remaining = Object.keys(out).filter((k) => !["@context", "@type", "name"].includes(k));
+    if (remaining.length === 0) return null;
+  }
+  return out;
+}
+
+function normalizeStructuredData() {
+  const blockRe = /(\s*<!--[^>]*?-->)?(\s*)<script type="application\/ld\+json">([\s\S]*?)<\/script>/g;
+
+  htmlFiles().forEach((file) => {
+    const original = fs.readFileSync(path.join(ROOT, file), "utf8");
+    const visibleText = normalizeText(
+      original.replace(/<head[\s\S]*?<\/head>/i, " ").replace(/<script[\s\S]*?<\/script>/gi, " ")
+    );
+    const content = original.replace(blockRe, (match, comment = "", space, json) => {
+      let data;
+      try {
+        data = JSON.parse(json);
+      } catch (err) {
+        console.warn(`  ! ${file}: invalid JSON-LD left untouched (${err.message})`);
+        return match;
+      }
+      const normalized = normalizeJsonLd(data, file, visibleText);
+      if (normalized === null) return "";
+      if (JSON.stringify(normalized) === JSON.stringify(data)) return match;
+      return `${comment}${space}${jsonLdScript(normalized)}`;
+    });
+
+    if (content !== original) {
+      fs.writeFileSync(path.join(ROOT, file), content, "utf8");
+      console.log(`Normalized structured data in ${file}`);
+    }
+  });
+}
+
+/** Add BreadcrumbList JSON-LD derived from the visible breadcrumb when a page lacks it. */
+function ensureBreadcrumbSchema() {
+  htmlFiles().forEach((file) => {
+    const content = fs.readFileSync(path.join(ROOT, file), "utf8");
+    if (content.includes('"BreadcrumbList"')) return;
+    const list = content.match(/<ol class="breadcrumb[^"]*">([\s\S]*?)<\/ol>/i);
+    if (!list) return;
+
+    const items = [...list[1].matchAll(/<li class="breadcrumb-item[^"]*"[^>]*>([\s\S]*?)<\/li>/gi)].map((m) => {
+      const link = m[1].match(/<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
+      return {
+        name: stripTags(link ? link[2] : m[1]),
+        item: link ? new URL(link[1], `${SITE_URL}/`).href : pageUrl(file),
+      };
+    });
+    if (items.length < 2) return;
+
+    const schema = jsonLdScript({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, item: it.item })),
+    });
+    fs.writeFileSync(path.join(ROOT, file), appendToHead(content, schema), "utf8");
+    console.log(`Added breadcrumb schema to ${file}`);
+  });
+}
+
+function gitAddedDate(file) {
+  try {
+    const out = execSync(`git log --diff-filter=A --follow --format=%cs -- "${file}"`, { cwd: ROOT })
+      .toString()
+      .trim()
+      .split("\n");
+    return out[out.length - 1] || TODAY;
+  } catch {
+    return TODAY;
+  }
+}
+
+/** Add Article JSON-LD to blog posts that have none. */
+function ensureBlogArticleSchema() {
+  htmlFiles()
+    .filter((f) => f.startsWith("blog-"))
+    .forEach((file) => {
+      const content = fs.readFileSync(path.join(ROOT, file), "utf8");
+      if (/"@type":\s*"(Article|BlogPosting)"/.test(content)) return;
+
+      const h1 = content.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+      const description = content.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
+      const published = gitAddedDate(file);
+      const schema = jsonLdScript(
+        compact({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: h1 ? stripTags(h1[1]) : null,
+          description: description ? description[1] : null,
+          image: `${SITE_URL}/pogrebni-kombi-sa-sandukom.jpg`,
+          author: businessRef(),
+          publisher: businessRef(),
+          datePublished: published,
+          dateModified: published,
+          mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl(file) },
+        })
+      );
+      fs.writeFileSync(path.join(ROOT, file), appendToHead(content, schema), "utf8");
+      console.log(`Added article schema to ${file}`);
+    });
+}
+
 function syncStylesMin() {
   const src = path.join(ROOT, "styles.css");
   const dest = path.join(ROOT, "styles.min.css");
@@ -2042,42 +1825,35 @@ function syncStylesMin() {
   }
 }
 
-// Main
-generateCityPages();
-generateCountryPages();
-generateServicePages();
-generateBlogPosts();
-injectPartials();
+function main() {
+  generateCityPages();
+  generateCountryPages();
+  generateServicePages();
+  generateBlogPosts();
+  injectPartials();
 
-const newUrls = [
-  ...COUNTRY_HUBS.map((c) => ({
-    loc: `https://transportpokojnika.com/${c.slug}`,
-    priority: "0.8",
-  })),
-  ...GERMAN_CITIES.map((c) => ({
-    loc: `https://transportpokojnika.com/${c.slug}`,
-  })),
-  { loc: "https://transportpokojnika.com/dokumentacija-za-prevoz-pokojnika", priority: "0.8" },
-  { loc: "https://transportpokojnika.com/pogrebni-sanduci", priority: "0.8" },
-  { loc: "https://transportpokojnika.com/ekshumacija", priority: "0.8" },
-  { loc: "https://transportpokojnika.com/repatrijacija-pokojnika", priority: "0.8" },
-  { loc: "https://transportpokojnika.com/blog-sta-raditi-kada-neko-umre-u-inostranstvu", priority: "0.7" },
-  { loc: "https://transportpokojnika.com/blog-prevoz-pokojnika-iz-italije-vodic", priority: "0.7" },
-];
+  updateBlogImageDimensions();
+  updateBlogListingImages();
+  updateStaticPageImages();
+  dedupeAllPictureTags();
+  updateHeadAssets();
+  fixAccessibilityLinks();
+  ensureHeadTags();
+  normalizeStructuredData();
+  ensureBreadcrumbSchema();
+  ensureBlogArticleSchema();
 
-updateSitemap(newUrls);
-generateLlmsTxt();
-updateBlogImageDimensions();
-updateBlogListingImages();
-updateStaticPageImages();
-dedupeAllPictureTags();
-updateHeadAssets();
-fixAccessibilityLinks();
-syncStylesMin();
-verifyCls();
+  // Last, so content hashes reflect the final pages.
+  updateSitemap();
+  generateLlmsTxt();
+  syncStylesMin();
+  verifyCls();
 
-if (process.argv.includes("--images")) {
-  convertImages();
+  if (process.argv.includes("--images")) {
+    convertImages();
+  }
+
+  console.log("Build complete.");
 }
 
-console.log("Build complete.");
+main();

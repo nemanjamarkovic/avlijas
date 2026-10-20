@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,16 +8,15 @@
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Cenovnik prevoza pokojnika iz inostranstva - Transparentne cene bez skrivenih troškova. MI ZAVRŠAVAMO SVU DOKUMENTACIJU! 15+ godina iskustva. Tel: 064 249 28 49."
+      content="Cenovnik prevoza pokojnika iz inostranstva: od čega zavisi cena, šta je uključeno i kada se isplati avion. Tačnu cenu dobijate u prvom razgovoru."
     />
-    <meta
-      name="keywords"
-      content="cenovnik transport pokojnika, cene prevoz umrlih, koliko košta transport iz nemačke, cena prevoza iz austrije, cena transporta iz švajcarske"
-    />
+    <link rel="canonical" href="https://transportpokojnika.com/cenovnik" />
     <meta name="author" content="Transport pokojnika - Pogrebno preduzeće" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="sr_RS" />
+    <meta property="og:site_name" content="Transport pokojnika" />
     <meta property="og:url" content="https://transportpokojnika.com/cenovnik" />
     <meta
       property="og:title"
@@ -25,7 +24,7 @@
     />
     <meta
       property="og:description"
-      content="Informacije o cenama transporta pokojnika iz Evrope. Besplatna procena, najpovoljnije usluge u regionu."
+      content="Od čega zavisi cena prevoza pokojnika iz Evrope i šta je uključeno. Besplatna procena, bez obaveze."
     />
     <meta
       property="og:image"
@@ -74,18 +73,29 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
+        "@type": "Service",
         "name": "Transport pokojnika - Cenovnik usluga",
         "description": "Informacije o uslugama transporta pokojnika iz Evrope sa profesionalnim pristupom",
         "url": "https://transportpokojnika.com/cenovnik",
         "provider": {
-          "@type": "FuneralService",
+          "@type": "LocalBusiness",
+          "@id": "https://transportpokojnika.com/#business",
           "name": "Transport pokojnika - Pogrebno preduzeće",
+          "url": "https://transportpokojnika.com/",
           "telephone": "+381642492849",
-          "email": "kontakt@transportpokojnika.com",
-          "priceRange": "€€"
+          "logo": "https://transportpokojnika.com/vijenac%20logo.png",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Beograd",
+            "addressCountry": "RS"
+          }
         },
-        "areaServed": ["RS", "DE", "AT", "CH"],
+        "areaServed": [
+          "RS",
+          "DE",
+          "AT",
+          "CH"
+        ],
         "serviceType": [
           "Transport pokojnika iz Nemačke",
           "Transport pokojnika iz Austrije",
@@ -96,8 +106,78 @@
       }
     </script>
 
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Da li se cena računa po kilometru?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ne samo po kilometru. Udaljenost je važan činilac, ali na cenu utiču i dokumenta, takse, sanduk, priprema pokojnika i okolnosti slučaja. Zato vam u prvom razgovoru dajemo cenu za ceo prevoz, a ne cenu po pređenom kilometru."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Koliko košta prevoz pokojnika iz Nemačke?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Zavisi od grada u kome je nastupila smrt i od mesta sahrane — od Minhena do Beograda ima oko 940 km, a od Hamburga oko 1.540 km. Utiču i lokalne takse i izbor sanduka. Više o tome piše u članku koliko košta prevoz pokojnika iz Nemačke, a tačnu cenu za vaš slučaj dobijate u prvom razgovoru."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Da li ima skrivenih troškova?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nema. Sve stavke navodimo u ponudi pre nego što se bilo šta dogovori. Ako se tokom postupka pojavi nešto što ne zavisi od nas, na primer obdukcija ili čekanje na dozvolu tužilaštva, obaveštavamo vas pre nego što nastane bilo kakav dodatni trošak."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ko plaća prevoz ako je pokojnik bio osiguran?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "To zavisi od polise. Neka putna zdravstvena osiguranja i osiguranja za slučaj smrti pokrivaju prevoz posmrtnih ostataka, u celini ili delimično. Javite se osiguravaču što ranije i proverite uslove, jer neki osiguravači traže da prevoz prethodno odobre. Na vaš zahtev dostavljamo račun i kopije dokumenata koje osiguravač obično traži."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Da li je procena cene besplatna?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Da. Procena je besplatna i ne obavezuje vas ni na šta. Pozovite nas u bilo koje doba, a tačnu cenu za vaš slučaj dobijate već u prvom razgovoru."
+            }
+          }
+        ]
+      }
+    </script>
+
     <link rel="icon" type="image/png" href="vijenac logo.png" />
     <link rel="apple-touch-icon" href="vijenac logo.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Početna",
+            "item": "https://transportpokojnika.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Cenovnik",
+            "item": "https://transportpokojnika.com/cenovnik"
+          }
+        ]
+      }
+    </script>
   </head>
 
   <body>
@@ -175,14 +255,14 @@
         </li>
         <li class="nav-item dropdown medjunarodni-transport">
           <a
-            href="#"
+            href="/#transport"
             class="nav-link dropdown-toggle"
             id="medjunarodni-dropdown"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Medjunarodni Transport
+            Međunarodni transport
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -220,6 +300,17 @@
             </li>
             <li>
               <a class="dropdown-item" href="/norveska">Prevoz iz Norveške</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><h6 class="dropdown-header">Sahrana u</h6></li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-bih">Bosni i Hercegovini</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-crnu-goru">Crnoj Gori</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-severnu-makedoniju">Severnoj Makedoniji</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
@@ -368,6 +459,12 @@
 </script>
     </div><main role="main">
       <h1 class="visually-hidden">Cenovnik transporta pokojnika iz Evrope</h1>
+      <nav class="container pt-3" aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="/">Početna</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Cenovnik</li>
+        </ol>
+      </nav>
 
       <!-- Hero Section -->
       <section class="py-5 bg-dark text-white">
@@ -405,7 +502,7 @@
                 <div class="card-body">
                   <div class="price-display text-center mb-4">
                     <div class="fs-4 fw-bold text-white">
-                      Najpovoljnije cene
+                      Transparentne cene
                     </div>
                     <small class="text-white-50">Besplatna procena</small>
                   </div>
@@ -607,6 +704,120 @@
         </div>
       </section>
 
+      <!-- Price Factors and Inclusions -->
+      <section class="container my-5">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <h2 class="h3 mb-3">Od čega zavisi cena prevoza pokojnika iz inostranstva</h2>
+            <p>
+              Svaki prevoz je drugačiji, zato ne objavljujemo paušalne cene.
+              Na ukupan iznos utiču:
+            </p>
+            <ul>
+              <li class="mb-2"><strong>Udaljenost i mesto sahrane</strong> — polazni grad i tačno odredište u Srbiji, BiH, Crnoj Gori ili Severnoj Makedoniji. Od Beča do Beograda, na primer, ima oko 620 km, a od Stokholma oko 2.660 km.</li>
+              <li class="mb-2"><strong>Zemlja u kojoj je nastupila smrt</strong> — lokalne takse, broj potrebnih dokumenata i da li su potrebni apostil i prevod, kao kod dokumenata iz Švedske, Danske ili Norveške.</li>
+              <li class="mb-2"><strong>Konzularne takse</strong> — za sprovodnicu ili za dozvolu predstavništva BiH, Crne Gore ili Severne Makedonije.</li>
+              <li class="mb-2"><strong>Sanduk i oprema</strong> — standardni sanduk propisan za međunarodni prevoz ili model po izboru porodice.</li>
+              <li class="mb-2"><strong>Priprema pokojnika</strong> — na primer balsamovanje, kada ga propisi ili dužina puta zahtevaju.</li>
+              <li class="mb-2"><strong>Način prevoza</strong> — specijalizovanim pogrebnim vozilom ili avionom.</li>
+              <li><strong>Okolnosti slučaja</strong> — na primer obdukcija ili čekanje na odobrenje tužilaštva.</li>
+            </ul>
+          </div>
+          <div class="col-lg-6">
+            <h2 class="h3 mb-3">Šta je uključeno u cenu</h2>
+            <p>
+              Cena koju dobijete u prvom razgovoru odnosi se na ceo posao, od
+              preuzimanja pokojnika do predaje porodici:
+            </p>
+            <ul class="list-unstyled">
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Pribavljanje dokumenata u zemlji smrti i sprovodnice, odnosno dozvole zemlje sahrane</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Preuzimanje pokojnika iz bolnice, doma za stare ili stana</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Priprema pokojnika i standardni sanduk propisan za međunarodni prevoz</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Prevoz specijalizovanim pogrebnim vozilom do mesta sahrane</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Granične i carinske formalnosti</li>
+              <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Jedna kontakt osoba za porodicu, dostupna 24/7</li>
+            </ul>
+            <p class="mb-0">
+              Sve što nije deo standardne usluge — na primer sanduk po izboru
+              porodice — navodimo posebno u ponudi, pre nego što se bilo šta
+              dogovori. Spisak dokumenata po zemljama nalazi se na stranici
+              <a href="/dokumentacija-za-prevoz-pokojnika" class="text-primary">dokumentacija za prevoz pokojnika</a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Air Transport -->
+      <section class="container my-5">
+        <h2 class="mb-3">Prevoz avionom — kada se isplati</h2>
+        <p>
+          Prevoz pokojnika avionom nije uvek brži ni jednostavniji nego drumom.
+          Avion zahteva rezervaciju avio-tereta, posebnu ambalažu za sanduk,
+          aerodromske procedure i prevoz do aerodroma i od njega, a sve to se
+          dodaje na cenu leta. Da li se isplati, zavisi od nekoliko stvari:
+        </p>
+        <ul>
+          <li class="mb-2"><strong>Udaljenost</strong> — kod velikih razdaljina, na primer iz Švedske, Norveške ili Španije, avion može znatno da skrati put. Od Madrida do Beograda drumom ima oko 2.570 km.</li>
+          <li class="mb-2"><strong>Hitnost sahrane</strong> — kada porodica, na primer iz verskih razloga, želi sahranu što pre.</li>
+          <li class="mb-2"><strong>Letovi i aerodromi</strong> — da li postoji pogodna linija sa prevozom tereta do Beograda, Sarajeva, Podgorice ili Skoplja i koliko je mesto sahrane udaljeno od aerodroma.</li>
+          <li><strong>Ukupan trošak</strong> — pored leta računaju se i prevoz do aerodroma u zemlji smrti i prevoz od aerodroma do mesta sahrane.</li>
+        </ul>
+        <p class="mb-0">
+          Iz Austrije, Nemačke, Švajcarske ili severne Italije specijalizovano
+          vozilo najčešće stiže podjednako brzo, jer pokojnika preuzima i
+          dovozi direktno do mesta sahrane. Detaljno poređenje pročitajte u
+          članku
+          <a href="/blog-prevoz-pokojnika-avionom-vs-kombijem" class="text-primary">prevoz pokojnika avionom ili kombijem</a>.
+        </p>
+      </section>
+
+      <!-- Pricing FAQ -->
+      <section class="container my-5">
+        <h2 class="mb-4">Najčešća pitanja o ceni prevoza</h2>
+        <div class="accordion" id="cenovnikFaq">
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cenovnikFaq1" aria-expanded="true" aria-controls="cenovnikFaq1">Da li se cena računa po kilometru?</button>
+            </h3>
+            <div id="cenovnikFaq1" class="accordion-collapse collapse show" data-bs-parent="#cenovnikFaq">
+              <div class="accordion-body">Ne samo po kilometru. Udaljenost je važan činilac, ali na cenu utiču i dokumenta, takse, sanduk, priprema pokojnika i okolnosti slučaja. Zato vam u prvom razgovoru dajemo cenu za ceo prevoz, a ne cenu po pređenom kilometru.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cenovnikFaq2" aria-expanded="false" aria-controls="cenovnikFaq2">Koliko košta prevoz pokojnika iz Nemačke?</button>
+            </h3>
+            <div id="cenovnikFaq2" class="accordion-collapse collapse" data-bs-parent="#cenovnikFaq">
+              <div class="accordion-body">Zavisi od grada u kome je nastupila smrt i od mesta sahrane — od Minhena do Beograda ima oko 940 km, a od Hamburga oko 1.540 km. Utiču i lokalne takse i izbor sanduka. Više o tome piše u članku <a href="/blog-koliko-kosta-prevoz-pokojnika-nemacka" class="text-primary">koliko košta prevoz pokojnika iz Nemačke</a>, a tačnu cenu za vaš slučaj dobijate u prvom razgovoru.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cenovnikFaq3" aria-expanded="false" aria-controls="cenovnikFaq3">Da li ima skrivenih troškova?</button>
+            </h3>
+            <div id="cenovnikFaq3" class="accordion-collapse collapse" data-bs-parent="#cenovnikFaq">
+              <div class="accordion-body">Nema. Sve stavke navodimo u ponudi pre nego što se bilo šta dogovori. Ako se tokom postupka pojavi nešto što ne zavisi od nas, na primer obdukcija ili čekanje na dozvolu tužilaštva, obaveštavamo vas pre nego što nastane bilo kakav dodatni trošak.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cenovnikFaq4" aria-expanded="false" aria-controls="cenovnikFaq4">Ko plaća prevoz ako je pokojnik bio osiguran?</button>
+            </h3>
+            <div id="cenovnikFaq4" class="accordion-collapse collapse" data-bs-parent="#cenovnikFaq">
+              <div class="accordion-body">To zavisi od polise. Neka putna zdravstvena osiguranja i osiguranja za slučaj smrti pokrivaju prevoz posmrtnih ostataka, u celini ili delimično. Javite se osiguravaču što ranije i proverite uslove, jer neki osiguravači traže da prevoz prethodno odobre. Na vaš zahtev dostavljamo račun i kopije dokumenata koje osiguravač obično traži.</div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cenovnikFaq5" aria-expanded="false" aria-controls="cenovnikFaq5">Da li je procena cene besplatna?</button>
+            </h3>
+            <div id="cenovnikFaq5" class="accordion-collapse collapse" data-bs-parent="#cenovnikFaq">
+              <div class="accordion-body">Da. Procena je besplatna i ne obavezuje vas ni na šta. Pozovite nas u bilo koje doba, a tačnu cenu za vaš slučaj dobijate već u prvom razgovoru.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Contact CTA -->
       <section class="py-5 bg-dark text-white">
         <div class="container text-center">
@@ -642,7 +853,8 @@
     </main>
 
     <!-- Footer will be loaded here -->
-    <footer class="bg-dark text-white py-5">
+    <div id="footer-container">
+<footer class="bg-dark text-white py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-4 mb-4 mb-md-0">
@@ -660,9 +872,9 @@
       <div class="col-md-4 mb-4 mb-md-0">
         <h2>Kontakt</h2>
         <address class="mb-0">
-          <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
+          <p><i class="bi bi-telephone-fill me-2"></i><a href="tel:+381642492849" class="text-white">+381 64 249 28 49</a></p>
           <p>
-            <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
+            <i class="bi bi-envelope-fill me-2"></i><a href="mailto:kontakt@transportpokojnika.com" class="text-white">kontakt@transportpokojnika.com</a>
           </p>
           <p>
             <i class="bi bi-geo-alt-fill me-2"></i>Beograd, Srbija
@@ -674,6 +886,8 @@
         <ul class="list-unstyled">
           <li><a href="/" class="text-white">Početna</a></li>
           <li><a href="/#transport" class="text-white">Usluge</a></li>
+          <li><a href="/cenovnik" class="text-white">Cenovnik</a></li>
+          <li><a href="/testimonials" class="text-white">Utisci klijenata</a></li>
           <li><a href="/blog" class="text-white">Blog</a></li>
           <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
           <li><a href="/contact" class="text-white">Kontakt</a></li>
@@ -693,27 +907,57 @@
           <li><a href="/bec" class="text-white">Prevoz iz Beča (Wien)</a></li>
           <li><a href="/graz" class="text-white">Prevoz iz Graca (Graz)</a></li>
           <li><a href="/linz" class="text-white">Prevoz iz Linca (Linz)</a></li>
+          <li><a href="/salcburg" class="text-white">Prevoz iz Salcburga</a></li>
+          <li><a href="/insbruk" class="text-white">Prevoz iz Insbruka</a></li>
           <li><a href="/svajcarska" class="text-white">Prevoz iz Švajcarske</a></li>
           <li><a href="/cirih" class="text-white">Prevoz iz Ciriha (Zürich)</a></li>
           <li><a href="/zeneva" class="text-white">Prevoz iz Ženeve (Genève)</a></li>
+          <li><a href="/bern" class="text-white">Prevoz iz Berna</a></li>
           <li><a href="/italija" class="text-white">Prevoz iz Italije</a></li>
           <li><a href="/rim" class="text-white">Prevoz iz Rima (Roma)</a></li>
+          <li><a href="/milano" class="text-white">Prevoz iz Milana</a></li>
           <li><a href="/spanija" class="text-white">Prevoz iz Španije</a></li>
           <li><a href="/madrid" class="text-white">Prevoz iz Madrida</a></li>
+          <li><a href="/barselona" class="text-white">Prevoz iz Barselone</a></li>
           <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
+          <li><a href="/stokholm" class="text-white">Prevoz iz Stokholma</a></li>
+          <li><a href="/geteborg" class="text-white">Prevoz iz Geteborga</a></li>
           <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
+          <li><a href="/kopenhagen" class="text-white">Prevoz iz Kopenhagena</a></li>
+          <li><a href="/francuska" class="text-white">Prevoz iz Francuske</a></li>
+          <li><a href="/pariz" class="text-white">Prevoz iz Pariza</a></li>
+          <li><a href="/hrvatska" class="text-white">Prevoz iz Hrvatske</a></li>
+          <li><a href="/zagreb" class="text-white">Prevoz iz Zagreba</a></li>
+          <li><a href="/crna-gora" class="text-white">Prevoz iz Crne Gore</a></li>
+          <li><a href="/grcka" class="text-white">Prevoz iz Grčke</a></li>
+          <li><a href="/atina" class="text-white">Prevoz iz Atine</a></li>
+          <li><a href="/solun" class="text-white">Prevoz iz Soluna</a></li>
+          <li><a href="/norveska" class="text-white">Prevoz iz Norveške</a></li>
+          <li><a href="/oslo" class="text-white">Prevoz iz Osla</a></li>
+          <li class="mt-2"><strong>Sahrana u</strong></li>
+          <li><a href="/prevoz-pokojnika-u-bih" class="text-white">Bosni i Hercegovini (i RS)</a></li>
+          <li><a href="/prevoz-pokojnika-u-crnu-goru" class="text-white">Crnoj Gori</a></li>
+          <li><a href="/prevoz-pokojnika-u-severnu-makedoniju" class="text-white">Severnoj Makedoniji</a></li>
           <li class="mt-2"><strong>Usluge</strong></li>
           <li><a href="/dokumentacija-za-prevoz-pokojnika" class="text-white">Dokumentacija</a></li>
           <li><a href="/pogrebni-sanduci" class="text-white">Pogrebni sanduci</a></li>
           <li><a href="/ekshumacija" class="text-white">Ekshumacija</a></li>
           <li><a href="/repatrijacija-pokojnika" class="text-white">Repatrijacija</a></li>
+          <li class="mt-2"><strong>Vodiči</strong></li>
+          <li><a href="/blog-sta-raditi-kada-neko-umre-u-inostranstvu" class="text-white">Šta raditi kada neko umre u inostranstvu</a></li>
+          <li><a href="/blog-sprovodnica-za-prenos-posmrtnih-ostataka" class="text-white">Sprovodnica za prenos posmrtnih ostataka</a></li>
+          <li><a href="/blog-kako-organizovati-prevoz-pokojnika" class="text-white">Kako organizovati prevoz pokojnika</a></li>
+          <li><a href="/blog-koliko-kosta-prevoz-pokojnika-nemacka" class="text-white">Koliko košta prevoz pokojnika</a></li>
+          <li><a href="/blog-prevoz-pokojnika-avionom-vs-kombijem" class="text-white">Prevoz avionom ili kombijem</a></li>
+          <li><a href="/blog-prevoz-urne-iz-inostranstva" class="text-white">Prevoz urne iz inostranstva</a></li>
+          <li><a href="/blog-smrt-na-odmoru-u-inostranstvu" class="text-white">Smrt na odmoru u inostranstvu</a></li>
         </ul>
       </div>
     </div>
   </div>
       <div class="container copyright mt-4 pt-3 border-top border-secondary">
     <p class="mb-0 text-center">
-      &copy; <span id="current-year">2023</span> Transport Pokojnika. Sva prava
+      &copy; <span id="current-year">2026</span> Transport Pokojnika. Sva prava
       zadržana.
     </p>
   </div>
@@ -722,6 +966,7 @@
 <script>
   document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
+    </div>
 
     <!-- Bootstrap JS -->
     <script

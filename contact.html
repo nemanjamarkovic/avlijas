@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="sr-Latn">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,16 +8,14 @@
     <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Kontaktirajte nas za prevoz pokojnika iz inostranstva - MI ZAVRŠAVAMO SVU DOKUMENTACIJU! Dostupni 24/7, 15+ godina iskustva. Tel: +381 64 249 28 49."
-    />
-    <meta
-      name="keywords"
-      content="kontakt transport pokojnika, pozovite pogrebno preduzeće, hitno transport umrlih, 24/7 pogrebne usluge"
+      content="Kontakt za prevoz pokojnika iz inostranstva: telefon, WhatsApp, Viber i email. Dostupni smo 24/7, a svu dokumentaciju i sprovodnicu završavamo mi."
     />
     <meta name="author" content="Transport pokojnika - Pogrebno preduzeće" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="sr_RS" />
+    <meta property="og:site_name" content="Transport pokojnika" />
     <meta property="og:url" content="https://transportpokojnika.com/contact" />
     <meta
       property="og:title"
@@ -111,31 +109,85 @@
         "description": "Kontaktna stranica za pogrebno preduzeće sa međunarodnim transportom pokojnika",
         "url": "https://transportpokojnika.com/contact",
         "mainEntity": {
-          "@type": "FuneralService",
+          "@type": "LocalBusiness",
+          "@id": "https://transportpokojnika.com/#business",
           "name": "Transport pokojnika - Pogrebno preduzeće",
+          "url": "https://transportpokojnika.com/",
           "telephone": "+381642492849",
-          "email": "kontakt@transportpokojnika.com",
-          "url": "https://transportpokojnika.com",
+          "logo": "https://transportpokojnika.com/vijenac%20logo.png",
           "address": {
             "@type": "PostalAddress",
             "addressLocality": "Beograd",
             "addressCountry": "RS"
-          },
-          "openingHours": "Mo-Su 00:00-24:00",
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+381642492849",
-            "contactType": "customer service",
-            "areaServed": ["RS", "DE", "AT", "CH"],
-            "availableLanguage": ["sr", "de"],
-            "hoursAvailable": "Mo-Su 00:00-24:00"
           }
         }
       }
     </script>
 
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Koliko brzo odgovarate kada vas pozovem?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Dostupni smo 24/7, i vikendom i praznicima. Na telefon se javljamo u svako doba dana i noći, a na poruke preko WhatsApp-a, Vibera ili emaila odgovaramo što pre."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Na kom jeziku možemo da razgovaramo?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sa porodicom razgovaramo na srpskom jeziku. Sa bolnicama, matičnim službama i drugim ustanovama u nemačkom govornom području komuniciramo na nemačkom, pa porodica ne mora sama da ih zove."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Da li moram da putujem u inostranstvo?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "U pravilu ne. Dokumenta i preuzimanje pokojnika organizujemo mi, a od porodice su nam potrebni podaci, kopije dokumenata i, kada je potrebno, potpisano ovlašćenje. Ako lokalni organi u nekom slučaju traže lično prisustvo srodnika, reći ćemo vam to odmah na početku."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Kako da pošaljem dokumenta?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Najjednostavnije je da dokumenta fotografišete ili skenirate i pošaljete preko WhatsApp-a ili Vibera na broj +381 64 249 28 49, ili emailom na kontakt@transportpokojnika.com. Ako budu potrebni originali, objasnićemo vam kako i kada da ih predate."
+            }
+          }
+        ]
+      }
+    </script>
+
     <link rel="icon" type="image/png" href="vijenac logo.png" />
     <link rel="apple-touch-icon" href="vijenac logo.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Početna",
+            "item": "https://transportpokojnika.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Kontakt",
+            "item": "https://transportpokojnika.com/contact"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <!-- Header will be loaded here -->
@@ -212,14 +264,14 @@
         </li>
         <li class="nav-item dropdown medjunarodni-transport">
           <a
-            href="#"
+            href="/#transport"
             class="nav-link dropdown-toggle"
             id="medjunarodni-dropdown"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Medjunarodni Transport
+            Međunarodni transport
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -257,6 +309,17 @@
             </li>
             <li>
               <a class="dropdown-item" href="/norveska">Prevoz iz Norveške</a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><h6 class="dropdown-header">Sahrana u</h6></li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-bih">Bosni i Hercegovini</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-crnu-goru">Crnoj Gori</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/prevoz-pokojnika-u-severnu-makedoniju">Severnoj Makedoniji</a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
@@ -407,6 +470,12 @@
 
     <main role="main">
       <h1 class="visually-hidden">Kontakt - Transport pokojnika iz Evrope</h1>
+      <nav class="container pt-3" aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item"><a href="/">Početna</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Kontakt</li>
+        </ol>
+      </nav>
 
       <section
         id="contact"
@@ -666,10 +735,75 @@
           </div>
         </div>
       </section>
+
+      <!-- Before You Call and FAQ -->
+      <section class="py-5" style="background-color: #1a1d20">
+        <div class="container">
+          <div class="row g-4">
+            <div class="col-lg-5">
+              <div
+                class="p-4 rounded h-100"
+                style="background-color: #212529; border: 1px solid #2c3034"
+              >
+                <h2 class="h4 mb-3 text-white">Šta da pripremite pre poziva</h2>
+                <p class="text-white-50">
+                  Ne morate imati sve podatke — počnite od onoga što znate, a
+                  ostalo ćemo utvrditi zajedno. Najviše nam pomaže:
+                </p>
+                <ul class="text-white-50 mb-0">
+                  <li class="mb-2">ime i prezime pokojnika</li>
+                  <li class="mb-2">mesto smrti i ustanova u kojoj se pokojnik nalazi — bolnica, dom za stare ili stan</li>
+                  <li class="mb-2">kontakt bolnice ili doma, ako ga znate</li>
+                  <li class="mb-2">mesto gde želite sahranu — grad i groblje u Srbiji, BiH, Crnoj Gori ili Severnoj Makedoniji</li>
+                  <li>dokumenta koja već imate, na primer pasoš ili ličnu kartu pokojnika i potvrdu o smrti</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <h2 class="h4 mb-3 text-white">Najčešća pitanja</h2>
+              <div class="accordion" id="contactFaq">
+                <div class="accordion-item">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq1" aria-expanded="true" aria-controls="contactFaq1">Koliko brzo odgovarate kada vas pozovem?</button>
+                  </h3>
+                  <div id="contactFaq1" class="accordion-collapse collapse show" data-bs-parent="#contactFaq">
+                    <div class="accordion-body">Dostupni smo 24/7, i vikendom i praznicima. Na telefon se javljamo u svako doba dana i noći, a na poruke preko WhatsApp-a, Vibera ili emaila odgovaramo što pre.</div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq2" aria-expanded="false" aria-controls="contactFaq2">Na kom jeziku možemo da razgovaramo?</button>
+                  </h3>
+                  <div id="contactFaq2" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                    <div class="accordion-body">Sa porodicom razgovaramo na srpskom jeziku. Sa bolnicama, matičnim službama i drugim ustanovama u nemačkom govornom području komuniciramo na nemačkom, pa porodica ne mora sama da ih zove.</div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq3" aria-expanded="false" aria-controls="contactFaq3">Da li moram da putujem u inostranstvo?</button>
+                  </h3>
+                  <div id="contactFaq3" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                    <div class="accordion-body">U pravilu ne. Dokumenta i preuzimanje pokojnika organizujemo mi, a od porodice su nam potrebni podaci, kopije dokumenata i, kada je potrebno, potpisano ovlašćenje. Ako lokalni organi u nekom slučaju traže lično prisustvo srodnika, reći ćemo vam to odmah na početku.</div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h3 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactFaq4" aria-expanded="false" aria-controls="contactFaq4">Kako da pošaljem dokumenta?</button>
+                  </h3>
+                  <div id="contactFaq4" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+                    <div class="accordion-body">Najjednostavnije je da dokumenta fotografišete ili skenirate i pošaljete preko WhatsApp-a ili Vibera na broj +381 64 249 28 49, ili emailom na kontakt@transportpokojnika.com. Ako budu potrebni originali, objasnićemo vam kako i kada da ih predate.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Footer will be loaded here -->
-    <footer class="bg-dark text-white py-5">
+    <div id="footer-container">
+<footer class="bg-dark text-white py-5">
   <div class="container">
     <div class="row">
       <div class="col-md-4 mb-4 mb-md-0">
@@ -687,9 +821,9 @@
       <div class="col-md-4 mb-4 mb-md-0">
         <h2>Kontakt</h2>
         <address class="mb-0">
-          <p><i class="bi bi-telephone-fill me-2"></i>+381 64 249 28 49</p>
+          <p><i class="bi bi-telephone-fill me-2"></i><a href="tel:+381642492849" class="text-white">+381 64 249 28 49</a></p>
           <p>
-            <i class="bi bi-envelope-fill me-2"></i>kontakt@transportpokojnika.com
+            <i class="bi bi-envelope-fill me-2"></i><a href="mailto:kontakt@transportpokojnika.com" class="text-white">kontakt@transportpokojnika.com</a>
           </p>
           <p>
             <i class="bi bi-geo-alt-fill me-2"></i>Beograd, Srbija
@@ -701,6 +835,8 @@
         <ul class="list-unstyled">
           <li><a href="/" class="text-white">Početna</a></li>
           <li><a href="/#transport" class="text-white">Usluge</a></li>
+          <li><a href="/cenovnik" class="text-white">Cenovnik</a></li>
+          <li><a href="/testimonials" class="text-white">Utisci klijenata</a></li>
           <li><a href="/blog" class="text-white">Blog</a></li>
           <li><a href="/#faq" class="text-white">Često postavljana pitanja</a></li>
           <li><a href="/contact" class="text-white">Kontakt</a></li>
@@ -720,27 +856,57 @@
           <li><a href="/bec" class="text-white">Prevoz iz Beča (Wien)</a></li>
           <li><a href="/graz" class="text-white">Prevoz iz Graca (Graz)</a></li>
           <li><a href="/linz" class="text-white">Prevoz iz Linca (Linz)</a></li>
+          <li><a href="/salcburg" class="text-white">Prevoz iz Salcburga</a></li>
+          <li><a href="/insbruk" class="text-white">Prevoz iz Insbruka</a></li>
           <li><a href="/svajcarska" class="text-white">Prevoz iz Švajcarske</a></li>
           <li><a href="/cirih" class="text-white">Prevoz iz Ciriha (Zürich)</a></li>
           <li><a href="/zeneva" class="text-white">Prevoz iz Ženeve (Genève)</a></li>
+          <li><a href="/bern" class="text-white">Prevoz iz Berna</a></li>
           <li><a href="/italija" class="text-white">Prevoz iz Italije</a></li>
           <li><a href="/rim" class="text-white">Prevoz iz Rima (Roma)</a></li>
+          <li><a href="/milano" class="text-white">Prevoz iz Milana</a></li>
           <li><a href="/spanija" class="text-white">Prevoz iz Španije</a></li>
           <li><a href="/madrid" class="text-white">Prevoz iz Madrida</a></li>
+          <li><a href="/barselona" class="text-white">Prevoz iz Barselone</a></li>
           <li><a href="/svedska" class="text-white">Prevoz iz Švedske</a></li>
+          <li><a href="/stokholm" class="text-white">Prevoz iz Stokholma</a></li>
+          <li><a href="/geteborg" class="text-white">Prevoz iz Geteborga</a></li>
           <li><a href="/danska" class="text-white">Prevoz iz Danske</a></li>
+          <li><a href="/kopenhagen" class="text-white">Prevoz iz Kopenhagena</a></li>
+          <li><a href="/francuska" class="text-white">Prevoz iz Francuske</a></li>
+          <li><a href="/pariz" class="text-white">Prevoz iz Pariza</a></li>
+          <li><a href="/hrvatska" class="text-white">Prevoz iz Hrvatske</a></li>
+          <li><a href="/zagreb" class="text-white">Prevoz iz Zagreba</a></li>
+          <li><a href="/crna-gora" class="text-white">Prevoz iz Crne Gore</a></li>
+          <li><a href="/grcka" class="text-white">Prevoz iz Grčke</a></li>
+          <li><a href="/atina" class="text-white">Prevoz iz Atine</a></li>
+          <li><a href="/solun" class="text-white">Prevoz iz Soluna</a></li>
+          <li><a href="/norveska" class="text-white">Prevoz iz Norveške</a></li>
+          <li><a href="/oslo" class="text-white">Prevoz iz Osla</a></li>
+          <li class="mt-2"><strong>Sahrana u</strong></li>
+          <li><a href="/prevoz-pokojnika-u-bih" class="text-white">Bosni i Hercegovini (i RS)</a></li>
+          <li><a href="/prevoz-pokojnika-u-crnu-goru" class="text-white">Crnoj Gori</a></li>
+          <li><a href="/prevoz-pokojnika-u-severnu-makedoniju" class="text-white">Severnoj Makedoniji</a></li>
           <li class="mt-2"><strong>Usluge</strong></li>
           <li><a href="/dokumentacija-za-prevoz-pokojnika" class="text-white">Dokumentacija</a></li>
           <li><a href="/pogrebni-sanduci" class="text-white">Pogrebni sanduci</a></li>
           <li><a href="/ekshumacija" class="text-white">Ekshumacija</a></li>
           <li><a href="/repatrijacija-pokojnika" class="text-white">Repatrijacija</a></li>
+          <li class="mt-2"><strong>Vodiči</strong></li>
+          <li><a href="/blog-sta-raditi-kada-neko-umre-u-inostranstvu" class="text-white">Šta raditi kada neko umre u inostranstvu</a></li>
+          <li><a href="/blog-sprovodnica-za-prenos-posmrtnih-ostataka" class="text-white">Sprovodnica za prenos posmrtnih ostataka</a></li>
+          <li><a href="/blog-kako-organizovati-prevoz-pokojnika" class="text-white">Kako organizovati prevoz pokojnika</a></li>
+          <li><a href="/blog-koliko-kosta-prevoz-pokojnika-nemacka" class="text-white">Koliko košta prevoz pokojnika</a></li>
+          <li><a href="/blog-prevoz-pokojnika-avionom-vs-kombijem" class="text-white">Prevoz avionom ili kombijem</a></li>
+          <li><a href="/blog-prevoz-urne-iz-inostranstva" class="text-white">Prevoz urne iz inostranstva</a></li>
+          <li><a href="/blog-smrt-na-odmoru-u-inostranstvu" class="text-white">Smrt na odmoru u inostranstvu</a></li>
         </ul>
       </div>
     </div>
   </div>
       <div class="container copyright mt-4 pt-3 border-top border-secondary">
     <p class="mb-0 text-center">
-      &copy; <span id="current-year">2023</span> Transport Pokojnika. Sva prava
+      &copy; <span id="current-year">2026</span> Transport Pokojnika. Sva prava
       zadržana.
     </p>
   </div>
@@ -749,6 +915,7 @@
 <script>
   document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
+    </div>
 
     <!-- Bootstrap JS -->
     <script
