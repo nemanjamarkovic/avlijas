@@ -150,7 +150,12 @@ const HUB_PAGES = new Set([
 ]);
 
 /** Country hub pages — add entries in scripts/content/countries.js, then run `npm run build`. */
-const COUNTRY_HUBS = require("./content/countries");
+const COUNTRY_HUBS = [
+  ...require("./content/countries"),
+  ...require("./content/hub-slovenija"),
+  ...require("./content/hub-holandija"),
+  ...require("./content/hub-belgija"),
+];
 
 const { CONSULATES, DESTINATIONS, ROUTE_TABLE, COUNTRY_META } = require("./content/facts");
 
@@ -162,6 +167,9 @@ const CITIES = [
   ...require("./content/cities-new-a"),
   ...require("./content/cities-new-b"),
   ...require("./content/cities-new-c"),
+  ...require("./content/cities-slovenija"),
+  ...require("./content/cities-holandija"),
+  ...require("./content/cities-belgija"),
 ];
 
 const PHONE_DISPLAY = "+381 64 249 28 49";

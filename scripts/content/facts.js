@@ -94,6 +94,9 @@ const CONSULATES = {
   vukovar: { name: "Generalni konzulat Republike Srbije u Vukovaru", url: "https://vukovar.mfa.gov.rs/" },
   podgorica: { name: "Ambasada Republike Srbije u Podgorici", url: "https://podgorica.mfa.gov.rs/" },
   hercegnovi: { name: "Generalni konzulat Republike Srbije u Herceg Novom", url: "https://hercegnovi.mfa.gov.rs/" },
+  ljubljana: { name: "Ambasada Republike Srbije u Ljubljani", url: "https://ljubljana.mfa.gov.rs/", area: "cela Slovenija" },
+  thehague: { name: "Ambasada Republike Srbije u Hagu", url: "https://thehague.mfa.gov.rs/", area: "cela Holandija" },
+  brussels: { name: "Ambasada Republike Srbije u Briselu", url: "https://brussels.mfa.gov.rs/", area: "Belgija i Luksemburg" },
   athens: { name: "Ambasada Republike Srbije u Atini", url: "https://athens.mfa.gov.rs/" },
   thessaloniki: { name: "Generalni konzulat Republike Srbije u Solunu", url: "https://thessaloniki.mfa.gov.rs/" },
 };
@@ -140,6 +143,12 @@ const ROUTE_TABLE = {
   stokholm: [r(2660, 28), r(2590, 27), r(2780, 30), r(3070, 34), r(3090, 32)],
   geteborg: [r(2310, 24), r(2240, 23), r(2440, 26), r(2730, 30), r(2740, 28)],
   kopenhagen: [r(2010, 20), r(1940, 20), r(2130, 23), r(2420, 27), r(2440, 25)],
+  ljubljana: [r(530, 6), r(320, 4), r(540, 6), r(760, 10), r(960, 10)],
+  maribor: [r(510, 5), r(300, 3), r(520, 6), r(800, 10), r(940, 10)],
+  amsterdam: [r(1720, 18), r(1510, 16), r(1730, 19), r(2000, 23), r(2150, 22)],
+  rotterdam: [r(1740, 18), r(1530, 16), r(1750, 19), r(2010, 23), r(2170, 22)],
+  brisel: [r(1680, 17), r(1470, 15), r(1690, 18), r(1960, 22), r(2110, 22)],
+  antverpen: [r(1680, 17), r(1470, 15), r(1690, 18), r(1950, 22), r(2110, 22)],
   podgorica: [r(430, 7), r(460, 8), r(270, 5), null, r(330, 6)],
 };
 
@@ -361,6 +370,59 @@ const COUNTRY_META = {
     ],
     authorityNote:
       "U Norveškoj lekar prijavljuje smrt Folkeregisteru, a za iznošenje kovčega iz zemlje potrebna je dozvola policije i potvrda da smrt nije posledica zarazne bolesti (smitteattest). Norveška nije članica EU, pa se na izlasku obavljaju carinske formalnosti.",
+  },
+  slovenija: {
+    name: "Slovenija",
+    nameGen: "Slovenije",
+    nameLoc: "Sloveniji",
+    schemaCountry: "Slovenia",
+    eu: true,
+    multilingualExtract: true,
+    duration: "1–3 dana",
+    consulates: ["ljubljana"],
+    documents: [
+      ["Prijava smrti / potrdilo mrliškega oglednika", "potvrda lekara mrtvozornika o smrti i uzroku smrti"],
+      ["Izpisek iz matičnega registra (smrt)", "izvod iz matične knjige umrlih — na višejezičnom obrascu važi u Srbiji bez legalizacije"],
+      ["Posmrtni potni list", "slovenačka dozvola za prevoz posmrtnih ostataka u inostranstvo — izdaje Zdravstveni inšpektorat Republike Slovenije"],
+    ],
+    authorityNote:
+      "U Sloveniji smrt utvrđuje lekar mrtvozornik (mrliški oglednik), a za prevoz posmrtnih ostataka u inostranstvo Zdravstveni inšpektorat Republike Slovenije izdaje posmrtni potni list, na zahtev pogrebnog preduzeća. Uzrok smrti navodi se na slovenačkom jeziku i sa šifrom međunarodne klasifikacije bolesti.",
+  },
+  holandija: {
+    name: "Holandija",
+    nameGen: "Holandije",
+    nameLoc: "Holandiji",
+    schemaCountry: "Netherlands",
+    eu: true,
+    multilingualExtract: true,
+    duration: "3–5 dana",
+    consulates: ["thehague"],
+    documents: [
+      ["Verklaring van overlijden", "lekarska potvrda o smrti"],
+      ["Akte van overlijden", "izvod iz matične knjige umrlih — izdaje opština (Burgerlijke Stand); višejezični izvod važi u Srbiji bez legalizacije"],
+      ["Verlof tot begraven of cremeren", "dozvola opštine za sahranu ili kremaciju"],
+      ["Laissez-passer", "dozvola za prevoz posmrtnih ostataka u inostranstvo — izdaje opština mesta smrti"],
+    ],
+    authorityNote:
+      "U Holandiji smrt prijavljuje se opštini mesta smrti, koja upisuje smrt (akte van overlijden), izdaje dozvolu za sahranu ili kremaciju i, za prevoz van zemlje, laissez-passer. Pre izdavanja dozvole opština mora da ima lekarsku potvrdu o prirodnoj smrti ili saglasnost tužilaštva.",
+  },
+  belgija: {
+    name: "Belgija",
+    nameGen: "Belgije",
+    nameLoc: "Belgiji",
+    schemaCountry: "Belgium",
+    eu: true,
+    multilingualExtract: true,
+    duration: "3–5 dana",
+    consulates: ["brussels"],
+    documents: [
+      ["Certificat de décès / overlijdensattest", "lekarska potvrda o smrti"],
+      ["Acte de décès / akte van overlijden", "izvod iz matične knjige umrlih — izdaje opština; višejezični izvod važi u Srbiji bez legalizacije"],
+      ["Certificat de non-contagion", "lekarska potvrda da smrt nije posledica zarazne bolesti — traži se po pravilu"],
+      ["Laissez-passer mortuaire", "dozvola za prevoz posmrtnih ostataka u inostranstvo — izdaje nadležni belgijski organ"],
+    ],
+    authorityNote:
+      "U Belgiji smrt prijavljuje pogrebno preduzeće ili dve punoletne osobe matičnoj službi opštine mesta smrti (na francuskom ili holandskom, zavisno od regiona), a za prevoz van zemlje potreban je laissez-passer mortuaire nadležnog organa. Kod nasilne ili nejasne smrti telo se izdaje tek uz saglasnost tužilaštva.",
   },
 };
 

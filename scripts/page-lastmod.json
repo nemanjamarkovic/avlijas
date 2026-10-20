@@ -1,4 +1,12 @@
 {
+  "https://transportpokojnika.com/amsterdam": {
+    "hash": "05bd6176fb977098e14f6499da8a140c794f7fdb",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/antverpen": {
+    "hash": "ffd0dc8a6421e1c9c4bb81f1b206ab0b815683d0",
+    "lastmod": "2026-10-20"
+  },
   "https://transportpokojnika.com/atina": {
     "hash": "74b7642b9fc063777cf37ec3def57d89b1ca36a2",
     "lastmod": "2026-10-20"
@@ -13,6 +21,10 @@
   },
   "https://transportpokojnika.com/bec": {
     "hash": "1b19de4c746d0636ea1632744775ac01d5ab521a",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/belgija": {
+    "hash": "87d15057a4204b5491847d1f99c71b149e757704",
     "lastmod": "2026-10-20"
   },
   "https://transportpokojnika.com/berlin": {
@@ -91,6 +103,10 @@
     "hash": "5fdf98393321d0aa21ba3d2b628c37d0765f5fc5",
     "lastmod": "2026-10-20"
   },
+  "https://transportpokojnika.com/brisel": {
+    "hash": "382147a3ad046c11b2d5d93a3a0110ba9019a9a4",
+    "lastmod": "2026-10-20"
+  },
   "https://transportpokojnika.com/cenovnik": {
     "hash": "f474e5de1a3c0720b6f4f022f17c32a2d9320522",
     "lastmod": "2026-10-20"
@@ -155,12 +171,16 @@
     "hash": "e323b8be841a8332d07b2e3f788043a52ad05b21",
     "lastmod": "2026-10-19"
   },
+  "https://transportpokojnika.com/holandija": {
+    "hash": "8cab1e792940f36d87f5ac0b6b82cc8bed4458b2",
+    "lastmod": "2026-10-20"
+  },
   "https://transportpokojnika.com/hrvatska": {
     "hash": "3e6430b11f1253b6a0932ca8973b7fd07a52ee18",
     "lastmod": "2026-10-20"
   },
   "https://transportpokojnika.com/": {
-    "hash": "c226e2508a65fdc4ef06888dbae68e125222fd61",
+    "hash": "31cfe139758582bfd585caa11d6c8c6443fab34f",
     "lastmod": "2026-10-20"
   },
   "https://transportpokojnika.com/insbruk": {
@@ -187,8 +207,16 @@
     "hash": "85d74dc49f320c92e15c450f4c30530c3402cbb2",
     "lastmod": "2026-10-20"
   },
+  "https://transportpokojnika.com/ljubljana": {
+    "hash": "0db91c37fb20b87f239040fd97240d600284a911",
+    "lastmod": "2026-10-20"
+  },
   "https://transportpokojnika.com/madrid": {
     "hash": "013805cb5c69ab20b16175477cb1f21cae6bc918",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/maribor": {
+    "hash": "b79ede8b3182fb203867a6548b5625fda1f03b82",
     "lastmod": "2026-10-20"
   },
   "https://transportpokojnika.com/milano": {
@@ -239,8 +267,16 @@
     "hash": "bdb290e918b7f0a65dc3f1bad4a67215ce780ea3",
     "lastmod": "2026-10-20"
   },
+  "https://transportpokojnika.com/rotterdam": {
+    "hash": "8553838c679814229c6542531a3bf48e941d97cb",
+    "lastmod": "2026-10-20"
+  },
   "https://transportpokojnika.com/salcburg": {
     "hash": "0fbebf45aa6d323313e00012b0f8327035d7be5b",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/slovenija": {
+    "hash": "b85421006b027db75722fde4eecc48a6af6fad0d",
     "lastmod": "2026-10-20"
   },
   "https://transportpokojnika.com/solun": {
