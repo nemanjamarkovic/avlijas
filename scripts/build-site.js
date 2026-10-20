@@ -835,8 +835,14 @@ function generateCountryPages() {
 
 const LASTMOD_MANIFEST = path.join(__dirname, "page-lastmod.json");
 
+/** Root pages plus the generated /de/ and /en/ pages ("de/index.html"). */
 function htmlFiles() {
-  return fs.readdirSync(ROOT).filter((f) => f.endsWith(".html"));
+  const localeFiles = Object.keys(LOCALE_PAGES).flatMap((lang) =>
+    fs.existsSync(path.join(ROOT, lang))
+      ? fs.readdirSync(path.join(ROOT, lang)).filter((f) => f.endsWith(".html")).map((f) => `${lang}/${f}`)
+      : []
+  );
+  return [...fs.readdirSync(ROOT).filter((f) => f.endsWith(".html")), ...localeFiles];
 }
 
 function isIndexable(html) {
@@ -844,8 +850,8 @@ function isIndexable(html) {
 }
 
 function pageUrl(file) {
-  const slug = file.replace(/\.html$/, "");
-  return slug === "index" ? `${SITE_URL}/` : `${SITE_URL}/${slug}`;
+  const slug = file.replace(/\.html$/, "").replace(/(^|\/)index$/, "$1");
+  return `${SITE_URL}/${slug}`;
 }
 
 /** Hash of what a visitor reads (title, description, <main>) — ignores header/footer/asset churn. */
@@ -1286,6 +1292,382 @@ function generateBlogPosts() {
   });
 }
 
+/* German and English pages — /de/ and /en/, one entry per page in scripts/content/i18n/*.js. */
+
+const LOCALE_PAGES = {
+  de: [...require("./content/i18n/de-a"), ...require("./content/i18n/de-b")],
+  en: [...require("./content/i18n/en-a"), ...require("./content/i18n/en-b")],
+};
+
+/** Serbian page with the same content as a locale page key (hreflang alternates, language switcher). */
+const SR_EQUIVALENTS = {
+  home: "",
+  "dest-bih": "prevoz-pokojnika-u-bih",
+  "dest-montenegro": "prevoz-pokojnika-u-crnu-goru",
+  "dest-macedonia": "prevoz-pokojnika-u-severnu-makedoniju",
+  "from-germany": "nemacka",
+  "from-austria": "austrija",
+  "from-switzerland": "svajcarska",
+  documents: "dokumentacija-za-prevoz-pokojnika",
+  cost: "cenovnik",
+  contact: "contact",
+};
+
+const LANGUAGES = [
+  { lang: "sr-Latn", short: "SR", name: "Srpski", home: "/" },
+  { lang: "de", short: "DE", name: "Deutsch", home: "/de/" },
+  { lang: "en", short: "EN", name: "English", home: "/en/" },
+];
+
+const LOCALE_UI = {
+  de: {
+    ogLocale: "de_DE",
+    home: "Startseite",
+    available: "24/7 erreichbar",
+    call: "Jetzt anrufen",
+    whatsappText: "Guten Tag, ich brauche Hilfe bei einer Überführung",
+    faq: "Häufige Fragen",
+    related: "Weitere Informationen",
+    ctaTitle: "Wir sind rund um die Uhr für Sie da",
+    ctaText:
+      "Rufen Sie uns an oder schreiben Sie per WhatsApp oder Viber – aus jedem Land. Wir sprechen Deutsch, nennen Ihnen im ersten Gespräch den genauen Preis und übernehmen alle Formalitäten.",
+    menu: "Menü öffnen",
+    from: "Überführung aus",
+    to: "Überführung nach",
+    footerAbout:
+      "Bestattungsunternehmen aus Belgrad für internationale Überführungen Verstorbener aus ganz Europa nach Serbien, Bosnien und Herzegowina, Montenegro und Nordmazedonien.",
+    footerContact: "Kontakt",
+    footerPages: "Seiten",
+    location: "Belgrad, Serbien",
+    rights: "Alle Rechte vorbehalten.",
+    callAria: "Rufen Sie uns an",
+    imageAlt: "Bestattungsfahrzeug für internationale Überführungen",
+  },
+  en: {
+    ogLocale: "en_GB",
+    home: "Home",
+    available: "Available 24/7",
+    call: "Call now",
+    whatsappText: "Hello, I need help with a repatriation",
+    faq: "Frequently asked questions",
+    related: "Related pages",
+    ctaTitle: "We are here for you, day and night",
+    ctaText:
+      "Call us or message us on WhatsApp or Viber from any country. We give you the exact price in the first conversation and take care of every document.",
+    menu: "Open menu",
+    from: "Repatriation from",
+    to: "Repatriation to",
+    footerAbout:
+      "Belgrade funeral company for international repatriation of the deceased from all over Europe to Serbia, Bosnia and Herzegovina, Montenegro and North Macedonia.",
+    footerContact: "Contact",
+    footerPages: "Pages",
+    location: "Belgrade, Serbia",
+    rights: "All rights reserved.",
+    callAria: "Call us",
+    imageAlt: "Funeral vehicle for international repatriation",
+  },
+};
+
+function localePath(lang, slug) {
+  return slug ? `/${lang}/${slug}` : `/${lang}/`;
+}
+
+/** Every language version of a page key, plus x-default (English) — empty when only one exists. */
+function pageAlternates(key) {
+  const list = [];
+  if (key in SR_EQUIVALENTS) list.push({ lang: "sr-Latn", href: `${SITE_URL}/${SR_EQUIVALENTS[key]}` });
+  for (const [lang, pages] of Object.entries(LOCALE_PAGES)) {
+    const page = pages.find((p) => p.key === key);
+    if (page) list.push({ lang, href: SITE_URL + localePath(lang, page.slug) });
+  }
+  const en = list.find((a) => a.lang === "en");
+  if (en) list.push({ lang: "x-default", href: en.href });
+  return list.length > 2 ? list : [];
+}
+
+function hreflangTags(alternates) {
+  return alternates.map((a) => `<link rel="alternate" hreflang="${a.lang}" href="${a.href}" />\n  `).join("");
+}
+
+function languageSwitcherHtml(current, alternates) {
+  return LANGUAGES.map(({ lang, short, name, home }) => {
+    const alt = alternates.find((a) => a.lang === lang);
+    const href = alt ? alt.href.replace(SITE_URL, "") : home;
+    const active = lang === current ? ' active" aria-current="true' : "";
+    return `<li class="nav-item"><a class="nav-link${active}" href="${href}" hreflang="${lang}" lang="${lang}" title="${name}">${short}</a></li>`;
+  }).join("\n          ");
+}
+
+function localeHeader(lang, alternates) {
+  const ui = LOCALE_UI[lang];
+  const pages = LOCALE_PAGES[lang];
+  const byKey = (key) => pages.find((p) => p.key === key);
+  const item = (key) => {
+    const p = byKey(key);
+    return p ? `<li><a class="dropdown-item" href="${localePath(lang, p.slug)}">${p.crumb}</a></li>` : "";
+  };
+  const link = (key) => {
+    const p = byKey(key);
+    return p ? `<li class="nav-item"><a class="nav-link" href="${localePath(lang, p.slug)}">${p.crumb}</a></li>` : "";
+  };
+  const wa = `https://wa.me/381642492849?text=${encodeURIComponent(ui.whatsappText)}`;
+  return `<div class="top-bar py-2">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <div class="contact-info">
+            <a href="tel:+381642492849" class="contact-link contact-link--phone me-3" aria-label="${ui.callAria}: ${PHONE_DISPLAY}"><i class="bi bi-telephone-fill" aria-hidden="true"></i> <span class="contact-text">${PHONE_DISPLAY}</span></a>
+            <a href="mailto:kontakt@transportpokojnika.com" class="contact-link me-3"><i class="bi bi-envelope-fill" aria-hidden="true"></i> <span class="contact-text">kontakt@transportpokojnika.com</span></a>
+            <a href="${wa}" target="_blank" rel="noopener noreferrer" class="contact-link me-3" aria-label="WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a>
+            <a href="viber://chat?number=381642492849" class="contact-link" aria-label="Viber"><i class="bi bi-chat-dots-fill" aria-hidden="true"></i></a>
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <div class="working-hours"><span><i class="bi bi-clock-fill"></i> ${ui.available}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="${localePath(lang, "")}">
+        <i class="bi bi-building me-2"></i>
+        <span class="brand-name">Transport pokojnika</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="${ui.menu}">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">${ui.from}</a>
+            <ul class="dropdown-menu">${item("from-germany")}${item("from-austria")}${item("from-switzerland")}</ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">${ui.to}</a>
+            <ul class="dropdown-menu">${item("dest-serbia")}${item("dest-bih")}${item("dest-montenegro")}${item("dest-macedonia")}</ul>
+          </li>
+          ${link("documents")}
+          ${link("cost")}
+          ${link("contact")}
+          ${languageSwitcherHtml(lang, alternates)}
+        </ul>
+      </div>
+    </div>
+  </nav>`;
+}
+
+function localeFooter(lang) {
+  const ui = LOCALE_UI[lang];
+  const links = LOCALE_PAGES[lang]
+    .filter((p) => p.key !== "home")
+    .map((p) => `<li><a href="${localePath(lang, p.slug)}" class="text-white">${p.crumb}</a></li>`)
+    .join("\n            ");
+  return `<footer class="bg-dark text-white py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h2 class="h5">Transport pokojnika</h2>
+          <p>${ui.footerAbout}</p>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h2 class="h5">${ui.footerContact}</h2>
+          <address class="mb-0">
+            <p><i class="bi bi-telephone-fill me-2"></i><a href="tel:+381642492849" class="text-white">${PHONE_DISPLAY}</a> (WhatsApp, Viber)</p>
+            <p><i class="bi bi-envelope-fill me-2"></i><a href="mailto:kontakt@transportpokojnika.com" class="text-white">kontakt@transportpokojnika.com</a></p>
+            <p><i class="bi bi-geo-alt-fill me-2"></i>${ui.location}</p>
+          </address>
+        </div>
+        <div class="col-md-4">
+          <h2 class="h5">${ui.footerPages}</h2>
+          <ul class="list-unstyled">
+            ${links}
+          </ul>
+        </div>
+      </div>
+      <div class="copyright mt-4 pt-3 border-top border-secondary">
+        <p class="mb-0 text-center">&copy; ${new Date().getFullYear()} Transport pokojnika. ${ui.rights}</p>
+      </div>
+    </div>
+  </footer>`;
+}
+
+function renderLocalePage(lang, page) {
+  const ui = LOCALE_UI[lang];
+  const url = SITE_URL + localePath(lang, page.slug);
+  const alternates = pageAlternates(page.key);
+  const isHome = page.key === "home";
+  const accordionId = `faq-${page.key}`;
+  const wa = `https://wa.me/381642492849?text=${encodeURIComponent(ui.whatsappText)}`;
+
+  const sectionsHtml = page.sections
+    .map((s) => {
+      const tag = s.ordered ? "ol" : "ul";
+      const list = s.list ? `<${tag}>${s.list.map((li) => `<li class="mb-1">${li}</li>`).join("")}</${tag}>` : "";
+      return `<h2 class="mt-4 mb-3">${s.h}</h2>\n          ${s.p.map((p) => `<p>${p}</p>`).join("\n          ")}${list}`;
+    })
+    .join("\n          ");
+  const cardsHtml = (page.cards || [])
+    .map(
+      (c) => `<div class="col-md-6 col-lg-4"><div class="card h-100 shadow-sm"><div class="card-body d-flex flex-column">
+            <h2 class="h5 card-title"><a href="${c.href}" class="text-decoration-none">${c.title}</a></h2>
+            <p class="card-text">${c.text}</p>
+          </div></div></div>`
+    )
+    .join("\n        ");
+  const relatedHtml = (page.relatedLinks || [])
+    .map((l) => `<li class="mb-1"><a href="${l.href}" class="text-primary">${l.title}</a></li>`)
+    .join("\n            ");
+
+  const breadcrumb = [
+    { name: ui.home, item: SITE_URL + localePath(lang, "") },
+    ...(isHome ? [] : [{ name: page.crumb, item: url }]),
+  ];
+  const schema = isHome
+    ? { "@context": "https://schema.org", "@type": "WebSite", name: "Transport pokojnika", url, inLanguage: lang, publisher: businessRef() }
+    : page.key === "contact"
+      ? { "@context": "https://schema.org", "@type": "ContactPage", name: page.h1, url, inLanguage: lang, about: businessRef() }
+      : compact({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: page.h1,
+          serviceType: "Repatriation of human remains",
+          description: page.description,
+          url,
+          provider: businessRef(),
+          areaServed: page.areaServed ? { "@type": "Country", name: page.areaServed } : undefined,
+        });
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumb.map((b, i) => ({ "@type": "ListItem", position: i + 1, name: b.name, item: b.item })),
+  };
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${page.title}</title>
+  <meta name="description" content="${page.description}" />
+  <meta name="author" content="${BUSINESS.name}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="${ui.ogLocale}" />
+  <meta property="og:site_name" content="Transport pokojnika" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${page.title}" />
+  <meta property="og:description" content="${page.description}" />
+  <meta property="og:image" content="${SITE_URL}/pogrebni-kombi-sa-sandukom.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="${url}" />
+  ${hreflangTags(alternates)}<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  ${GENERATED_HEAD_ASSETS.replace('href="styles.min.css', 'href="/styles.min.css')}
+  ${jsonLdScript(schema)}
+  ${jsonLdScript(faqSchemaJson(page.faqs))}
+  ${isHome ? "" : jsonLdScript(breadcrumbSchema)}
+  <link rel="icon" type="image/png" href="/vijenac%20logo.png" />
+</head>
+<body>
+  ${localeHeader(lang, alternates)}
+  <main role="main">
+    ${isHome ? "" : `<nav class="container py-3" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="${localePath(lang, "")}">${ui.home}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">${page.crumb}</li>
+      </ol>
+    </nav>`}
+    <section class="container-fluid bg-light py-5">
+      <div class="container">
+        <h1 class="display-5 mb-4">${page.h1}</h1>
+        <p class="lead">${page.lead}</p>
+        <a href="tel:+381642492849" class="btn btn-primary btn-lg mt-3 me-2"><i class="bi bi-telephone-fill me-2"></i>${ui.call}</a>
+        <a href="${wa}" class="btn btn-success btn-lg mt-3" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
+      </div>
+    </section>
+    ${cardsHtml ? `<section class="container my-5">
+      <div class="row g-4">
+        ${cardsHtml}
+      </div>
+    </section>` : ""}
+    <section class="container my-5">
+      <div class="row">
+        <div class="col-lg-8">
+          ${sectionsHtml}
+        </div>
+        <div class="col-lg-4">
+          <picture><source srcset="/pogrebni-kombi-sa-sandukom.webp" type="image/webp" /><img src="/pogrebni-kombi-sa-sandukom.jpg" alt="${ui.imageAlt}" class="img-fluid rounded shadow mb-4" width="400" height="240" loading="lazy" /></picture>
+          ${relatedHtml ? `<div class="card shadow-sm"><div class="card-body">
+            <h2 class="h5">${ui.related}</h2>
+            <ul class="list-unstyled mb-0">
+            ${relatedHtml}
+            </ul>
+          </div></div>` : ""}
+        </div>
+      </div>
+    </section>
+    <section class="container my-5">
+      <h2 class="mb-4">${ui.faq}</h2>
+      ${faqAccordionHtml(page.faqs, accordionId)}
+    </section>
+    <section class="py-5 bg-primary text-white">
+      <div class="container text-center">
+        <h2 class="mb-3">${ui.ctaTitle}</h2>
+        <p class="mb-4">${ui.ctaText}</p>
+        <a href="tel:+381642492849" class="btn btn-light btn-lg me-2 mb-2"><i class="bi bi-telephone-fill me-2"></i>${PHONE_DISPLAY}</a>
+        <a href="${wa}" class="btn btn-outline-light btn-lg mb-2" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
+      </div>
+    </section>
+  </main>
+  ${localeFooter(lang)}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="/includes.js?v=3" defer></script>
+</body>
+</html>
+`;
+}
+
+function generateLocalePages() {
+  for (const [lang, pages] of Object.entries(LOCALE_PAGES)) {
+    const dir = path.join(ROOT, lang);
+    fs.mkdirSync(dir, { recursive: true });
+    const written = new Set();
+    pages.forEach((page) => {
+      const file = page.slug ? `${page.slug}.html` : "index.html";
+      fs.writeFileSync(path.join(dir, file), renderLocalePage(lang, page), "utf8");
+      written.add(file);
+    });
+    // The folder is generated: drop pages that no longer exist in the content modules.
+    fs.readdirSync(dir)
+      .filter((f) => f.endsWith(".html") && !written.has(f))
+      .forEach((f) => fs.unlinkSync(path.join(dir, f)));
+    console.log(`Generated ${pages.length} pages in /${lang}/`);
+  }
+}
+
+/** hreflang tags and language-switcher targets on the Serbian pages that have translations. */
+function applySerbianAlternates() {
+  const keyBySlug = Object.fromEntries(Object.entries(SR_EQUIVALENTS).map(([key, slug]) => [slug, key]));
+  fs.readdirSync(ROOT)
+    .filter((f) => f.endsWith(".html"))
+    .forEach((file) => {
+      const slug = file === "index.html" ? "" : file.replace(/\.html$/, "");
+      const alternates = slug in keyBySlug ? pageAlternates(keyBySlug[slug]) : [];
+      let content = fs.readFileSync(path.join(ROOT, file), "utf8");
+      const original = content;
+      content = content.replace(/<link rel="alternate" hreflang="[^"]*" href="[^"]*" \/>\n  /g, "");
+      if (alternates.length) content = content.replace("</head>", `${hreflangTags(alternates)}</head>`);
+      for (const { lang, home } of LANGUAGES.slice(1)) {
+        const alt = alternates.find((a) => a.lang === lang);
+        const href = alt ? alt.href.replace(SITE_URL, "") : home;
+        content = content.replace(
+          new RegExp(`<a class="nav-link" href="[^"]*" hreflang="${lang}"`, "g"),
+          `<a class="nav-link" href="${href}" hreflang="${lang}"`
+        );
+      }
+      if (content !== original) fs.writeFileSync(path.join(ROOT, file), content, "utf8");
+    });
+}
+
 function readPartial(name) {
   return fs.readFileSync(path.join(PARTIALS_DIR, name), "utf8").trim();
 }
@@ -1503,6 +1885,8 @@ function generateLlmsTxt() {
   const sections = {
     Usluge: [],
     "Odredišta (sahrana)": [],
+    "Deutsch (de)": [],
+    "English (en)": [],
     Zemlje: [],
     Gradovi: [],
     Blog: [],
@@ -1511,13 +1895,18 @@ function generateLlmsTxt() {
 
   urls.forEach((url) => {
     const slug = new URL(url).pathname.slice(1);
-    const html = fs.readFileSync(path.join(ROOT, `${slug || "index"}.html`), "utf8");
+    const file = slug === "" || slug.endsWith("/") ? `${slug}index.html` : `${slug}.html`;
+    const html = fs.readFileSync(path.join(ROOT, file), "utf8");
     const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
     const description = html.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
     const title = slug === "" ? "Početna stranica" : decodeEntities(stripTags(h1 ? h1[1] : slug));
     const entry = `- [${title}](${url}): ${decodeEntities(description ? description[1] : "")}`;
 
-    if (slug === "" || LLMS_SERVICE_SLUGS.has(slug)) {
+    if (slug.startsWith("de/")) {
+      sections["Deutsch (de)"].push(entry);
+    } else if (slug.startsWith("en/")) {
+      sections["English (en)"].push(entry);
+    } else if (slug === "" || LLMS_SERVICE_SLUGS.has(slug)) {
       sections.Usluge.push(entry);
     } else if (slug.startsWith("prevoz-pokojnika-u-")) {
       sections["Odredišta (sahrana)"].push(entry);
@@ -1838,6 +2227,7 @@ function main() {
   generateCountryPages();
   generateServicePages();
   generateBlogPosts();
+  generateLocalePages();
   injectPartials();
 
   updateBlogImageDimensions();
@@ -1850,6 +2240,7 @@ function main() {
   normalizeStructuredData();
   ensureBreadcrumbSchema();
   ensureBlogArticleSchema();
+  applySerbianAlternates();
 
   // Last, so content hashes reflect the final pages.
   updateSitemap();

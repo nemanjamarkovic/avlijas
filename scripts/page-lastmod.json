@@ -314,5 +314,93 @@
   "https://transportpokojnika.com/zeneva": {
     "hash": "e9049aeefd3da40316c5717be83268b31544a367",
     "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/dokumente-leichenpass": {
+    "hash": "a3f07ec42a2f6b520f4b277847881ae6664e0fca",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/": {
+    "hash": "7b157038be7d15d8fe7f8616d4de6f3020e738b8",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/kontakt": {
+    "hash": "93f4dda5b4b94c63cca443b6f159e02ec92a14ff",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/kosten-ueberfuehrung": {
+    "hash": "dbf42d9285be5e5c02161f9e420427231010b404",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/ueberfuehrung-aus-der-schweiz": {
+    "hash": "7c0ee386c3651fc04a7387a0fd694929b94c1bea",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/ueberfuehrung-aus-deutschland": {
+    "hash": "fae53c62fecfef6af0f45b6e4bf72e884d229b70",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/ueberfuehrung-aus-oesterreich": {
+    "hash": "b2350c10596253bc5812a27b2a992877c5844278",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/ueberfuehrung-nach-bosnien": {
+    "hash": "f3b8df99c0d9cda7d364683e3a0c11ce3bdae5a1",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/ueberfuehrung-nach-montenegro": {
+    "hash": "c7108bbb31386b75b670124c4ebcd3ea56b60a2d",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/ueberfuehrung-nach-nordmazedonien": {
+    "hash": "c18d049af8725946d1af4d0cfc05cb1149c3c7cd",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/de/ueberfuehrung-nach-serbien": {
+    "hash": "3e5d5356a7a66c36344b056b068f0cec2055093d",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/contact": {
+    "hash": "270af45497e5cc6f90248aaee497b13ec7244494",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/documents-for-repatriation": {
+    "hash": "4f4fdac127e84df3009d369ca020cc69c489b1f5",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/": {
+    "hash": "1a51902b572fc96cd36e468182c1da7e8e93cdb1",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-cost": {
+    "hash": "0bbc30b39626424fb3f90e653045c257562d8f7f",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-from-austria": {
+    "hash": "dcefc656f7907f6be7b871f78eb6ec05492d847b",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-from-germany": {
+    "hash": "d7c215cc3a10cd3628dce4c05c77f30c01b1a26a",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-from-switzerland": {
+    "hash": "6a9ddd29d50855c5b84492acf523ae20a72a5184",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-to-bosnia": {
+    "hash": "81e967bc1e5e8494e7ebbe7f50045bbd20b44daf",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-to-montenegro": {
+    "hash": "fb9401688b5ecba307fa8f224b8df2c210a5ebd6",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-to-north-macedonia": {
+    "hash": "6089dd7a956ac6557cb7d88e55bb6b36426c34cb",
+    "lastmod": "2026-10-20"
+  },
+  "https://transportpokojnika.com/en/repatriation-to-serbia": {
+    "hash": "9caed8043d3c529eb170cbf3788c2170cc61bd9c",
+    "lastmod": "2026-10-20"
   }
 }

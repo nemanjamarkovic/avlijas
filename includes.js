@@ -170,13 +170,18 @@ function initContactForm() {
 function addStickyContactButton() {
   if (document.querySelector(".sticky-contact-button")) return;
 
+  const labels = {
+    de: { call: "Rufen Sie uns an", contact: "Kontakt", href: "/de/kontakt" },
+    en: { call: "Call us", contact: "Contact us", href: "/en/contact" },
+  }[document.documentElement.lang] || { call: "Pozovite nas", contact: "Kontaktirajte nas", href: "/contact" };
+
   const stickyButton = document.createElement("div");
   stickyButton.className = "sticky-contact-button";
   stickyButton.innerHTML =
-    '<a href="tel:+381642492849" class="btn btn-primary btn-lg sticky-phone-number" aria-label="Pozovite nas: +381 64 249 28 49">' +
+    '<a href="tel:+381642492849" class="btn btn-primary btn-lg sticky-phone-number" aria-label="' + labels.call + ': +381 64 249 28 49">' +
     '<i class="bi bi-telephone-fill" aria-hidden="true"></i>' +
     '<span class="sticky-phone-number__text">+381 64 249 28 49</span></a>' +
-    '<a href="/contact" class="btn btn-success btn-lg">Kontaktirajte nas</a>';
+    '<a href="' + labels.href + '" class="btn btn-success btn-lg">' + labels.contact + '</a>';
   document.body.appendChild(stickyButton);
 }
 
